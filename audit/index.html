@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TAG Business Intelligence Audit — Prototype v0.3</title>
+<style>
+:root{
+  --bg:#0a0d12;
+  --panel:#11161d;
+  --panel2:#151c25;
+  --text:#f5f7fa;
+  --muted:#9aa7b5;
+  --line:#27313e;
+  --accent:#7ee0c3;
+  --accent2:#5ab8ff;
+  --warn:#f5c96a;
+  --danger:#f18787;
+  --good:#79ddb2;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  background:
+    radial-gradient(circle at top right, rgba(90,184,255,.10), transparent 35%),
+    radial-gradient(circle at top left, rgba(126,224,195,.08), transparent 30%),
+    var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+.shell{max-width:1080px;margin:0 auto;padding:28px 18px 60px}
+.brand{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.logo{font-weight:800;letter-spacing:.18em;font-size:20px}
+.logo span{color:var(--accent)}
+.badge{border:1px solid var(--line);border-radius:999px;padding:7px 11px;color:var(--muted);font-size:12px}
+.hero,.card{
+  background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.012));
+  border:1px solid var(--line);
+  border-radius:22px;
+}
+.hero{padding:44px 32px;text-align:center}
+.hero h1{font-size:clamp(32px,6vw,58px);margin:0 0 14px;letter-spacing:-.035em}
+.hero p{max-width:760px;margin:0 auto 28px;color:var(--muted);font-size:18px;line-height:1.55}
+button{
+  appearance:none;border:0;border-radius:12px;padding:13px 18px;
+  font-weight:700;font-size:15px;cursor:pointer
+}
+.primary{background:var(--accent);color:#06100d}
+.secondary{background:#1b2430;color:var(--text);border:1px solid var(--line)}
+.hidden{display:none!important}
+.progress-wrap{margin:22px 0 10px}
+.progress-top{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:8px}
+.progress{height:8px;background:#161d26;border-radius:999px;overflow:hidden}
+.progress > div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s ease}
+.card{padding:28px;margin-top:18px}
+.question-kicker{font-size:12px;letter-spacing:.14em;color:var(--accent);font-weight:800;margin-bottom:10px}
+.question h2{font-size:28px;margin:0 0 8px}
+.question p{color:var(--muted);margin:0 0 22px}
+.options{display:grid;gap:10px}
+.option{
+  display:flex;align-items:center;gap:12px;padding:14px 16px;
+  border:1px solid var(--line);border-radius:13px;background:#121821;cursor:pointer
+}
+.option:hover{border-color:#3c4b5d}
+.option input{accent-color:var(--accent);width:18px;height:18px}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
+.results-head{text-align:center;padding:20px 0 8px}
+.results-head h1{font-size:42px;margin:0 0 8px}
+.results-head p{color:var(--muted);margin:0}
+.score-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:24px}
+.metric{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;text-align:center}
+.ring{
+  --score:50;
+  --ringColor:var(--accent);
+  width:106px;height:106px;border-radius:50%;margin:0 auto 12px;
+  background:conic-gradient(var(--ringColor) calc(var(--score)*1%),#202a36 0);
+  display:grid;place-items:center;position:relative
+}
+.ring:after{content:"";position:absolute;width:78px;height:78px;border-radius:50%;background:var(--panel)}
+.ring strong{position:relative;z-index:1;font-size:25px}
+.metric .label{font-size:13px;color:var(--muted);line-height:1.3}
+.metric .status{font-size:11px;font-weight:800;margin-top:6px;letter-spacing:.05em}
+.overall{
+  margin-top:20px;padding:26px;border-radius:20px;
+  background:linear-gradient(135deg,rgba(126,224,195,.10),rgba(90,184,255,.08));
+  border:1px solid #2c4950;display:grid;grid-template-columns:170px 1fr;gap:24px;align-items:center
+}
+.big-ring{width:150px;height:150px}
+.big-ring:after{width:112px;height:112px;background:#101820}
+.big-ring strong{font-size:38px}
+.overall h2{font-size:30px;margin:0 0 8px}
+.overall p{color:var(--muted);line-height:1.5;margin:0}
+.section-title{margin:30px 0 12px;font-size:22px}
+.bar-row{display:grid;grid-template-columns:220px 1fr 54px;gap:12px;align-items:center;margin:12px 0}
+.bar-label{color:#dce3ea;font-size:14px}
+.track{height:12px;background:#1b2430;border-radius:999px;overflow:hidden}
+.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.leak-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--warn),var(--danger))}
+.bar-value{text-align:right;color:var(--muted);font-size:13px}
+.opportunity{padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--panel);margin:10px 0}
+.opportunity .rank{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:.12em}
+.opportunity h3{margin:5px 0 6px}
+.opportunity p{margin:0;color:var(--muted);line-height:1.45}
+.risk{display:inline-block;margin-top:9px;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800;background:rgba(245,201,106,.12);color:var(--warn);border:1px solid rgba(245,201,106,.24)}
+
+.leakage-block{
+  margin-top:14px;
+}
+.leakage-head{
+  text-align:center;
+  margin:10px 0 18px;
+}
+.leakage-kicker{
+  font-size:12px;
+  letter-spacing:.16em;
+  color:var(--accent);
+  font-weight:800;
+  margin-bottom:9px;
+}
+.leakage-head h2{
+  margin:0;
+  font-size:clamp(30px,4vw,48px);
+  letter-spacing:-.04em;
+}
+.leakage-head p{
+  margin:10px auto 0;
+  max-width:720px;
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.5;
+}
+.leakage-hero{
+  position:relative;
+  overflow:hidden;
+  border:1px solid #2b3541;
+  border-radius:26px;
+  padding:30px;
+  background:
+    linear-gradient(145deg,rgba(239,102,112,.08),rgba(239,138,93,.03) 42%,rgba(102,186,255,.035)),
+    rgba(14,20,29,.96);
+}
+.leakage-hero:before{
+  content:"";
+  position:absolute;
+  width:520px;height:520px;border-radius:50%;
+  left:50%;top:-300px;transform:translateX(-50%);
+  background:radial-gradient(circle,rgba(239,102,112,.34),rgba(239,138,93,.18) 35%,transparent 68%);
+  filter:blur(4px)
+}
+.leakage-hero-inner{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:330px 1fr;
+  gap:34px;
+  align-items:center;
+}
+.leak-score-orb{
+  width:280px;height:280px;margin:auto;
+  border-radius:50%;
+  display:grid;place-items:center;
+  position:relative;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(239,102,112,.18),rgba(18,25,35,.92) 58%),
+    #111923;
+  border:1px solid rgba(239,102,112,.34);
+  box-shadow:
+    0 0 48px rgba(239,102,112,.52),
+    0 0 130px rgba(239,102,112,.32),
+    0 0 220px rgba(239,102,112,.18),
+    inset 0 0 56px rgba(239,102,112,.24);
+}
+.leak-score-orb:before,
+.leak-score-orb:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  border:1px solid rgba(239,102,112,.22);
+}
+.leak-score-orb:before{
+  inset:-18px;
+  border-color:rgba(239,102,112,.42);
+  box-shadow:0 0 20px rgba(239,102,112,.20);
+  animation:leak-pulse 3s ease-in-out infinite
+}
+.leak-score-orb:after{
+  inset:-38px;
+  border-color:rgba(243,173,82,.26);
+  box-shadow:0 0 28px rgba(243,173,82,.12);
+  animation:leak-pulse 3s ease-in-out infinite .6s
+}
+@keyframes leak-pulse{
+  0%,100%{transform:scale(1);opacity:.72}
+  50%{transform:scale(1.075);opacity:1}
+}
+.leak-score-orb .num{
+  font-size:86px;
+  line-height:.85;
+  font-weight:900;
+  letter-spacing:-.05em;
+  color:#ffb56b;
+}
+.leak-score-orb .of{
+  font-size:14px;
+  color:var(--muted);
+  margin-top:6px;
+}
+.leak-score-orb .status{
+  margin-top:12px;
+  display:inline-block;
+  padding:7px 11px;
+  border-radius:999px;
+  background:rgba(239,102,112,.10);
+  border:1px solid rgba(239,102,112,.28);
+  color:#ffd3d7;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.07em;
+}
+.leak-hero-copy h3{
+  margin:0 0 10px;
+  font-size:34px;
+  letter-spacing:-.03em;
+}
+.leak-hero-copy p{
+  margin:0;
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.55;
+  max-width:650px;
+}
+.leak-hero-copy .callout{
+  margin-top:20px;
+  border-left:3px solid #ef6670;
+  padding:10px 0 10px 16px;
+  color:#e7edf4;
+  font-size:15px;
+  line-height:1.5;
+}
+.leakage-grid{
+  margin-top:24px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+.leak-metric{
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(14,20,29,.95);
+  padding:18px;
+}
+.leak-metric-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:14px;
+}
+.leak-metric h4{margin:0;font-size:18px}
+.leak-metric .sub{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.35;
+}
+.leak-value{text-align:right;min-width:96px}
+.leak-value strong{display:block;font-size:28px;line-height:1}
+.leak-value span{
+  display:block;
+  margin-top:5px;
+  font-size:11px;
+  letter-spacing:.06em;
+  font-weight:800;
+}
+.leak-bar-wrap{position:relative;padding-top:20px;padding-bottom:22px}
+.leak-bar{
+  height:16px;
+  background:linear-gradient(
+    90deg,
+    #63d99b 0%,
+    #9ed96b 18%,
+    #f0d35f 40%,
+    #f3ad52 60%,
+    #ef875c 78%,
+    #ef6670 100%
+  );
+  border-radius:999px;
+  overflow:visible;
+  position:relative;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.08),
+    0 0 18px rgba(239,102,112,.08);
+}
+.leak-marker{
+  position:absolute;
+  top:-16px;
+  transform:translateX(-50%);
+  color:#ff5b66;
+  font-size:18px;
+  line-height:1;
+}
+.leak-marker:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  top:16px;
+  width:2px;
+  height:10px;
+  background:rgba(255,91,102,.8);
+  border-radius:999px;
+}
+.leak-scale{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:18px;
+  color:#6f7d8d;
+  font-size:10px;
+  font-weight:700;
+}
+.leak-scale span{
+  position:absolute;
+  transform:translateX(-50%);
+  bottom:0;
+}
+.leak-scale span:before{
+  content:"";
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  top:-8px;
+  width:1px;
+  height:5px;
+  background:#405063;
+}
+.leak-scale .s0{left:0%;transform:none}
+.leak-scale .s0:before{left:0;transform:none}
+.leak-scale .s25{left:25%}
+.leak-scale .s50{left:50%}
+.leak-scale .s75{left:75%}
+.leak-scale .s100{left:100%;transform:translateX(-100%)}
+.leak-scale .s100:before{left:100%;transform:translateX(-100%)}
+.leak-priority{
+  margin-top:24px;
+  border:1px solid #2b3745;
+  border-radius:18px;
+  padding:20px;
+  background:linear-gradient(135deg,rgba(102,186,255,.05),rgba(126,224,195,.03));
+}
+.leak-priority .leakage-kicker{margin-bottom:6px}
+.leak-priority h3{margin:0 0 7px;font-size:22px}
+.leak-priority p{margin:0;color:#b8c3cf;line-height:1.5}
+.minimal{color:var(--good)}
+.low{color:#bfd77c}
+.moderate{color:var(--warn)}
+.significant{color:#ef8a5d}
+.critical{color:#ef6670}
+.footer-actions{display:flex;gap:12px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+
+@media(max-width:950px){
+  .score-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:820px){
+  .score-grid{grid-template-columns:repeat(2,1fr)}
+  .overall{grid-template-columns:1fr;text-align:center}
+  .bar-row{grid-template-columns:150px 1fr 45px}
+  .leakage-hero-inner{grid-template-columns:1fr}
+  .leakage-grid{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+  .hero,.card{padding:22px 18px}
+  .score-grid{grid-template-columns:1fr 1fr}
+  .question h2{font-size:23px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="brand">
+    <div class="logo">[ <span>TAG</span> ] INTELLIGENCE</div>
+    <div class="badge">Prototype v0.3</div>
+  </div>
+
+  <section id="startScreen" class="hero">
+    <div class="question-kicker">BUSINESS OPERATIONS & AUTOMATION AUDIT</div>
+    <h1>Where is your business leaking capacity?</h1>
+    <p>Complete a guided audit across operations, financial workflows, communication, scheduling, task management, documents, growth, AI adoption, and system integration. TAG converts your answers into a visual intelligence scorecard and ranked automation opportunities.</p>
+    <button class="primary" id="startBtn">Start My Audit</button>
+  </section>
+
+  <section id="auditScreen" class="hidden">
+    <div class="progress-wrap">
+      <div class="progress-top"><span id="sectionLabel">Business Profile</span><span id="progressText">1 of 38</span></div>
+      <div class="progress"><div id="progressBar"></div></div>
+    </div>
+    <div class="card question">
+      <div class="question-kicker" id="questionKicker"></div>
+      <h2 id="questionTitle"></h2>
+      <p id="questionHelp"></p>
+      <div class="options" id="options"></div>
+      <div class="nav">
+        <button class="secondary" id="backBtn">Back</button>
+        <button class="primary" id="nextBtn">Next</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="resultsScreen" class="hidden">
+    <div class="results-head">
+      <div class="question-kicker">TAG AUDIT COMPLETE</div>
+      <h1>Your Business Intelligence Scorecard</h1>
+      <p>A prototype diagnostic generated from your questionnaire responses.</p>
+    </div>
+
+    <div class="overall">
+      <div class="ring big-ring" id="overallRing"><strong id="overallScore">0</strong></div>
+      <div>
+        <h2 id="overallHeadline">Your business has significant automation potential.</h2>
+        <p id="overallSummary"></p>
+      </div>
+    </div>
+
+    <div class="score-grid">
+      <div class="metric"><div class="ring" id="automationRing"><strong id="automationScore">0</strong></div><div class="label">Automation Readiness</div><div class="status" id="automationStatus"></div></div>
+      <div class="metric"><div class="ring" id="efficiencyRing"><strong id="efficiencyScore">0</strong></div><div class="label">Operational Efficiency</div><div class="status" id="efficiencyStatus"></div></div>
+      <div class="metric"><div class="ring" id="aiRing"><strong id="aiScore">0</strong></div><div class="label">AI Maturity</div><div class="status" id="aiStatus"></div></div>
+      <div class="metric"><div class="ring" id="ownerRing"><strong id="ownerScore">0</strong></div><div class="label">Owner Independence</div><div class="status" id="ownerStatus"></div></div>
+      <div class="metric"><div class="ring" id="revenueRing"><strong id="revenueScore">0</strong></div><div class="label">Revenue Capture</div><div class="status" id="revenueStatus"></div></div>
+      <div class="metric"><div class="ring" id="growthRing"><strong id="growthScore">0</strong></div><div class="label">Growth Scalability</div><div class="status" id="growthStatus"></div></div>
+    </div>
+
+    <h2 class="section-title">Performance profile</h2>
+    <div class="card" id="bars"></div>
+
+    
+    <div class="leakage-block">
+      <div class="leakage-head">
+        <div class="leakage-kicker">OPERATIONAL LEAKAGE INTELLIGENCE</div>
+        <h2>Your Business Leakage Score</h2>
+        <p>TAG has identified the operational areas where hidden inefficiency is reducing your business capacity.</p>
+      </div>
+
+      <div class="leakage-hero">
+        <div class="leakage-hero-inner">
+          <div class="leak-score-orb">
+            <div style="text-align:center">
+              <div class="num" id="overallLeakNum">0</div>
+              <div class="of">out of 100</div>
+              <div class="status" id="overallLeakStatus">MINIMAL LEAKAGE</div>
+            </div>
+          </div>
+
+          <div class="leak-hero-copy">
+            <div class="leakage-kicker">OVERALL LEAKAGE SCORE</div>
+            <h3 id="overallLeakHeadline">Operational leakage detected.</h3>
+            <p id="overallLeakSummary">TAG is analyzing the hidden inefficiencies in your business.</p>
+            <div class="callout" id="overallLeakCallout">TAG will surface the highest-priority leakage areas here.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="leakage-grid" id="leakMetrics"></div>
+
+      <div class="leak-priority">
+        <div class="leakage-kicker">TAG PRIORITY ANALYSIS</div>
+        <h3 id="leakPriorityHeadline">Fix the largest leaks first.</h3>
+        <p id="leakPriorityText">TAG will explain which leakage categories should be addressed first.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">Highest-value opportunities</h2>
+
+    <div id="opportunities"></div>
+
+    <div class="footer-actions">
+      <button class="secondary" id="restartBtn">Retake Audit</button>
+      <button class="primary" id="demoCta">Build My TAG System</button>
+    </div>
+  </section>
+</div>
+
+<script>
+const questions = [
+ {section:"Business Profile", title:"How large is your team?", help:"Include owners and regular staff.", key:"team", options:[["Just me",1],["2–5 people",2],["6–10 people",3],["11–25 people",4],["26+ people",5]]},
+
+ {section:"Lead & Revenue Flow", title:"How are new customer inquiries tracked?", help:"Choose the answer that best reflects normal operations.", key:"leadTracking", options:[["Automatically in a CRM or centralized system",5],["Usually in one digital system",4],["Across several systems",2],["Mostly email/text/spreadsheets",1],["No consistent system",0]]},
+ {section:"Lead & Revenue Flow", title:"How quickly are new inquiries normally answered?", help:"Think about the average, not the best case.", key:"leadResponse", options:[["Immediately / automatically",5],["Within 15 minutes",4],["Within an hour",3],["Same day",2],["Next day or inconsistent",0]]},
+ {section:"Lead & Revenue Flow", title:"Are unresponsive leads automatically followed up?", help:"Automated nurture can prevent revenue leakage.", key:"followup", options:[["Yes, consistently",5],["Partially",3],["Manually",1],["No",0]]},
+ {section:"Lead & Revenue Flow", title:"Can you instantly see your open sales pipeline?", help:"For example: leads, estimates, proposals, and likely revenue.", key:"pipeline", options:[["Yes, clearly",5],["Mostly",4],["With some manual work",2],["No",0]]},
+
+ {section:"Workflow & Process Leaks", title:"How often is customer or project information entered more than once?", help:"Duplicate entry is a strong automation signal.", key:"duplicateEntry", options:[["Never",5],["Rarely",4],["Sometimes",2],["Frequently",1],["Almost always",0]]},
+ {section:"Workflow & Process Leaks", title:"How automated is the handoff after a customer says yes?", help:"Consider scheduling, task creation, notifications, accounting, and project setup.", key:"handoff", options:[["Almost everything happens automatically",5],["Most steps are automated",4],["Some steps are automated",3],["Very little is automated",1],["Nothing is automated",0]]},
+ {section:"Workflow & Process Leaks", title:"How often does work pause while someone waits for information or approval?", help:"Waiting time is one of the most common hidden workflow leaks.", key:"waiting", options:[["Almost never",5],["Rarely",4],["Sometimes",3],["Frequently",1],["Constantly",0]]},
+ {section:"Workflow & Process Leaks", title:"How often does work have to be redone because information was incomplete, outdated, or misunderstood?", help:"Think rework, corrections, duplicate effort, and avoidable mistakes.", key:"rework", options:[["Almost never",5],["Rarely",4],["Sometimes",2],["Frequently",1],["Constantly",0]]},
+
+ {section:"Financial Operations", title:"How automated is your invoicing process?", help:"Consider generation, delivery, reminders, and status tracking.", key:"invoicing", options:[["Highly automated",5],["Mostly automated",4],["Partially automated",3],["Mostly manual",1],["Fully manual",0]]},
+ {section:"Financial Operations", title:"Are overdue invoices automatically followed up?", help:"This directly affects cash flow and collections leakage.", key:"collections", options:[["Yes, consistently",5],["Partially",3],["Manually",1],["No",0]]},
+ {section:"Financial Operations", title:"Can management quickly see cash position, receivables, and upcoming obligations?", help:"Financial visibility is different from simply having accounting software.", key:"financialVisibility", options:[["Yes, in real time",5],["Mostly",4],["With some manual work",2],["Not reliably",1],["No",0]]},
+ {section:"Financial Operations", title:"How much manual work goes into receipts, expenses, purchasing, or vendor bills?", help:"Include entry, categorization, approvals, and filing.", key:"financialAdmin", options:[["Very little",5],["Occasional",4],["Moderate",3],["Frequent",1],["Heavy manual workload",0]]},
+
+ {section:"Communication", title:"Are customer communications centralized?", help:"Can the right people see relevant calls, messages, and emails?", key:"centralComms", options:[["Yes",5],["Mostly",4],["Partially",2],["No",0]]},
+ {section:"Communication", title:"How often are important messages missed, delayed, or buried?", help:"Think across phone, text, email, CRM, and internal messaging.", key:"missedMessages", options:[["Almost never",5],["Rarely",4],["Sometimes",2],["Frequently",1],["Constantly",0]]},
+ {section:"Communication", title:"How much staff time goes into repetitive customer questions or status updates?", help:"These are often strong candidates for automation.", key:"repetitiveComms", options:[["Very little",5],["Some",4],["Moderate",3],["Significant",1],["A major workload",0]]},
+
+ {section:"Email Management", title:"How organized is your business email workflow?", help:"Consider routing, ownership, priority, and response consistency.", key:"emailOrganization", options:[["Highly organized and automated",5],["Well organized",4],["Manageable but manual",3],["Frequently messy",1],["Chaotic / inbox-driven",0]]},
+ {section:"Email Management", title:"Do emails automatically create tasks, records, or follow-up actions when appropriate?", help:"For example: attachments routed, CRM records updated, or tasks created.", key:"emailAutomation", options:[["Yes, broadly",5],["In a few workflows",4],["Rarely",2],["No",0]]},
+
+ {section:"Scheduling & Calendar", title:"How much manual coordination does scheduling require?", help:"Think appointments, staff, jobs, travel, and customer changes.", key:"scheduling", options:[["Very little",5],["Occasional",4],["Moderate",3],["Frequent",1],["Constant",0]]},
+ {section:"Scheduling & Calendar", title:"Are reminders, confirmations, and rescheduling workflows automated?", help:"Include both customer and employee reminders.", key:"reminders", options:[["Yes, fully",5],["Mostly",4],["Partially",3],["Mostly manual",1],["No",0]]},
+
+ {section:"Tasks & Accountability", title:"How reliably are tasks captured and assigned?", help:"Think beyond whether a task app exists—does work consistently enter it?", key:"taskCapture", options:[["Almost everything is captured",5],["Most tasks are captured",4],["About half",3],["Many live in messages or memory",1],["Mostly verbal / memory",0]]},
+ {section:"Tasks & Accountability", title:"Can management instantly see overdue work and who owns it?", help:"Visibility is essential for reliable execution.", key:"taskVisibility", options:[["Yes",5],["Mostly",4],["With manual checking",2],["No",0]]},
+ {section:"Tasks & Accountability", title:"How often do tasks depend on someone remembering to do them?", help:"This includes verbal reminders and tasks living in someone's head.", key:"memoryTasks", options:[["Never",5],["Rarely",4],["Sometimes",2],["Frequently",1],["Constantly",0]]},
+
+ {section:"Document Generation", title:"How much time is spent creating repetitive business documents?", help:"Estimates, proposals, contracts, reports, forms, customer letters, SOPs, etc.", key:"documentGeneration", options:[["Very little",5],["Occasional",4],["Moderate",3],["Significant",1],["A major workload",0]]},
+ {section:"Document Organization", title:"How easy is it to find the correct document or file when needed?", help:"Consider naming, folders, duplicates, versions, and search.", key:"documentOrganization", options:[["Immediate and reliable",5],["Usually easy",4],["Takes some searching",3],["Frequently difficult",1],["Disorganized",0]]},
+ {section:"Document Organization", title:"Does company knowledge live mainly in documented systems or in people's heads?", help:"Knowledge trapped in individuals creates scaling and continuity risk.", key:"knowledgeCapture", options:[["Mostly documented and searchable",5],["Well documented",4],["Mixed",3],["Mostly tribal knowledge",1],["Almost entirely in people's heads",0]]},
+
+ {section:"Software & Integration", title:"How well do your business systems communicate with each other?", help:"CRM, accounting, scheduling, email, project management, etc.", key:"integration", options:[["Most systems are integrated",5],["Several key systems are connected",4],["A few are connected",3],["Very little integration",1],["None / unsure",0]]},
+ {section:"Software & Integration", title:"How often do employees copy information between applications?", help:"Examples: CRM to accounting, email to task system, spreadsheet to calendar.", key:"copyBetweenApps", options:[["Never",5],["Rarely",4],["Sometimes",2],["Daily",1],["Multiple times per day",0]]},
+
+ {section:"Owner Dependency", title:"If the owner disappeared for two weeks, could operations continue normally?", help:"This helps identify decision and knowledge bottlenecks.", key:"ownerDependency", options:[["Yes",5],["Mostly",4],["With difficulty",2],["No",0]]},
+ {section:"Owner Dependency", title:"How many routine decisions or approvals require the owner?", help:"Pricing, scheduling, purchasing, customer issues, employee questions, etc.", key:"ownerApprovals", options:[["Very few",5],["Some",4],["Moderate",3],["Many",1],["Almost everything",0]]},
+
+ {section:"Customer Experience", title:"How consistent is the customer experience from inquiry through completion?", help:"Think response, onboarding, updates, documents, billing, and follow-up.", key:"customerExperience", options:[["Highly consistent",5],["Mostly consistent",4],["Varies somewhat",3],["Often inconsistent",1],["Highly inconsistent",0]]},
+ {section:"Customer Experience", title:"Are reviews, repeat business, or customer reactivation managed systematically?", help:"Retention and reputation often leak value when they rely on memory.", key:"retention", options:[["Yes, automatically",5],["Yes, mostly",4],["Somewhat",3],["Rarely",1],["No",0]]},
+
+ {section:"Management Intelligence", title:"Can management see key business performance without manually gathering data?", help:"Sales, jobs, revenue, workload, overdue work, cash, and bottlenecks.", key:"managementVisibility", options:[["Yes, real time",5],["Mostly",4],["Some metrics",3],["Requires manual gathering",1],["No",0]]},
+
+ {section:"Growth & Scalability", title:"When sales volume increases, how much additional administrative work is created?", help:"Scalable businesses should not need overhead to grow at the same rate as revenue.", key:"growthOverhead", options:[["Very little additional work",5],["Some",4],["Moderate",3],["A lot",1],["Nearly proportional to growth",0]]},
+ {section:"Growth & Scalability", title:"Do you have a reliable way to know when to hire, add capacity, or change systems?", help:"Capacity planning is a major part of controlled growth.", key:"capacityPlanning", options:[["Yes, data-driven",5],["Mostly",4],["Somewhat",3],["Mostly reactive",1],["No",0]]},
+
+ {section:"AI Adoption", title:"Which best describes your company's current use of AI?", help:"There is no right answer. We want to understand where you are today.", key:"aiUsage", options:[
+  ["We do not currently use AI",0],
+  ["We occasionally experiment or play with AI tools",1],
+  ["We use AI casually for writing, ideas, or research",2],
+  ["We use AI professionally for specific business tasks",3],
+  ["AI is part of multiple regular business workflows",4],
+  ["AI is deeply integrated into operations or automation",5]
+ ]},
+ {section:"AI Adoption", title:"How comfortable is your team with using AI tools?", help:"Consider the people who would actually interact with new systems.", key:"aiComfort", options:[["Not comfortable yet",0],["Beginner",1],["Moderately comfortable",3],["Very comfortable",4],["Advanced / power users",5]]},
+ {section:"AI Adoption", title:"Does your business already use AI-generated outputs in real work?", help:"Examples: customer communication, estimates, analysis, documents, support, scheduling, or internal decisions.", key:"aiProfessional", options:[["No",0],["Occasionally, but informally",2],["Yes, for one or two functions",3],["Yes, across several functions",4],["Yes, as part of core operations",5]]},
+
+ {section:"Process Maturity", title:"How standardized are your normal business processes?", help:"Consistent processes are easier to automate reliably.", key:"standardization", options:[["Highly standardized",5],["Mostly standardized",4],["Somewhat standardized",3],["Inconsistent",1],["Very inconsistent",0]]},
+ {section:"Digital Readiness", title:"How much of your important business information is digital and accessible?", help:"Customer data, files, jobs, invoices, schedules, communications, etc.", key:"digital", options:[["Nearly everything",5],["Most",4],["About half",3],["Very little",1],["Mostly paper / disconnected",0]]},
+
+ {section:"Risk & Resilience", title:"How resilient are operations if a key employee, device, or software system becomes unavailable?", help:"Consider backups, access, permissions, documented processes, and continuity.", key:"resilience", options:[["Very resilient",5],["Mostly resilient",4],["Some gaps",3],["Significant risk",1],["Major single points of failure",0]]},
+ {section:"Training & SOPs", title:"How well documented are your recurring processes and employee procedures?", help:"Strong SOPs reduce training time and dependence on individual employees.", key:"sops", options:[["Comprehensive and current",5],["Mostly documented",4],["Some documentation",3],["Minimal documentation",1],["No meaningful SOPs",0]]}
+];
+
+let index = 0;
+const answers = {};
+
+const startScreen = document.getElementById("startScreen");
+const auditScreen = document.getElementById("auditScreen");
+const resultsScreen = document.getElementById("resultsScreen");
+
+document.getElementById("startBtn").addEventListener("click", () => {
+  startScreen.classList.add("hidden");
+  auditScreen.classList.remove("hidden");
+  renderQuestion();
+});
+document.getElementById("backBtn").addEventListener("click", () => {
+  if(index>0){ index--; renderQuestion(); }
+});
+document.getElementById("nextBtn").addEventListener("click", () => {
+  const q = questions[index];
+  const selected = document.querySelector('input[name="answer"]:checked');
+  if(!selected){ alert("Choose an answer to continue."); return; }
+  answers[q.key] = Number(selected.value);
+  if(index < questions.length-1){ index++; renderQuestion(); }
+  else { showResults(); }
+});
+document.getElementById("restartBtn").addEventListener("click", () => location.reload());
+document.getElementById("demoCta").addEventListener("click", () => alert("Prototype CTA: this would route the qualified prospect into the TAG implementation funnel."));
+
+function renderQuestion(){
+  const q = questions[index];
+  document.getElementById("sectionLabel").textContent = q.section;
+  document.getElementById("progressText").textContent = `${index+1} of ${questions.length}`;
+  document.getElementById("progressBar").style.width = `${((index+1)/questions.length)*100}%`;
+  document.getElementById("questionKicker").textContent = q.section.toUpperCase();
+  document.getElementById("questionTitle").textContent = q.title;
+  document.getElementById("questionHelp").textContent = q.help;
+  document.getElementById("backBtn").style.visibility = index===0 ? "hidden" : "visible";
+  document.getElementById("nextBtn").textContent = index===questions.length-1 ? "View My Results" : "Next";
+
+  const options = document.getElementById("options");
+  options.innerHTML = "";
+  q.options.forEach(([label,val])=>{
+    const wrap = document.createElement("label");
+    wrap.className = "option";
+    const input = document.createElement("input");
+    input.type="radio"; input.name="answer"; input.value=val;
+    if(answers[q.key]===val) input.checked=true;
+    const span = document.createElement("span");
+    span.textContent=label;
+    wrap.append(input,span);
+    options.appendChild(wrap);
+  });
+}
+
+function avg(keys){
+  return keys.reduce((s,k)=>s+(answers[k] ?? 0),0)/keys.length;
+}
+function pct(v){ return Math.round((v/5)*100); }
+function clamp(n){ return Math.max(0,Math.min(100,Math.round(n))); }
+
+function scoreStatus(v){
+  if(v>=80) return ["STRONG","var(--good)"];
+  if(v>=60) return ["HEALTHY","var(--accent)"];
+  if(v>=40) return ["MODERATE","var(--warn)"];
+  if(v>=20) return ["WEAK","var(--warn)"];
+  return ["CRITICAL","var(--danger)"];
+}
+function leakSeverityLabel(v){
+  if(v<=20) return "MINIMAL LEAKAGE";
+  if(v<=40) return "LOW LEAKAGE";
+  if(v<=60) return "MODERATE LEAKAGE";
+  if(v<=80) return "SIGNIFICANT LEAKAGE";
+  return "CRITICAL LEAKAGE";
+}
+function leakSeverityClass(v){
+  if(v<=20) return "minimal";
+  if(v<=40) return "low";
+  if(v<=60) return "moderate";
+  if(v<=80) return "significant";
+  return "critical";
+}
+function leakOverallHeadline(v){
+  if(v<=20) return "Minimal operational leakage detected.";
+  if(v<=40) return "Low operational leakage detected.";
+  if(v<=60) return "Moderate operational leakage detected.";
+  if(v<=80) return "Significant operational leakage detected.";
+  return "Critical operational leakage detected.";
+}
+
+function showResults(){
+  auditScreen.classList.add("hidden");
+  resultsScreen.classList.remove("hidden");
+
+  const automation = clamp(pct(avg(["integration","standardization","digital","handoff","emailAutomation","reminders"])));
+  const efficiency = clamp(pct(avg(["duplicateEntry","waiting","rework","taskCapture","taskVisibility","scheduling","documentOrganization","centralComms"])));
+  const ai = clamp(pct(avg(["aiUsage","aiComfort","aiProfessional"])));
+  const ownerIndependence = clamp(pct(avg(["ownerDependency","ownerApprovals","knowledgeCapture"])));
+  const revenueCapture = clamp(pct(avg(["leadTracking","leadResponse","followup","pipeline","collections","retention"])));
+  const growth = clamp(pct(avg(["growthOverhead","capacityPlanning","managementVisibility","sops","resilience"])));
+
+  const financialOps = clamp(pct(avg(["invoicing","collections","financialVisibility","financialAdmin"])));
+  const communication = clamp(pct(avg(["centralComms","missedMessages","repetitiveComms","emailOrganization","emailAutomation"])));
+  const taskOps = clamp(pct(avg(["taskCapture","taskVisibility","memoryTasks","reminders"])));
+  const documents = clamp(pct(avg(["documentGeneration","documentOrganization","knowledgeCapture","sops"])));
+  const customer = clamp(pct(avg(["customerExperience","retention","leadResponse","centralComms"])));
+  const management = clamp(pct(avg(["managementVisibility","financialVisibility","taskVisibility","capacityPlanning"])));
+
+  const performanceScores = [automation,efficiency,ai,ownerIndependence,revenueCapture,growth];
+  const overall = clamp(performanceScores.reduce((a,b)=>a+b,0)/performanceScores.length);
+
+  const revenueLeak = clamp(100-revenueCapture);
+  const laborLeak = clamp(100-pct(avg(["duplicateEntry","repetitiveComms","financialAdmin","documentGeneration"])));
+  const workflowLeak = clamp(100-efficiency);
+  const commLeak = clamp(100-communication);
+  const financialLeak = clamp(100-financialOps);
+  const knowledgeLeak = clamp(100-pct(avg(["documentOrganization","knowledgeCapture","sops"])));
+  const managementLeak = clamp(100-management);
+
+  const leakage = clamp(avgRaw([revenueLeak,laborLeak,workflowLeak,commLeak,financialLeak,knowledgeLeak,managementLeak]));
+  const opportunityPotential = clamp(
+    leakage*.55 +
+    (100-automation)*.20 +
+    (100-ownerIndependence)*.15 +
+    Math.max(20,100-growth)*.10
+  );
+
+  setRing("overallRing","overallScore",overall);
+  setMetric("automation",automation);
+  setMetric("efficiency",efficiency);
+  setMetric("ai",ai);
+  setMetric("owner",ownerIndependence);
+  setMetric("revenue",revenueCapture);
+  setMetric("growth",growth);
+
+  const headline = overall >= 80 ? "Your operating system is already strong."
+    : overall >= 65 ? "You have a solid foundation with clear automation upside."
+    : overall >= 45 ? "Your business has significant automation potential."
+    : overall >= 25 ? "Your business is carrying substantial manual operational load."
+    : "Your business is operating with severe structural leakage.";
+
+  document.getElementById("overallHeadline").textContent = headline;
+  document.getElementById("overallSummary").textContent =
+    `Your overall TAG score is ${overall}/100. Estimated operational leakage is ${leakage}/100, while automation opportunity potential is ${opportunityPotential}/100. ` +
+    `The strongest implementation opportunities are the areas where recurring manual work, weak visibility, fragmented systems, and revenue leakage overlap.`;
+
+  const metrics = [
+    ["Automation readiness",automation],
+    ["Operational efficiency",efficiency],
+    ["AI maturity",ai],
+    ["Owner independence",ownerIndependence],
+    ["Revenue capture",revenueCapture],
+    ["Growth scalability",growth],
+    ["Financial operations",financialOps],
+    ["Communication systems",communication],
+    ["Task management",taskOps],
+    ["Document systems",documents],
+    ["Customer experience",customer],
+    ["Management intelligence",management]
+  ];
+  document.getElementById("bars").innerHTML = metrics.map(([label,val]) => `
+    <div class="bar-row">
+      <div class="bar-label">${label}</div>
+      <div class="track"><div class="fill" style="width:${val}%"></div></div>
+      <div class="bar-value">${val}</div>
+    </div>`).join("");
+
+  const leaks = [
+    ["Revenue Leakage", revenueLeak, "Missed leads, weak follow-up, stalled estimates, lost repeat business."],
+    ["Management Leakage", managementLeak, "Manual reporting, weak visibility, owner-dependent decisions."],
+    ["Financial Leakage", financialLeak, "Collections delays, invoice friction, expense and cash-flow inefficiency."],
+    ["Workflow Leakage", workflowLeak, "Waiting, rework, duplicate entry, manual handoffs, forgotten steps."],
+    ["Communication Leakage", commLeak, "Missed messages, fragmented channels, repetitive updates."],
+    ["Labor Leakage", laborLeak, "Repetitive admin work, document creation, unnecessary manual effort."],
+    ["Knowledge Leakage", knowledgeLeak, "Tribal knowledge, document sprawl, poor searchability, version confusion."]
+  ];
+
+  const topLeaks = [...leaks].sort((a,b)=>b[1]-a[1]);
+  const topOne = topLeaks[0];
+  const topTwo = topLeaks[1];
+
+  document.getElementById("overallLeakNum").textContent = leakage;
+  document.getElementById("overallLeakStatus").textContent = leakSeverityLabel(leakage);
+  document.getElementById("overallLeakHeadline").textContent = leakOverallHeadline(leakage);
+  document.getElementById("overallLeakSummary").textContent =
+    `Your business is losing meaningful capacity through a combination of missed revenue opportunities, manual work, fragmented workflows, financial inefficiency, and limited management visibility. Your automation opportunity potential is ${opportunityPotential}/100.`;
+  document.getElementById("overallLeakCallout").innerHTML =
+    `Your largest leaks are <strong>${topOne[0]}</strong> and <strong>${topTwo[0]}</strong>. These should be addressed first because they represent the greatest immediate opportunity for recovery.`;
+
+  document.getElementById("leakMetrics").innerHTML = leaks.map(([label,val,sub]) => `
+    <div class="leak-metric">
+      <div class="leak-metric-top">
+        <div>
+          <h4>${label}</h4>
+          <div class="sub">${sub}</div>
+        </div>
+        <div class="leak-value">
+          <strong>${val}</strong>
+          <span class="${leakSeverityClass(val)}">${leakSeverityLabel(val)}</span>
+        </div>
+      </div>
+      <div class="leak-bar-wrap">
+        <div class="leak-bar">
+          <div class="leak-marker" style="left:${val}%">▼</div>
+        </div>
+        <div class="leak-scale">
+          <span class="s0">0</span>
+          <span class="s25">25</span>
+          <span class="s50">50</span>
+          <span class="s75">75</span>
+          <span class="s100">100</span>
+        </div>
+      </div>
+    </div>`).join("");
+
+  document.getElementById("leakPriorityHeadline").textContent =
+    `Fix ${topOne[0].toLowerCase()} and ${topTwo[0].toLowerCase()} first.`;
+  document.getElementById("leakPriorityText").textContent =
+    `These two categories currently account for the highest concentration of operational leakage and represent the strongest candidates for immediate automation and system integration.`;
+
+  const candidates = [
+    {title:"Automate lead capture and follow-up", score:revenueLeak, text:"Reduce response delays, missed follow-up, and revenue loss between inquiry, proposal, and close."},
+    {title:"Repair workflow and handoff leaks", score:workflowLeak, text:"Remove waiting, duplicate work, rework, and manual handoffs between departments, people, and systems."},
+    {title:"Reduce repetitive labor", score:laborLeak, text:"Automate recurring administrative work, document creation, repetitive communication, and duplicate data entry."},
+    {title:"Centralize communication and email operations", score:commLeak, text:"Create clear ownership, routing, searchable history, automatic follow-up, and fewer missed messages."},
+    {title:"Strengthen financial operations", score:financialLeak, text:"Improve invoicing, collections, expense handling, cash visibility, purchasing, and financial workflow automation."},
+    {title:"Build a searchable company knowledge system", score:knowledgeLeak, text:"Reduce tribal knowledge, document sprawl, version confusion, and dependence on individual employees."},
+    {title:"Build a management intelligence layer", score:managementLeak, text:"Surface KPIs, overdue work, workload, sales, cash, capacity, and operational exceptions without manual reporting."},
+    {title:"Reduce owner dependency", score:100-ownerIndependence, text:"Move routine approvals, information retrieval, decisions, coordination, and administrative work away from the owner."},
+    {title:"Create a scalable growth operating model", score:100-growth, text:"Make growth less dependent on proportional increases in administrative labor and reactive hiring."},
+    {title:"Deploy practical AI workflows", score:Math.max(25,100-ai), text:"Introduce AI at the level appropriate for the team's current maturity and connect it to real business workflows."},
+    {title:"Automate task capture and accountability", score:100-taskOps, text:"Ensure work is automatically captured, assigned, tracked, reminded, and visible before it becomes overdue."},
+    {title:"Automate document generation and organization", score:100-documents, text:"Generate recurring documents faster and organize files, versions, customer records, and company knowledge automatically."}
+  ].sort((a,b)=>b.score-a.score).slice(0,5);
+
+  document.getElementById("opportunities").innerHTML = candidates.map((o,i)=>`
+    <div class="opportunity">
+      <div class="rank">PRIORITY ${i+1}</div>
+      <h3>${o.title}</h3>
+      <p>${o.text}</p>
+      <span class="risk">Opportunity score: ${clamp(o.score)}/100</span>
+    </div>`).join("");
+}
+
+function avgRaw(vals){ return vals.reduce((a,b)=>a+b,0)/vals.length; }
+
+function setMetric(prefix,value){
+  setRing(prefix+"Ring",prefix+"Score",value);
+  const [status,color] = scoreStatus(value);
+  const el = document.getElementById(prefix+"Status");
+  el.textContent = status;
+  el.style.color = color;
+}
+
+function setRing(ringId,scoreId,value){
+  const ring = document.getElementById(ringId);
+  ring.style.setProperty("--score",value);
+  const [,color] = scoreStatus(value);
+  ring.style.setProperty("--ringColor",color);
+  document.getElementById(scoreId).textContent=value;
+}
+</script>
+</body>
+</html>

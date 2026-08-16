@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TAG Intelligence | AI Operations & Automation</title>
+<meta name="description" content="TAG Intelligence helps businesses identify operational leakage, automate workflows, and build intelligent systems that scale." />
+<style>
+:root{
+  --bg:#070a0f;
+  --bg2:#0a1017;
+  --panel:#0f151d;
+  --panel2:#131b25;
+  --text:#f4f7fb;
+  --muted:#94a2b1;
+  --line:#25313d;
+  --teal:#7ee0c3;
+  --blue:#62b9ff;
+  --green:#63d99b;
+  --yellow:#f0d35f;
+  --orange:#ef8a5d;
+  --red:#ef6670;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 80% 0%,rgba(98,185,255,.10),transparent 30%),
+    radial-gradient(circle at 10% 12%,rgba(126,224,195,.06),transparent 30%),
+    linear-gradient(180deg,#081019 0%,#070a0f 45%,#06090d 100%);
+}
+a{color:inherit;text-decoration:none}
+.shell{max-width:1180px;margin:0 auto;padding:0 22px}
+nav{
+  position:sticky;top:0;z-index:40;
+  backdrop-filter:blur(16px);
+  background:rgba(7,10,15,.76);
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.nav-inner{
+  max-width:1180px;margin:0 auto;padding:16px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+}
+.logo{font-weight:900;letter-spacing:.18em;font-size:19px}
+.logo span{color:var(--teal)}
+.nav-links{display:flex;align-items:center;gap:22px;color:#b9c4cf;font-size:14px}
+.nav-links a:hover{color:#fff}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:12px 17px;border-radius:12px;border:1px solid var(--line);
+  font-size:14px;font-weight:800;cursor:pointer;transition:.2s ease;
+}
+.btn-primary{
+  background:var(--teal);color:#06100d;border-color:transparent;
+}
+.btn-primary:hover{transform:translateY(-1px);filter:brightness(1.05)}
+.btn-secondary{background:#121a24;color:#fff}
+.hero{
+  min-height:760px;
+  display:grid;align-items:center;
+  padding:86px 0 62px;
+  position:relative;overflow:hidden;
+}
+.hero:before{
+  content:"";
+  position:absolute;left:50%;top:120px;transform:translateX(-50%);
+  width:760px;height:760px;border-radius:50%;
+  border:1px solid rgba(126,224,195,.10);
+  box-shadow:0 0 120px rgba(98,185,255,.06);
+  animation:pulse 5s ease-in-out infinite;
+}
+.hero:after{
+  content:"";
+  position:absolute;left:50%;top:190px;transform:translateX(-50%);
+  width:620px;height:620px;border-radius:50%;
+  border:1px solid rgba(98,185,255,.08);
+  animation:pulse 5s ease-in-out infinite .8s;
+}
+@keyframes pulse{
+  0%,100%{transform:translateX(-50%) scale(1);opacity:.55}
+  50%{transform:translateX(-50%) scale(1.05);opacity:1}
+}
+.hero-grid{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1fr;gap:34px;align-items:center;
+}
+.kicker{font-size:12px;letter-spacing:.17em;color:var(--teal);font-weight:900;margin-bottom:14px}
+.hero h1{
+  margin:0;
+  font-size:clamp(52px,7vw,88px);
+  letter-spacing:-.055em;
+  line-height:.96;
+  max-width:760px;
+}
+.hero h1 .accent{
+  background:linear-gradient(90deg,var(--teal),var(--blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{
+  color:var(--muted);
+  font-size:19px;line-height:1.65;
+  max-width:760px;margin:24px 0 28px;
+}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.hero-note{margin-top:18px;color:#6f7e8d;font-size:13px}
+.hero-card{
+  border:1px solid #2a3744;border-radius:28px;padding:26px;
+  background:
+    linear-gradient(145deg,rgba(239,102,112,.08),rgba(98,185,255,.04)),
+    rgba(15,21,29,.94);
+  box-shadow:0 30px 80px rgba(0,0,0,.22);
+  position:relative;
+}
+.orb{
+  width:250px;height:250px;margin:16px auto 24px;border-radius:50%;
+  display:grid;place-items:center;position:relative;
+  background:radial-gradient(circle at 50% 42%,rgba(239,102,112,.18),rgba(17,24,34,.96) 61%);
+  border:1px solid rgba(239,102,112,.38);
+  box-shadow:
+    0 0 45px rgba(239,102,112,.45),
+    0 0 115px rgba(239,102,112,.25),
+    0 0 180px rgba(239,102,112,.12),
+    inset 0 0 52px rgba(239,102,112,.22);
+}
+.orb:before,.orb:after{
+  content:"";position:absolute;border-radius:50%;
+  border:1px solid rgba(239,102,112,.30);
+  animation:orbPulse 3.4s ease-in-out infinite;
+}
+.orb:before{inset:-18px}
+.orb:after{inset:-38px;border-color:rgba(243,173,82,.20);animation-delay:.7s}
+@keyframes orbPulse{
+  0%,100%{transform:scale(1);opacity:.65}
+  50%{transform:scale(1.07);opacity:1}
+}
+.orb strong{font-size:78px;color:#ffb56b;letter-spacing:-.05em}
+.orb span{display:block;text-align:center;margin-top:7px;font-size:11px;letter-spacing:.14em;color:#ffd3d7;font-weight:900}
+.mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.mini{
+  padding:14px;border:1px solid var(--line);border-radius:14px;background:#101720;
+}
+.mini b{display:block;font-size:13px;margin-bottom:7px}
+.scale{
+  height:8px;border-radius:999px;
+  background:linear-gradient(90deg,var(--green),var(--yellow),var(--orange),var(--red));
+  position:relative;
+}
+.marker{
+  position:absolute;top:-9px;font-size:13px;color:#ff5b66;transform:translateX(-50%);
+}
+section{padding:86px 0}
+.section-head{text-align:center;max-width:780px;margin:0 auto 38px}
+.section-head h2{font-size:clamp(36px,5vw,58px);letter-spacing:-.04em;margin:0 0 12px}
+.section-head p{color:var(--muted);font-size:17px;line-height:1.6;margin:0}
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{
+  border:1px solid var(--line);border-radius:20px;padding:22px;
+  background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,.006)),var(--panel);
+}
+.card .num{font-size:12px;color:var(--teal);font-weight:900;letter-spacing:.12em}
+.card h3{margin:12px 0 8px;font-size:22px}
+.card p{margin:0;color:var(--muted);line-height:1.55;font-size:14px}
+.process{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:10px;position:relative
+}
+.process:before{
+  content:"";position:absolute;left:7%;right:7%;top:35px;height:1px;background:#24313d
+}
+.step{position:relative;text-align:center}
+.step .dot{
+  width:70px;height:70px;margin:0 auto 14px;border-radius:50%;
+  display:grid;place-items:center;background:#111923;border:1px solid #31404e;
+  color:var(--teal);font-weight:900;position:relative;z-index:2
+}
+.step h4{margin:0 0 7px;font-size:15px}
+.step p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}
+.leak-section{
+  border-top:1px solid rgba(255,255,255,.04);
+  border-bottom:1px solid rgba(255,255,255,.04);
+  background:linear-gradient(180deg,rgba(239,102,112,.025),transparent);
+}
+.leak-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:34px;align-items:center}
+.leak-copy h2{font-size:clamp(38px,5vw,60px);letter-spacing:-.04em;margin:0 0 14px}
+.leak-copy p{color:var(--muted);font-size:17px;line-height:1.6}
+.leak-points{display:grid;gap:10px;margin-top:20px}
+.leak-point{padding:13px 15px;border:1px solid var(--line);border-radius:13px;background:#101720;color:#c9d3dd;font-size:14px}
+.platform-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.platform{
+  padding:20px;border:1px solid var(--line);border-radius:18px;background:#101720
+}
+.platform h4{margin:0 0 6px;font-size:16px}
+.platform p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+.cta{
+  border:1px solid #2b3947;border-radius:28px;padding:46px;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(98,185,255,.09),transparent 26%),
+    radial-gradient(circle at 20% 40%,rgba(126,224,195,.07),transparent 30%),
+    #0e151d;
+  text-align:center;
+}
+.cta h2{font-size:clamp(36px,5vw,58px);margin:0 0 12px;letter-spacing:-.04em}
+.cta p{max-width:720px;margin:0 auto 24px;color:var(--muted);font-size:17px;line-height:1.55}
+footer{
+  padding:34px 0 50px;border-top:1px solid rgba(255,255,255,.05);color:#778594;font-size:13px
+}
+.footer-inner{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+@media(max-width:980px){
+  .hero-grid,.leak-wrap{grid-template-columns:1fr}
+  .hero{min-height:auto}
+  .card-grid{grid-template-columns:1fr 1fr}
+  .process{grid-template-columns:1fr 1fr}
+  .process:before{display:none}
+  .platform-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+  .nav-links{display:none}
+  .card-grid,.platform-grid,.mini-grid{grid-template-columns:1fr}
+  .process{grid-template-columns:1fr}
+  .hero{padding-top:56px}
+  .hero h1{font-size:50px}
+  .cta{padding:30px 20px}
+}
+
+/* =========================
+   TAG FUTURE UI PASS v0.3
+   Visual-only enhancement
+   ========================= */
+
+body{
+  overflow-x:hidden;
+  position:relative;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      rgba(255,255,255,.012) 34%,
+      transparent 58%
+    );
+  animation:ambientSweep 15s ease-in-out infinite alternate;
+}
+
+@keyframes ambientSweep{
+  0%{transform:translateX(-10%) translateY(-1%)}
+  100%{transform:translateX(10%) translateY(1%)}
+}
+
+/* Navigation */
+nav{
+  box-shadow:0 10px 34px rgba(0,0,0,.14);
+}
+
+.logo{
+  text-shadow:0 0 22px rgba(126,224,195,.05);
+}
+
+.nav-links a{
+  position:relative;
+  transition:
+    color .22s ease,
+    transform .22s ease;
+}
+
+.nav-links a:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  right:50%;
+  bottom:-7px;
+  height:1px;
+  background:linear-gradient(90deg,var(--teal),var(--blue));
+  transition:
+    left .24s ease-in-out,
+    right .24s ease-in-out;
+}
+
+.nav-links a:hover{
+  transform:translateY(-1px);
+}
+
+.nav-links a:hover:after{
+  left:0;
+  right:0;
+}
+
+/* Buttons */
+.btn{
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  transition:
+    transform .20s ease-in-out,
+    box-shadow .20s ease-in-out,
+    border-color .20s ease-in-out,
+    filter .20s ease-in-out;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+}
+
+.btn-primary{
+  background:linear-gradient(180deg,#8be8ce,#73d8bb);
+  box-shadow:
+    0 12px 28px rgba(126,224,195,.15),
+    inset 0 1px 0 rgba(255,255,255,.42);
+}
+
+.btn-primary:hover{
+  box-shadow:
+    0 18px 38px rgba(126,224,195,.22),
+    inset 0 1px 0 rgba(255,255,255,.46);
+}
+
+.btn-secondary:hover{
+  border-color:rgba(126,224,195,.24);
+  box-shadow:
+    0 16px 34px rgba(0,0,0,.24),
+    0 0 24px rgba(98,185,255,.05);
+}
+
+/* Hero entrance */
+.hero-grid > div:first-child{
+  animation:heroRise .85s cubic-bezier(.22,.75,.25,1) both;
+}
+
+@keyframes heroRise{
+  from{
+    opacity:0;
+    transform:translateY(24px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.hero h1 .accent{
+  display:inline-block;
+  background-size:200% 100%;
+  animation:accentDrift 6s ease-in-out infinite alternate;
+}
+
+@keyframes accentDrift{
+  from{
+    background-position:0% 50%;
+    transform:translateY(0);
+  }
+  to{
+    background-position:100% 50%;
+    transform:translateY(-2px);
+  }
+}
+
+.hero-note{
+  animation:softFloat 4.8s ease-in-out infinite;
+}
+
+@keyframes softFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-3px)}
+}
+
+/* Glossy cards */
+.card,
+.platform,
+.leak-point,
+.hero-card,
+.cta{
+  position:relative;
+  overflow:hidden;
+  backdrop-filter:blur(14px);
+  box-shadow:
+    0 18px 42px rgba(0,0,0,.20),
+    inset 0 1px 0 rgba(255,255,255,.055);
+}
+
+.card{
+  background:
+    linear-gradient(
+      165deg,
+      rgba(255,255,255,.042),
+      rgba(255,255,255,.008) 44%
+    ),
+    var(--panel);
+}
+
+.platform,
+.leak-point{
+  background:
+    linear-gradient(
+      165deg,
+      rgba(255,255,255,.036),
+      rgba(255,255,255,.006) 48%
+    ),
+    #101720;
+}
+
+.card:before,
+.platform:before,
+.leak-point:before,
+.hero-card:before,
+.cta:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(
+      118deg,
+      transparent 0%,
+      rgba(255,255,255,.045) 28%,
+      transparent 49%
+    );
+  transform:translateX(-120%);
+  transition:transform .72s ease-in-out;
+}
+
+.card:hover:before,
+.platform:hover:before,
+.leak-point:hover:before,
+.hero-card:hover:before,
+.cta:hover:before{
+  transform:translateX(120%);
+}
+
+.card,
+.platform,
+.leak-point{
+  transition:
+    transform .24s cubic-bezier(.2,.75,.25,1),
+    box-shadow .24s ease-in-out,
+    border-color .24s ease-in-out;
+}
+
+.card:hover,
+.platform:hover,
+.leak-point:hover{
+  transform:translateY(-5px);
+  border-color:rgba(126,224,195,.24);
+  box-shadow:
+    0 26px 52px rgba(0,0,0,.27),
+    0 10px 30px rgba(98,185,255,.055),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* Section entrance motion */
+.section-head{
+  animation:sectionRise .7s ease-out both;
+}
+
+@keyframes sectionRise{
+  from{
+    opacity:0;
+    transform:translateY(18px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* Process timeline */
+.step{
+  transition:transform .24s ease-in-out;
+}
+
+.step .dot{
+  transition:
+    transform .24s ease-in-out,
+    box-shadow .24s ease-in-out,
+    border-color .24s ease-in-out;
+}
+
+.step:hover{
+  transform:translateY(-2px);
+}
+
+.step:hover .dot{
+  transform:translateY(-4px) scale(1.04);
+  border-color:rgba(126,224,195,.42);
+  box-shadow:0 0 34px rgba(126,224,195,.10);
+}
+
+.process:after{
+  content:"";
+  position:absolute;
+  top:34px;
+  left:7%;
+  width:9%;
+  height:2px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--teal),
+      var(--blue),
+      transparent
+    );
+  filter:drop-shadow(0 0 6px rgba(126,224,195,.28));
+  animation:dataTravel 5.5s ease-in-out infinite;
+}
+
+@keyframes dataTravel{
+  0%{
+    left:7%;
+    opacity:0;
+  }
+  10%{opacity:1}
+  90%{opacity:1}
+  100%{
+    left:84%;
+    opacity:0;
+  }
+}
+
+/* Leakage card */
+.hero-card{
+  background:
+    linear-gradient(
+      160deg,
+      rgba(255,255,255,.05),
+      rgba(255,255,255,.008) 34%,
+      transparent 56%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(239,102,112,.07),
+      rgba(98,185,255,.045)
+    ),
+    rgba(15,21,29,.90);
+  transition:
+    transform .30s ease-in-out,
+    box-shadow .30s ease-in-out,
+    border-color .30s ease-in-out;
+}
+
+.hero-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(126,224,195,.25);
+  box-shadow:
+    0 34px 75px rgba(0,0,0,.29),
+    0 12px 34px rgba(98,185,255,.07),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.orb{
+  animation:orbFloat 5s ease-in-out infinite;
+}
+
+@keyframes orbFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+
+.orb strong{
+  animation:numberShift 4s ease-in-out infinite alternate;
+}
+
+@keyframes numberShift{
+  from{color:#ffb56b}
+  to{color:#ffd08f}
+}
+
+.mini{
+  background:
+    linear-gradient(
+      165deg,
+      rgba(255,255,255,.035),
+      rgba(255,255,255,.006)
+    ),
+    #101720;
+  box-shadow:
+    0 12px 28px rgba(0,0,0,.17),
+    inset 0 1px 0 rgba(255,255,255,.04);
+  transition:
+    transform .22s ease-in-out,
+    border-color .22s ease-in-out,
+    box-shadow .22s ease-in-out;
+}
+
+.mini:hover{
+  transform:translateY(-3px);
+  border-color:rgba(239,102,112,.22);
+  box-shadow:
+    0 18px 34px rgba(0,0,0,.22),
+    0 0 22px rgba(239,102,112,.04);
+}
+
+.marker{
+  transition:left .45s cubic-bezier(.22,.75,.25,1);
+  animation:markerBreathe 2.8s ease-in-out infinite;
+}
+
+@keyframes markerBreathe{
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(-2px)}
+}
+
+/* CTA */
+.cta{
+  background:
+    linear-gradient(
+      160deg,
+      rgba(255,255,255,.04),
+      rgba(255,255,255,.006) 40%
+    ),
+    radial-gradient(circle at 80% 20%,rgba(98,185,255,.09),transparent 26%),
+    radial-gradient(circle at 20% 40%,rgba(126,224,195,.07),transparent 30%),
+    #0e151d;
+  transition:
+    transform .28s ease-in-out,
+    box-shadow .28s ease-in-out,
+    border-color .28s ease-in-out;
+}
+
+.cta:hover{
+  transform:translateY(-3px);
+  border-color:rgba(126,224,195,.20);
+  box-shadow:
+    0 30px 70px rgba(0,0,0,.25),
+    0 0 38px rgba(98,185,255,.05),
+    inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+/* Motion accents */
+.motion-word{
+  display:inline-block;
+  animation:wordDrift 5s ease-in-out infinite;
+}
+
+@keyframes wordDrift{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-3px)}
+}
+
+/* Respect accessibility */
+@media(prefers-reduced-motion:reduce){
+  *,
+  *:before,
+  *:after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+  }
+}
+
+
+/* Intentional TAG intelligence field behind hero */
+.hero{
+  position:relative;
+  isolation:isolate;
+}
+.hero .shell{
+  position:relative;
+  z-index:2;
+}
+.intelligence-field{
+  position:absolute;
+  left:50%;
+  top:46%;
+  width:min(78vw,900px);
+  aspect-ratio:1/1;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  z-index:1;
+  opacity:.95;
+}
+.if-ring,
+.if-orbit,
+.if-pulse{
+  position:absolute;
+  border-radius:50%;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+}
+.if-ring{
+  border:1px solid rgba(126,224,195,.085);
+  box-shadow:0 0 50px rgba(98,185,255,.025);
+}
+.ring-a{
+  width:58%;
+  height:58%;
+  animation:fieldBreathe 7s ease-in-out infinite;
+}
+.ring-b{
+  width:76%;
+  height:76%;
+  border-color:rgba(98,185,255,.065);
+  animation:fieldBreathe 8.5s ease-in-out infinite .7s;
+}
+.ring-c{
+  width:96%;
+  height:96%;
+  border-color:rgba(126,224,195,.045);
+  animation:fieldBreathe 10s ease-in-out infinite 1.2s;
+}
+@keyframes fieldBreathe{
+  0%,100%{
+    transform:translate(-50%,-50%) scale(1);
+    opacity:.55;
+  }
+  50%{
+    transform:translate(-50%,-50%) scale(1.025);
+    opacity:1;
+  }
+}
+.if-orbit{display:none;}
+.if-orbit-dot{
+  position:absolute;
+  left:50%;
+  top:-4px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:rgba(126,224,195,.9);
+  box-shadow:
+    0 0 10px rgba(126,224,195,.45),
+    0 0 22px rgba(98,185,255,.20);
+  transform:translateX(-50%);
+}
+@keyframes orbitRotate{
+  to{transform:translate(-50%,-50%) rotate(360deg)}
+}
+.if-pulse{
+  width:42%;
+  height:42%;
+  border:1px solid rgba(126,224,195,.08);
+  opacity:0;
+}
+.pulse-a{
+  animation:fieldPulse 6.2s ease-out infinite;
+}
+.pulse-b{
+  animation:fieldPulse 6.2s ease-out infinite 3.1s;
+}
+@keyframes fieldPulse{
+  0%{
+    transform:translate(-50%,-50%) scale(.72);
+    opacity:0;
+  }
+  18%{opacity:.26}
+  72%{opacity:.08}
+  100%{
+    transform:translate(-50%,-50%) scale(2.2);
+    opacity:0;
+  }
+}
+@media(max-width:700px){
+  .intelligence-field{
+    width:110vw;
+    top:44%;
+    opacity:.72;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .ring-a,.ring-b,.ring-c,.if-orbit,.pulse-a,.pulse-b{
+    animation:none!important;
+  }
+}
+
+
+/* Hero spacing + visible intelligence field v0.6 */
+.hero{
+  padding-top:92px;
+  padding-bottom:76px;
+}
+.hero-grid{
+  max-width:980px;
+  margin:0 auto;
+}
+.hero-grid > div:first-child{
+  max-width:900px;
+  margin:0 auto;
+  text-align:center;
+}
+.hero h1{
+  max-width:900px;
+  margin-left:auto;
+  margin-right:auto;
+  line-height:1.01;
+}
+.hero p{
+  max-width:790px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.hero-actions{
+  justify-content:center;
+}
+.hero-note{
+  text-align:center;
+}
+
+/* Recolor the subtle intelligence field so it is actually visible */
+.intelligence-field{
+  opacity:1;
+}
+.if-ring{
+  border-color:rgba(124,120,255,.23);
+  box-shadow:
+    0 0 36px rgba(124,120,255,.08),
+    0 0 70px rgba(64,205,255,.04);
+}
+.ring-b{
+  border-color:rgba(72,196,255,.19);
+}
+.ring-c{
+  border-color:rgba(179,93,255,.15);
+}
+.if-pulse{
+  border-color:rgba(74,201,255,.20);
+  box-shadow:0 0 36px rgba(124,120,255,.07);
+}
+.pulse-b{
+  border-color:rgba(179,93,255,.16);
+}
+@keyframes fieldBreathe{
+  0%,100%{
+    transform:translate(-50%,-50%) scale(1);
+    opacity:.62;
+  }
+  50%{
+    transform:translate(-50%,-50%) scale(1.035);
+    opacity:1;
+  }
+}
+@keyframes fieldPulse{
+  0%{
+    transform:translate(-50%,-50%) scale(.72);
+    opacity:0;
+  }
+  18%{opacity:.42}
+  72%{opacity:.14}
+  100%{
+    transform:translate(-50%,-50%) scale(2.2);
+    opacity:0;
+  }
+}
+@media(max-width:900px){
+  .hero-grid > div:first-child{
+    text-align:left;
+  }
+  .hero h1,
+  .hero p{
+    margin-left:0;
+    margin-right:0;
+  }
+  .hero-actions{
+    justify-content:flex-start;
+  }
+  .hero-note{
+    text-align:left;
+  }
+}
+
+
+/* Neon intelligence field v0.7 */
+.hero{
+  overflow:visible !important;
+  padding-top:96px;
+  padding-bottom:118px;
+}
+
+.intelligence-field{
+  width:min(108vw,1280px);
+  top:48%;
+  opacity:1;
+  overflow:visible;
+}
+
+.if-ring{
+  border-width:2px;
+  border-color:rgba(55,235,255,.82);
+  box-shadow:
+    0 0 12px rgba(55,235,255,.95),
+    0 0 28px rgba(55,235,255,.72),
+    0 0 62px rgba(55,235,255,.34),
+    inset 0 0 18px rgba(55,235,255,.08);
+}
+
+.ring-a{
+  width:48%;
+  height:48%;
+  border-color:rgba(92,245,255,.70);
+  box-shadow:
+    0 0 10px rgba(92,245,255,.76),
+    0 0 26px rgba(92,245,255,.45);
+  animation:fieldBreatheInner 7.5s ease-in-out infinite;
+}
+
+.ring-b{
+  width:72%;
+  height:72%;
+  border-color:rgba(117,115,255,.84);
+  box-shadow:
+    0 0 14px rgba(117,115,255,.92),
+    0 0 36px rgba(117,115,255,.62),
+    0 0 82px rgba(117,115,255,.28);
+  animation:fieldBreatheMid 6.6s ease-in-out infinite .45s;
+}
+
+.ring-c{
+  width:98%;
+  height:98%;
+  border-color:rgba(215,68,255,.80);
+  box-shadow:
+    0 0 16px rgba(215,68,255,.95),
+    0 0 42px rgba(215,68,255,.66),
+    0 0 96px rgba(215,68,255,.30);
+  animation:fieldBreatheOuter 5.8s ease-in-out infinite .8s;
+}
+
+.if-pulse{
+  border-width:2px;
+  border-color:rgba(55,235,255,.72);
+  box-shadow:
+    0 0 18px rgba(55,235,255,.62),
+    0 0 50px rgba(55,235,255,.24);
+}
+
+.pulse-a{
+  animation:fieldPulseNeon 6.4s ease-out infinite;
+}
+
+.pulse-b{
+  border-color:rgba(215,68,255,.62);
+  box-shadow:
+    0 0 18px rgba(215,68,255,.52),
+    0 0 50px rgba(215,68,255,.22);
+  animation:fieldPulseNeon 6.4s ease-out infinite 3.2s;
+}
+
+/* Keep the center comparatively stable; let outer rings do the breathing */
+@keyframes fieldBreatheInner{
+  0%,100%{
+    transform:translate(-50%,-50%) scale(1);
+    opacity:.78;
+  }
+  50%{
+    transform:translate(-50%,-50%) scale(1.012);
+    opacity:1;
+  }
+}
+
+@keyframes fieldBreatheMid{
+  0%,100%{
+    transform:translate(-50%,-50%) scale(.985);
+    opacity:.70;
+  }
+  50%{
+    transform:translate(-50%,-50%) scale(1.055);
+    opacity:1;
+  }
+}
+
+@keyframes fieldBreatheOuter{
+  0%,100%{
+    transform:translate(-50%,-50%) scale(.96);
+    opacity:.62;
+  }
+  50%{
+    transform:translate(-50%,-50%) scale(1.095);
+    opacity:1;
+  }
+}
+
+@keyframes fieldPulseNeon{
+  0%{
+    transform:translate(-50%,-50%) scale(.62);
+    opacity:0;
+  }
+  12%{opacity:.58}
+  58%{opacity:.28}
+  100%{
+    transform:translate(-50%,-50%) scale(2.7);
+    opacity:0;
+  }
+}
+
+/* Give the hero copy enough contrast without muting the neon field */
+.hero-grid > div:first-child{
+  position:relative;
+  z-index:3;
+}
+.hero h1,
+.hero p,
+.hero-actions,
+.hero-note,
+.hero .kicker{
+  position:relative;
+  z-index:3;
+  text-shadow:0 2px 12px rgba(0,0,0,.34);
+}
+
+/* Prevent next section background from visually chopping the field */
+#solutions{
+  position:relative;
+  z-index:2;
+  background:linear-gradient(
+    180deg,
+    rgba(7,10,15,0) 0%,
+    rgba(7,10,15,.62) 42px,
+    rgba(7,10,15,1) 120px
+  );
+  padding-top:112px;
+}
+
+@media(max-width:700px){
+  .intelligence-field{
+    width:150vw;
+    top:46%;
+  }
+  .hero{
+    padding-bottom:96px;
+  }
+}
+
+
+/* Full-screen hero + living headline v0.8 */
+.hero{
+  min-height:100vh;
+  min-height:100svh;
+  padding:88px 0 72px;
+  display:flex;
+  align-items:center;
+  overflow:visible !important;
+}
+
+.hero .shell{
+  width:100%;
+}
+
+.hero-grid{
+  min-height:calc(100vh - 160px);
+  min-height:calc(100svh - 160px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.hero-grid > div:first-child{
+  width:min(100%,980px);
+  margin:0 auto;
+  text-align:center;
+}
+
+.hero h1{
+  max-width:980px;
+  margin:0 auto;
+  line-height:1.08;
+  overflow:visible;
+  padding:.03em .02em .10em;
+}
+
+.hero p{
+  max-width:790px;
+  margin:24px auto 28px;
+}
+
+.hero-actions{
+  justify-content:center;
+}
+
+.hero-note{
+  text-align:center;
+}
+
+/* Give the intelligence field the whole first screen */
+.intelligence-field{
+  width:min(116vmin,1180px);
+  height:min(116vmin,1180px);
+  top:50%;
+  transform:translate(-50%,-50%);
+  overflow:visible;
+}
+
+.ring-a{
+  width:44%;
+  height:44%;
+}
+
+.ring-b{
+  width:70%;
+  height:70%;
+}
+
+.ring-c{
+  width:96%;
+  height:96%;
+}
+
+/* Do not let the next section creep into the first viewport */
+#solutions{
+  margin-top:0;
+  padding-top:108px;
+  background:#070a0f;
+  position:relative;
+  z-index:4;
+}
+
+/* Living "runs intelligently" treatment */
+.hero h1 .accent.motion-word{
+  display:inline-block;
+  position:relative;
+  overflow:visible;
+  padding:.02em .08em .10em;
+  margin:-.02em -.08em -.10em;
+  line-height:1.12;
+  transform-origin:center;
+  background:linear-gradient(
+    90deg,
+    #4df6ff 0%,
+    #7c78ff 24%,
+    #dc44ff 48%,
+    #ff6fa8 68%,
+    #7ee0c3 86%,
+    #4df6ff 100%
+  );
+  background-size:320% 100%;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  animation:
+    livingColor 7s ease-in-out infinite,
+    livingFloat 4.6s ease-in-out infinite,
+    livingFont 16s steps(1,end) infinite;
+  filter:drop-shadow(0 0 10px rgba(77,246,255,.12));
+}
+
+.hero h1 .accent.motion-word:after{
+  content:"";
+  position:absolute;
+  left:7%;
+  right:7%;
+  bottom:.02em;
+  height:1px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(77,246,255,.75),
+    rgba(220,68,255,.65),
+    transparent
+  );
+  transform:scaleX(.18);
+  opacity:.3;
+  animation:livingUnderline 4.6s ease-in-out infinite;
+}
+
+@keyframes livingColor{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+@keyframes livingFloat{
+  0%,100%{
+    transform:translateY(0) scale(1);
+    letter-spacing:0;
+  }
+  50%{
+    transform:translateY(-3px) scale(1.012);
+    letter-spacing:.004em;
+  }
+}
+
+@keyframes livingUnderline{
+  0%,100%{
+    transform:scaleX(.18);
+    opacity:.24;
+  }
+  50%{
+    transform:scaleX(1);
+    opacity:.72;
+  }
+}
+
+/* Discrete font shifts: deliberate, slow, and readable */
+@keyframes livingFont{
+  0%,24.99%{
+    font-family:"Segoe UI Variable","Segoe UI",Arial,sans-serif;
+    font-style:normal;
+  }
+  25%,49.99%{
+    font-family:"Trebuchet MS","Segoe UI",Arial,sans-serif;
+    font-style:normal;
+  }
+  50%,74.99%{
+    font-family:Georgia,"Times New Roman",serif;
+    font-style:italic;
+  }
+  75%,100%{
+    font-family:"Courier New",Consolas,monospace;
+    font-style:normal;
+  }
+}
+
+@media(max-width:900px){
+  .hero-grid > div:first-child{
+    text-align:center;
+  }
+  .hero h1,
+  .hero p{
+    margin-left:auto;
+    margin-right:auto;
+  }
+  .hero-actions{
+    justify-content:center;
+  }
+  .hero-note{
+    text-align:center;
+  }
+  .intelligence-field{
+    width:125vmin;
+    height:125vmin;
+  }
+}
+
+@media(max-width:700px){
+  .hero{
+    min-height:100svh;
+    padding:74px 0 52px;
+  }
+  .hero-grid{
+    min-height:calc(100svh - 126px);
+  }
+  .intelligence-field{
+    width:145vmin;
+    height:145vmin;
+  }
+  .hero h1{
+    line-height:1.06;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .hero h1 .accent.motion-word,
+  .hero h1 .accent.motion-word:after{
+    animation:none!important;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#top" class="logo">[ <span>TAG</span> ] INTELLIGENCE</a>
+    <div class="nav-links">
+      <a href="#solutions">Solutions</a>
+      <a href="#leakage">Leakage</a>
+      <a href="#process">How It Works</a>
+      <a href="#platform">Platform</a>
+    </div>
+    <a href="#audit" class="btn btn-primary">Start Business Audit</a>
+  </div>
+</nav>
+
+<main id="top">
+  <section class="hero">
+    <div class="intelligence-field" aria-hidden="true">
+      <div class="if-ring ring-a"></div>
+      <div class="if-ring ring-b"></div>
+      <div class="if-ring ring-c"></div>
+      <div class="if-orbit">
+        
+      </div>
+      <div class="if-pulse pulse-a"></div>
+      <div class="if-pulse pulse-b"></div>
+    </div>
+    <div class="shell hero-grid">
+      <div>
+        <div class="kicker">AI OPERATIONS & AUTOMATION</div>
+        <h1>Build a business that <span class="accent motion-word">runs intelligently.</span></h1>
+        <p>TAG Intelligence identifies hidden operational leakage, connects disconnected systems, and builds AI-powered workflows that reduce manual work, recover lost capacity, and help businesses scale without adding unnecessary overhead.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#audit">Start Free Business Audit</a>
+          <a class="btn btn-secondary" href="#solutions">Explore TAG Solutions</a>
+        </div>
+        <div class="hero-note">Audit first. Fix the highest-value leak. Prove ROI. Expand intelligently.</div>
+      </div>
+      </div>
+    </section>
+
+  <section id="solutions">
+    <div class="shell">
+      <div class="section-head">
+        <div class="kicker">WHAT TAG BUILDS</div>
+        <h2>Intelligence where your business actually needs it.</h2>
+        <p>TAG focuses on the operational layer between your people, software, customers, data, and decisions.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="num">01</div>
+          <h3>Workflow Automation</h3>
+          <p>Automate repetitive handoffs, approvals, follow-ups, data entry, reminders, task creation, and recurring administrative work.</p>
+        </div>
+        <div class="card">
+          <div class="num">02</div>
+          <h3>AI Operations</h3>
+          <p>Deploy AI assistants, agents, summaries, decision support, document generation, customer communication, and internal operations workflows.</p>
+        </div>
+        <div class="card">
+          <div class="num">03</div>
+          <h3>System Integration</h3>
+          <p>Connect CRM, accounting, scheduling, email, calendar, documents, project tools, and industry platforms into one coordinated system.</p>
+        </div>
+        <div class="card">
+          <div class="num">04</div>
+          <h3>Management Intelligence</h3>
+          <p>Surface KPIs, overdue work, revenue, workload, cash flow, bottlenecks, and exceptions without manually gathering information.</p>
+        </div>
+        <div class="card">
+          <div class="num">05</div>
+          <h3>Document Intelligence</h3>
+          <p>Generate, classify, organize, search, and route estimates, reports, proposals, SOPs, contracts, files, and business knowledge.</p>
+        </div>
+        <div class="card">
+          <div class="num">06</div>
+          <h3>Managed AI Systems</h3>
+          <p>Ongoing monitoring, optimization, maintenance, workflow improvement, and system expansion as the business evolves.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="leak-section" id="leakage">
+    <div class="shell leak-wrap">
+      <div class="leak-copy">
+        <div class="kicker">OPERATIONAL LEAKAGE</div>
+        <h2>The problems you feel are often not the problems you can see.</h2>
+        <p>TAG looks for hidden leakage across revenue, labor, workflow, communication, financial systems, company knowledge, and management visibility.</p>
+        <div class="leak-points">
+          <div class="leak-point">Revenue lost between inquiry, follow-up, estimate, and close</div>
+          <div class="leak-point">Labor consumed by repetitive or duplicate work</div>
+          <div class="leak-point">Management time lost gathering information and making routine decisions</div>
+          <div class="leak-point">Cash-flow friction caused by weak invoicing and collections workflows</div>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="kicker">EXAMPLE LEAKAGE PROFILE</div>
+        <div class="orb">
+          <div style="text-align:center">
+            <strong>67</strong>
+            <span>LEAKAGE SCORE</span>
+          </div>
+        </div>
+        <div class="mini-grid">
+          <div class="mini">
+            <b>Revenue Leakage</b>
+            <div class="scale"><div class="marker" style="left:88%">▼</div></div>
+          </div>
+          <div class="mini">
+            <b>Workflow Leakage</b>
+            <div class="scale"><div class="marker" style="left:72%">▼</div></div>
+          </div>
+          <div class="mini">
+            <b>Management Leakage</b>
+            <div class="scale"><div class="marker" style="left:81%">▼</div></div>
+          </div>
+          <div class="mini">
+            <b>Financial Leakage</b>
+            <div class="scale"><div class="marker" style="left:59%">▼</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="process">
+    <div class="shell">
+      <div class="section-head">
+        <div class="kicker">THE TAG MODEL</div>
+        <h2><span class="motion-word">Land.</span> Measure. <span class="motion-word">Expand.</span></h2>
+        <p>TAG starts with the highest-value operational problem, proves the result, then expands only where additional value is measurable.</p>
+      </div>
+
+      <div class="process">
+        <div class="step">
+          <div class="dot">01</div>
+          <h4>Audit</h4>
+          <p>Identify operational leakage and automation opportunities.</p>
+        </div>
+        <div class="step">
+          <div class="dot">02</div>
+          <h4>Prioritize</h4>
+          <p>Rank opportunities by impact, feasibility, and ROI.</p>
+        </div>
+        <div class="step">
+          <div class="dot">03</div>
+          <h4>Implement</h4>
+          <p>Fix the highest-value leak first.</p>
+        </div>
+        <div class="step">
+          <div class="dot">04</div>
+          <h4>Measure</h4>
+          <p>Track time, capacity, revenue, or cost recovered.</p>
+        </div>
+        <div class="step">
+          <div class="dot">05</div>
+          <h4>Expand</h4>
+          <p>Address the next leak and deepen the system.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="platform">
+    <div class="shell">
+      <div class="section-head">
+        <div class="kicker">ONE INTELLIGENCE LAYER</div>
+        <h2>Designed to sit across your existing business systems.</h2>
+        <p>TAG is built to orchestrate the tools you already use rather than forcing unnecessary replacements.</p>
+      </div>
+
+      <div class="platform-grid">
+        <div class="platform"><h4>Email</h4><p>Prioritization, routing, response, task creation, document extraction.</p></div>
+        <div class="platform"><h4>Calendar</h4><p>Scheduling, reminders, coordination, capacity, route-aware workflows.</p></div>
+        <div class="platform"><h4>CRM</h4><p>Lead capture, follow-up, status, pipeline visibility, customer history.</p></div>
+        <div class="platform"><h4>Accounting</h4><p>Invoices, receivables, payment follow-up, expense workflows, visibility.</p></div>
+        <div class="platform"><h4>Documents</h4><p>Generation, organization, retrieval, classification, knowledge systems.</p></div>
+        <div class="platform"><h4>Tasks</h4><p>Automatic task capture, assignment, reminders, accountability, exceptions.</p></div>
+        <div class="platform"><h4>Operations</h4><p>Project status, handoffs, approvals, recurring workflows, bottleneck detection.</p></div>
+        <div class="platform"><h4>AI</h4><p>Assistants, agents, analysis, natural-language control, intelligent automation.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="audit">
+    <div class="shell">
+      <div class="cta">
+        <div class="kicker">START WITH THE DATA</div>
+        <h2>Find out where your business is <span class="motion-word">leaking.</span></h2>
+        <p>Complete the TAG Business Intelligence Audit to identify operational leakage, automation readiness, owner dependency, AI maturity, and your highest-value implementation opportunities.</p>
+        <div class="hero-actions" style="justify-content:center">
+          <a class="btn btn-primary" href="TAG_Audit_Prototype_v0.3.html">Start Business Audit</a>
+          <a class="btn btn-secondary" href="#solutions">Review Solutions</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="shell footer-inner">
+    <div>[ TAG ] INTELLIGENCE</div>
+    <div>TAG Intelligence Management Systems LLC</div>
+    <div>AI Operations • Automation • Business Intelligence</div>
+  </div>
+</footer>
+
+</body>
+</html>
