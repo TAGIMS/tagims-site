@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Auto Loan Calculator | TAG Intelligence</title>
+<meta name="description" content="Compare vehicle prices, loan terms, APRs, down payments, taxes, and estimated monthly auto loan payments." />
+<style>
+:root{
+  --bg:#070a0f;
+  --panel:#0f151d;
+  --panel2:#131b25;
+  --text:#f4f7fb;
+  --muted:#94a2b1;
+  --line:#25313d;
+  --teal:#7ee0c3;
+  --blue:#62b9ff;
+  --green:#63d99b;
+  --red:#ef6670;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 85% 0%,rgba(98,185,255,.11),transparent 30%),
+    radial-gradient(circle at 10% 15%,rgba(126,224,195,.07),transparent 28%),
+    linear-gradient(180deg,#081019 0%,#070a0f 55%,#06090d 100%);
+}
+a{color:inherit;text-decoration:none}
+.shell{max-width:1180px;margin:0 auto;padding:0 22px}
+nav{
+  position:sticky;top:0;z-index:40;
+  backdrop-filter:blur(16px);
+  background:rgba(7,10,15,.82);
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.nav-inner{
+  max-width:1180px;margin:0 auto;padding:16px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+}
+.logo{font-weight:900;letter-spacing:.18em;font-size:19px}
+.logo span{color:var(--teal)}
+.back-link{color:#b9c4cf;font-size:14px}
+.back-link:hover{color:#fff}
+main{padding:58px 0 78px}
+.hero{text-align:center;max-width:860px;margin:0 auto 34px}
+.kicker{font-size:12px;letter-spacing:.17em;color:var(--teal);font-weight:900;margin-bottom:12px}
+h1{font-size:clamp(42px,6vw,70px);line-height:1;letter-spacing:-.045em;margin:0}
+.hero p{color:var(--muted);font-size:17px;line-height:1.6;margin:20px auto 0;max-width:720px}
+.layout{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:18px;align-items:start}
+.card{
+  border:1px solid var(--line);border-radius:22px;padding:22px;
+  background:linear-gradient(165deg,rgba(255,255,255,.04),rgba(255,255,255,.008) 44%),var(--panel);
+  box-shadow:0 22px 55px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.05);
+}
+.card h2{font-size:20px;margin:0 0 18px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{min-width:0}
+.field.full{grid-column:1/-1}
+label{display:block;color:#c9d3dd;font-size:12px;font-weight:800;margin:0 0 7px}
+.input-wrap{position:relative}
+.input-wrap .prefix,.input-wrap .suffix{position:absolute;top:50%;transform:translateY(-50%);color:#6f7e8d;font-weight:800;pointer-events:none}
+.input-wrap .prefix{left:13px}
+.input-wrap .suffix{right:13px}
+input,select{
+  width:100%;min-height:46px;border:1px solid #31404e;border-radius:12px;
+  background:#0b1118;color:#fff;font:inherit;font-size:16px;padding:11px 13px;outline:none;
+}
+.has-prefix input{padding-left:28px}.has-suffix input{padding-right:34px}
+input:focus,select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(126,224,195,.10)}
+.helper{color:#718090;font-size:11px;line-height:1.4;margin-top:6px}
+.result-card{position:sticky;top:82px}
+.payment-label{color:var(--muted);font-size:12px;font-weight:900;letter-spacing:.11em}
+.payment{font-size:clamp(48px,7vw,78px);font-weight:900;letter-spacing:-.055em;line-height:1;margin:8px 0 4px;background:linear-gradient(90deg,var(--teal),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+.per-month{color:#8c9aa8;font-size:14px;margin-bottom:22px}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metric{border:1px solid var(--line);border-radius:14px;background:#101720;padding:14px;min-width:0}
+.metric span{display:block;color:var(--muted);font-size:11px;margin-bottom:6px}
+.metric strong{font-size:18px;word-break:break-word}
+.compare-wrap{margin-top:18px}
+.compare-head{display:flex;justify-content:space-between;gap:14px;align-items:end;margin-bottom:12px;flex-wrap:wrap}
+.compare-head h2{margin:0;font-size:22px}
+.compare-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.compare-table{display:grid;gap:9px}
+.compare-row{
+  display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;
+  padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:#0e151d;
+}
+.compare-row.active{border-color:rgba(126,224,195,.42);background:linear-gradient(90deg,rgba(126,224,195,.07),rgba(98,185,255,.03)),#0e151d}
+.compare-price{font-weight:900;font-size:16px}
+.compare-payment{font-weight:900;color:var(--teal);font-size:17px;text-align:right}
+.compare-delta{color:var(--muted);font-size:12px;text-align:right;min-width:72px}
+.term-section{margin-top:18px}
+.term-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.term-card{border:1px solid var(--line);border-radius:14px;background:#101720;padding:13px;text-align:center}
+.term-card.active{border-color:rgba(126,224,195,.42)}
+.term-card span{display:block;color:var(--muted);font-size:11px}
+.term-card strong{display:block;font-size:18px;margin:5px 0 2px}
+.term-card small{color:#718090;font-size:10px}
+.note{margin-top:18px;color:#697887;font-size:11px;line-height:1.55;text-align:center}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.result-card{position:static}.term-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){
+  .nav-inner{padding:14px 16px}.shell{padding:0 16px}main{padding-top:40px}
+  .logo{font-size:15px}.back-link{font-size:12px}.form-grid{grid-template-columns:1fr}
+  .field.full{grid-column:auto}.metrics{grid-template-columns:1fr 1fr}
+  .compare-row{grid-template-columns:1fr auto}.compare-delta{grid-column:1/-1;text-align:left;min-width:0}
+  .term-grid{grid-template-columns:1fr 1fr}.card{padding:18px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">[ <span>TAG</span> ] INTELLIGENCE</a>
+    <a href="index.html" class="back-link">← Back to TAGIMS</a>
+  </div>
+</nav>
+<main>
+  <div class="shell">
+    <div class="hero">
+      <div class="kicker">AUTO FINANCE TOOL</div>
+      <h1>Auto Loan Calculator</h1>
+      <p>Change the vehicle price, APR, term, trade-in, down payment, taxes, and fees to compare what different vehicles would actually cost each month.</p>
+    </div>
+
+    <div class="layout">
+      <section class="card" aria-labelledby="loan-inputs-title">
+        <h2 id="loan-inputs-title">Loan details</h2>
+        <div class="form-grid">
+          <div class="field full">
+            <label for="price">Vehicle price</label>
+            <div class="input-wrap has-prefix"><span class="prefix">$</span><input id="price" type="number" min="0" step="100" value="35000" inputmode="decimal"></div>
+          </div>
+          <div class="field">
+            <label for="down">Down payment</label>
+            <div class="input-wrap has-prefix"><span class="prefix">$</span><input id="down" type="number" min="0" step="100" value="3000" inputmode="decimal"></div>
+          </div>
+          <div class="field">
+            <label for="trade">Trade-in value</label>
+            <div class="input-wrap has-prefix"><span class="prefix">$</span><input id="trade" type="number" min="0" step="100" value="0" inputmode="decimal"></div>
+          </div>
+          <div class="field">
+            <label for="payoff">Trade-in loan payoff</label>
+            <div class="input-wrap has-prefix"><span class="prefix">$</span><input id="payoff" type="number" min="0" step="100" value="0" inputmode="decimal"></div>
+            <div class="helper">If the trade still has a loan balance.</div>
+          </div>
+          <div class="field">
+            <label for="apr">APR</label>
+            <div class="input-wrap has-suffix"><input id="apr" type="number" min="0" max="40" step="0.1" value="7.5" inputmode="decimal"><span class="suffix">%</span></div>
+          </div>
+          <div class="field">
+            <label for="term">Loan term</label>
+            <select id="term">
+              <option value="36">36 months</option>
+              <option value="48">48 months</option>
+              <option value="60" selected>60 months</option>
+              <option value="72">72 months</option>
+              <option value="84">84 months</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="tax">Sales tax</label>
+            <div class="input-wrap has-suffix"><input id="tax" type="number" min="0" max="20" step="0.1" value="6" inputmode="decimal"><span class="suffix">%</span></div>
+          </div>
+          <div class="field">
+            <label for="fees">Dealer / title / other fees</label>
+            <div class="input-wrap has-prefix"><span class="prefix">$</span><input id="fees" type="number" min="0" step="50" value="1000" inputmode="decimal"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card result-card" aria-live="polite">
+        <div class="payment-label">ESTIMATED MONTHLY PAYMENT</div>
+        <div class="payment" id="monthly">$0</div>
+        <div class="per-month" id="paymentContext">per month</div>
+        <div class="metrics">
+          <div class="metric"><span>Amount financed</span><strong id="financed">$0</strong></div>
+          <div class="metric"><span>Total interest</span><strong id="interest">$0</strong></div>
+          <div class="metric"><span>Total of payments</span><strong id="totalPayments">$0</strong></div>
+          <div class="metric"><span>Estimated cash due</span><strong id="cashDue">$0</strong></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card compare-wrap" aria-labelledby="comparison-title">
+      <div class="compare-head">
+        <div><h2 id="comparison-title">Compare vehicle prices</h2><p>Same financing assumptions, different purchase prices.</p></div>
+      </div>
+      <div id="compareTable" class="compare-table"></div>
+    </section>
+
+    <section class="card term-section" aria-labelledby="term-title">
+      <div class="compare-head">
+        <div><h2 id="term-title">Compare loan terms</h2><p>See the monthly payment and total interest tradeoff.</p></div>
+      </div>
+      <div id="termGrid" class="term-grid"></div>
+    </section>
+
+    <div class="note">Estimates only. Actual lender payments can differ based on credit approval, taxes, lender fees, rebates, trade treatment, dealer documentation charges, and how your state taxes trade-ins.</div>
+  </div>
+</main>
+<script>
+(() => {
+  const ids = ['price','down','trade','payoff','apr','term','tax','fees'];
+  const els = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
+  const money = value => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(Math.max(0, Number(value) || 0));
+  const money2 = value => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:2}).format(Math.max(0, Number(value) || 0));
+  const n = el => Math.max(0, Number(el.value) || 0);
+
+  function loanForPrice(vehiclePrice, monthsOverride){
+    const down = n(els.down);
+    const trade = n(els.trade);
+    const payoff = n(els.payoff);
+    const apr = n(els.apr);
+    const months = monthsOverride || Math.max(1, Number(els.term.value) || 60);
+    const taxRate = n(els.tax) / 100;
+    const fees = n(els.fees);
+
+    const taxablePrice = Math.max(0, vehiclePrice - trade);
+    const taxAmount = taxablePrice * taxRate;
+    const netTradeEquity = trade - payoff;
+    const financed = Math.max(0, vehiclePrice + taxAmount + fees - down - netTradeEquity);
+    const monthlyRate = apr / 100 / 12;
+    let monthly;
+    if(financed === 0) monthly = 0;
+    else if(monthlyRate === 0) monthly = financed / months;
+    else monthly = financed * monthlyRate / (1 - Math.pow(1 + monthlyRate, -months));
+    const totalPayments = monthly * months;
+    const interest = Math.max(0, totalPayments - financed);
+    return {monthly, financed, interest, totalPayments, taxAmount, months, apr, cashDue:down};
+  }
+
+  function update(){
+    const price = n(els.price);
+    const base = loanForPrice(price);
+    document.getElementById('monthly').textContent = money2(base.monthly);
+    document.getElementById('paymentContext').textContent = `for ${base.months} months at ${base.apr.toFixed(1)}% APR`;
+    document.getElementById('financed').textContent = money(base.financed);
+    document.getElementById('interest').textContent = money(base.interest);
+    document.getElementById('totalPayments').textContent = money(base.totalPayments);
+    document.getElementById('cashDue').textContent = money(base.cashDue);
+
+    const steps = [-10000,-5000,0,5000,10000].map(delta => Math.max(0, price + delta));
+    const unique = [...new Set(steps)].sort((a,b)=>a-b);
+    const table = document.getElementById('compareTable');
+    table.innerHTML = '';
+    unique.forEach(p => {
+      const r = loanForPrice(p);
+      const row = document.createElement('div');
+      row.className = 'compare-row' + (p === price ? ' active' : '');
+      const delta = r.monthly - base.monthly;
+      row.innerHTML = `<div class="compare-price">${money(p)} vehicle</div><div class="compare-payment">${money2(r.monthly)}/mo</div><div class="compare-delta">${p === price ? 'Current' : `${delta >= 0 ? '+' : '−'}${money2(Math.abs(delta))}/mo`}</div>`;
+      table.appendChild(row);
+    });
+
+    const terms = [36,48,60,72,84];
+    const grid = document.getElementById('termGrid');
+    grid.innerHTML = '';
+    terms.forEach(term => {
+      const r = loanForPrice(price, term);
+      const card = document.createElement('div');
+      card.className = 'term-card' + (term === base.months ? ' active' : '');
+      card.innerHTML = `<span>${term} MONTHS</span><strong>${money2(r.monthly)}</strong><small>${money(r.interest)} interest</small>`;
+      grid.appendChild(card);
+    });
+  }
+
+  ids.forEach(id => els[id].addEventListener('input', update));
+  els.term.addEventListener('change', update);
+  update();
+})();
+</script>
+</body>
+</html>
