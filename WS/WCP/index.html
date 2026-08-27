@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Workflow Commands — Quick Reference</title>
+<style>
+  :root {
+    --bg:#020914; --panel:#061321; --panel2:#081a2e; --line:#214765; --cyan:#48c9ff;
+    --text:#f5f7fb; --muted:#7eb7e8;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; min-height:100%; background:radial-gradient(circle at 50% 0%, #08182a 0, #020914 48%, #01050b 100%); color:var(--text); }
+  body { font-family: "Segoe UI", Arial, sans-serif; padding:14px; }
+  .sheet { width:min(1180px, 100%); margin:0 auto; }
+  .topline { height:1px; background:linear-gradient(90deg,transparent,var(--cyan) 4%,#1c5a85 50%,var(--cyan) 96%,transparent); position:relative; margin-bottom:8px; }
+  .topline:before,.topline:after {content:"";position:absolute;top:-3px;width:15px;height:1px;background:var(--cyan);transform:rotate(-28deg)}
+  .topline:before{left:12px} .topline:after{right:12px;transform:rotate(28deg)}
+  h1 { margin:0; text-align:center; font-size:clamp(28px,4.6vw,58px); line-height:1; font-weight:900; letter-spacing:1px;
+    color:#f8fbff; text-shadow:0 2px 0 #7f8994, 0 4px 8px rgba(0,0,0,.7); }
+  .subtitle { display:flex; align-items:center; gap:12px; margin:14px 0 12px; color:#8bc8f3; font-weight:600; font-size:clamp(14px,2vw,22px); justify-content:center; white-space:nowrap; }
+  .subtitle .rule { height:1px; flex:1; max-width:240px; background:linear-gradient(90deg,transparent,var(--cyan)); }
+  .subtitle .rule.right { background:linear-gradient(90deg,var(--cyan),transparent); }
+  .spark { color:#55d8ff; text-shadow:0 0 10px #30bfff; font-size:18px; }
+  .table-wrap { border:1px solid #2f78ad; border-radius:16px; overflow:hidden; background:rgba(4,14,25,.9); box-shadow:0 0 25px rgba(13,87,140,.16) inset; }
+  table { width:100%; border-collapse:collapse; table-layout:fixed; }
+  colgroup col:nth-child(1){width:31%} colgroup col:nth-child(2){width:31%} colgroup col:nth-child(3){width:38%}
+  thead th { position:sticky; top:0; z-index:3; background:linear-gradient(#0a2441,#071a30); color:#f6f8fb; font-weight:800; font-size:clamp(14px,1.7vw,21px); padding:10px 14px; border-bottom:1px solid #2e709f; text-align:center; }
+  thead th+th, tbody td+td { border-left:1px solid rgba(74,118,150,.38); }
+  tbody tr { border-bottom:1px solid rgba(80,112,137,.25); transition:background .12s ease; }
+  tbody tr:last-child { border-bottom:0; }
+  tbody tr:hover { background:rgba(36,110,160,.13); }
+  td { padding:6px 12px; font-size:clamp(12px,1.45vw,18px); vertical-align:middle; }
+  .command-cell { display:grid; grid-template-columns:34px 34px 1fr; align-items:center; gap:7px; }
+  .icon { width:30px; height:30px; display:grid; place-items:center; font-size:24px; color:var(--accent); text-shadow:0 0 9px color-mix(in srgb,var(--accent) 65%,transparent); font-weight:900; }
+  .num { width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--accent); color:white; font-weight:800; font-size:14px; box-shadow:0 0 8px color-mix(in srgb,var(--accent) 40%,transparent) inset; }
+  .command { color:var(--accent); font-weight:900; letter-spacing:.3px; text-shadow:0 0 7px color-mix(in srgb,var(--accent) 28%,transparent); }
+  .syntax { font-family:Consolas,"SFMono-Regular",monospace; letter-spacing:.5px; color:#f5f6f8; white-space:nowrap; }
+  .purpose { color:#f1f3f6; }
+  .footer { margin-top:12px; border:1px solid #2f78ad; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,#06182a,#03101d); }
+  .footer-title { display:flex; justify-content:center; align-items:center; gap:12px; color:#6db9f2; font-weight:800; letter-spacing:.6px; padding:7px 12px; border-bottom:1px solid rgba(47,120,173,.7); font-size:clamp(14px,1.7vw,20px); }
+  .footer-title:before,.footer-title:after { content:""; width:120px; height:1px; background:linear-gradient(90deg,transparent,#55d8ff); }
+  .footer-title:after { background:linear-gradient(90deg,#55d8ff,transparent); }
+  .footer-grid { display:grid; grid-template-columns:1fr 1.45fr 1.45fr; }
+  .foot-item { padding:12px 16px; display:flex; align-items:center; gap:12px; min-height:62px; }
+  .foot-item+ .foot-item { border-left:1px solid rgba(65,111,145,.48); }
+  .foot-icon { color:#58c8ff; font-size:30px; font-weight:900; }
+  .label { color:#78b7e9; font-weight:900; }
+  .placeholder { color:#8bc8f3; font-family:Consolas,monospace; }
+  .legend-note { text-align:right; margin:7px 5px 0; color:#4f7899; font-size:11px; }
+  @media (max-width:760px) {
+    body{padding:6px} .subtitle{gap:7px} .subtitle .rule{display:none}
+    colgroup col:nth-child(1){width:35%} colgroup col:nth-child(2){width:29%} colgroup col:nth-child(3){width:36%}
+    td{padding:5px 6px} .command-cell{grid-template-columns:24px 25px 1fr;gap:4px} .icon{width:22px;height:22px;font-size:18px} .num{width:22px;height:22px;font-size:11px;border-width:1px}
+    .footer-grid{grid-template-columns:1fr} .foot-item+.foot-item{border-left:0;border-top:1px solid rgba(65,111,145,.48)}
+  }
+  @media print { body{background:#020914;padding:0} .sheet{width:100%} thead th{position:static} }
+</style>
+</head>
+<body>
+<main class="sheet">
+  <div class="topline"></div>
+  <h1>WORKFLOW COMMANDS — QUICK REFERENCE</h1>
+  <div class="subtitle"><span class="spark">✦</span><span class="rule"></span><span>◆◆</span><span>Compact command language for AI project orchestration</span><span>◆◆</span><span class="rule right"></span><span class="spark">✦</span></div>
+
+  <section class="table-wrap" aria-label="Workflow command reference">
+    <table>
+      <colgroup><col><col><col></colgroup>
+      <thead><tr><th>COMMAND</th><th>SYNTAX</th><th>PURPOSE</th></tr></thead>
+      <tbody><tr class="cmd-row" style="--accent:#39e52f">
+      <td class="command-cell"><span class="icon">▶</span><span class="num">1</span><span class="command">START</span></td>
+      <td class="syntax">START &lt;PROJECT&gt;</td>
+      <td class="purpose">Initialize a new project</td>
+    </tr><tr class="cmd-row" style="--accent:#ff2a2a">
+      <td class="command-cell"><span class="icon">↻</span><span class="num">2</span><span class="command">RESUME</span></td>
+      <td class="syntax">RESUME &lt;PROJECT&gt;</td>
+      <td class="purpose">Reload authoritative project state and continue</td>
+    </tr><tr class="cmd-row" style="--accent:#38a7ff">
+      <td class="command-cell"><span class="icon">⇄</span><span class="num">3</span><span class="command">SWITCH</span></td>
+      <td class="syntax">SWITCH &lt;PROJECT&gt;</td>
+      <td class="purpose">Jump to another active project without advancing it</td>
+    </tr><tr class="cmd-row" style="--accent:#ff9b00">
+      <td class="command-cell"><span class="icon">Ⅱ</span><span class="num">4</span><span class="command">PAUSE</span></td>
+      <td class="syntax">PAUSE [PROJECT]</td>
+      <td class="purpose">Checkpoint and stop cleanly</td>
+    </tr><tr class="cmd-row" style="--accent:#a95cff">
+      <td class="command-cell"><span class="icon">≫</span><span class="num">5</span><span class="command">CONTINUE</span></td>
+      <td class="syntax">CONTINUE</td>
+      <td class="purpose">Advance from the last next action</td>
+    </tr><tr class="cmd-row" style="--accent:#38a7ff">
+      <td class="command-cell"><span class="icon">⌁</span><span class="num">6</span><span class="command">STATUS</span></td>
+      <td class="syntax">STATUS [PROJECT]</td>
+      <td class="purpose">See task, owner, blocker, and next step</td>
+    </tr><tr class="cmd-row" style="--accent:#20d9d4">
+      <td class="command-cell"><span class="icon">☷</span><span class="num">7</span><span class="command">STEPS</span></td>
+      <td class="syntax">STEPS</td>
+      <td class="purpose">Show the current work step-by-step</td>
+    </tr><tr class="cmd-row" style="--accent:#39e52f">
+      <td class="command-cell"><span class="icon">▮</span><span class="num">8</span><span class="command">CHECKPOINT</span></td>
+      <td class="syntax">CHECKPOINT</td>
+      <td class="purpose">Save current state immediately</td>
+    </tr><tr class="cmd-row" style="--accent:#61ccff">
+      <td class="command-cell"><span class="icon">⚑</span><span class="num">9</span><span class="command">BRIEF</span></td>
+      <td class="syntax">BRIEF [PROJECT | ALL]</td>
+      <td class="purpose">Fast operational recap before work begins</td>
+    </tr><tr class="cmd-row" style="--accent:#ff9b00">
+      <td class="command-cell"><span class="icon">■</span><span class="num">10</span><span class="command">CLOSE</span></td>
+      <td class="syntax">CLOSE [PROJECT | ALL]</td>
+      <td class="purpose">Synchronize durable state at end of session</td>
+    </tr><tr class="cmd-row" style="--accent:#ff5dae">
+      <td class="command-cell"><span class="icon">✚</span><span class="num">11</span><span class="command">WCPADD</span></td>
+      <td class="syntax">WCPADD &lt;request&gt;</td>
+      <td class="purpose">Add or revise the canonical workflow command language</td>
+    </tr><tr class="cmd-row" style="--accent:#ff9b00">
+      <td class="command-cell"><span class="icon">▤</span><span class="num">12</span><span class="command">NOTE</span></td>
+      <td class="syntax">NOTE &lt;text&gt;</td>
+      <td class="purpose">Record a durable note or update</td>
+    </tr><tr class="cmd-row" style="--accent:#ff2a2a">
+      <td class="command-cell"><span class="icon">?</span><span class="num">13</span><span class="command">QUESTION</span></td>
+      <td class="syntax">QUESTION</td>
+      <td class="purpose">Ask without executing</td>
+    </tr><tr class="cmd-row" style="--accent:#a95cff">
+      <td class="command-cell"><span class="icon">●</span><span class="num">14</span><span class="command">CONVO</span></td>
+      <td class="syntax">CONVO</td>
+      <td class="purpose">Discussion / planning mode</td>
+    </tr><tr class="cmd-row" style="--accent:#ff9b00">
+      <td class="command-cell"><span class="icon">☷</span><span class="num">15</span><span class="command">ROUTE</span></td>
+      <td class="syntax">ROUTE &lt;objective&gt;</td>
+      <td class="purpose">Decide who should own the work</td>
+    </tr><tr class="cmd-row" style="--accent:#a95cff">
+      <td class="command-cell"><span class="icon">↪</span><span class="num">16</span><span class="command">HANDOFF</span></td>
+      <td class="syntax">HANDOFF</td>
+      <td class="purpose">Generate the next agent-ready handoff</td>
+    </tr><tr class="cmd-row" style="--accent:#39e52f">
+      <td class="command-cell"><span class="icon">⑂</span><span class="num">17</span><span class="command">SPLIT</span></td>
+      <td class="syntax">SPLIT</td>
+      <td class="purpose">Break work into parallel-safe tasks</td>
+    </tr><tr class="cmd-row" style="--accent:#38a7ff">
+      <td class="command-cell"><span class="icon">⟳</span><span class="num">18</span><span class="command">SYNC</span></td>
+      <td class="syntax">SYNC [PROJECT]</td>
+      <td class="purpose">Reconcile docs, Git, PRs, deployments, and runtime</td>
+    </tr><tr class="cmd-row" style="--accent:#ff9b00">
+      <td class="command-cell"><span class="icon">◆</span><span class="num">19</span><span class="command">REVIEW</span></td>
+      <td class="syntax">REVIEW</td>
+      <td class="purpose">Independent quality / checksum review</td>
+    </tr><tr class="cmd-row" style="--accent:#39e52f">
+      <td class="command-cell"><span class="icon">✓</span><span class="num">20</span><span class="command">APPROVE</span></td>
+      <td class="syntax">APPROVE</td>
+      <td class="purpose">Advance through the next approval gate</td>
+    </tr><tr class="cmd-row" style="--accent:#ff2a2a">
+      <td class="command-cell"><span class="icon">×</span><span class="num">21</span><span class="command">REJECT</span></td>
+      <td class="syntax">REJECT &lt;reason&gt;</td>
+      <td class="purpose">Return work with a correction reason</td>
+    </tr><tr class="cmd-row" style="--accent:#b9c2cf">
+      <td class="command-cell"><span class="icon">⬡</span><span class="num">22</span><span class="command">ABORT</span></td>
+      <td class="syntax">ABORT</td>
+      <td class="purpose">Terminate the current task without marking complete</td>
+    </tr><tr class="cmd-row" style="--accent:#38a7ff">
+      <td class="command-cell"><span class="icon">▣</span><span class="num">23</span><span class="command">LOCK</span></td>
+      <td class="syntax">LOCK &lt;thing&gt;</td>
+      <td class="purpose">Protect an accepted invariant</td>
+    </tr><tr class="cmd-row" style="--accent:#ff9b00">
+      <td class="command-cell"><span class="icon">□</span><span class="num">24</span><span class="command">UNLOCK</span></td>
+      <td class="syntax">UNLOCK &lt;thing&gt;</td>
+      <td class="purpose">Permit changes to a locked invariant</td>
+    </tr><tr class="cmd-row" style="--accent:#a95cff">
+      <td class="command-cell"><span class="icon">⚑</span><span class="num">25</span><span class="command">PRIORITY</span></td>
+      <td class="syntax">PRIORITY &lt;task/project&gt;</td>
+      <td class="purpose">Raise execution priority</td>
+    </tr><tr class="cmd-row" style="--accent:#38a7ff">
+      <td class="command-cell"><span class="icon">☷</span><span class="num">26</span><span class="command">QUEUE</span></td>
+      <td class="syntax">QUEUE</td>
+      <td class="purpose">Show all active projects and tasks</td>
+    </tr><tr class="cmd-row" style="--accent:#39e52f">
+      <td class="command-cell"><span class="icon">▧</span><span class="num">27</span><span class="command">CHEATSHEET</span></td>
+      <td class="syntax">CHEATSHEET &lt;topic&gt;</td>
+      <td class="purpose">Create a dense visual explainer</td>
+    </tr><tr class="cmd-row" style="--accent:#ff9b00">
+      <td class="command-cell"><span class="icon">▯</span><span class="num">28</span><span class="command">MOBILE MODE</span></td>
+      <td class="syntax">MOBILE MODE</td>
+      <td class="purpose">Optimize workflow ergonomics for mobile</td>
+    </tr><tr class="cmd-row" style="--accent:#38a7ff">
+      <td class="command-cell"><span class="icon">▰</span><span class="num">29</span><span class="command">OFFICE MODE</span></td>
+      <td class="syntax">OFFICE MODE</td>
+      <td class="purpose">Optimize workflow ergonomics for desktop</td>
+    </tr><tr class="cmd-row" style="--accent:#b9c2cf">
+      <td class="command-cell"><span class="icon">◴</span><span class="num">30</span><span class="command">USAGE</span></td>
+      <td class="syntax">USAGE</td>
+      <td class="purpose">Show accessible usage / resource information</td>
+    </tr></tbody>
+    </table>
+  </section>
+
+  <section class="footer">
+    <div class="footer-title"><span>✦</span> MANDATORY HANDOFF FOOTER <span>✦</span></div>
+    <div class="footer-grid">
+      <div class="foot-item"><span class="foot-icon">☑</span><div><span class="label">TASK ID #N:</span> <span class="placeholder">&lt;STATUS&gt;</span></div></div>
+      <div class="foot-item"><span class="foot-icon">◎</span><div><span class="label">OBJECTIVE:</span> <span class="placeholder">&lt;one short objective&gt;</span></div></div>
+      <div class="foot-item"><span class="foot-icon">➤</span><div><span class="label">ALEX ACTION:</span> <span class="placeholder">&lt;one exact next action&gt;</span></div></div>
+    </div>
+  </section>
+  <div class="legend-note">Canonical source: WORKFLOW_COMMAND_PROMPT.md</div>
+</main>
+</body>
+</html>
