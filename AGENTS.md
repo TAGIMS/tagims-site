@@ -16,7 +16,9 @@ Before handling an owner workflow command, read and follow `WORKFLOW_COMMAND_PRO
 
 Commands defined there are mandatory operating protocols, not conversational suggestions.
 
-The canonical workflow command set includes project lifecycle, orchestration, review/approval, multi-project routing, work-mode, CHEATSHEET, and workflow-administration commands. `WCPADD <request>` is the only command for adding or revising workflow commands; it must update the canonical workflow file and propagate only to materially affected control-plane files/projects.
+The canonical workflow command set includes project lifecycle, orchestration, review/approval, multi-project routing, work-mode, CHEATSHEET, workflow-administration commands, and the persistent `WORKFLOW MODE` / `EXIT WORKFLOW` execution-state commands. `WCPADD <request>` is the only command for adding or revising workflow commands; it must update the canonical workflow file and propagate only to materially affected control-plane files/projects.
+
+`WORKFLOW MODE` activates persistent structured workflow execution and remains active until `EXIT WORKFLOW` is explicitly issued. `QUESTION` and `CONVO` temporarily freeze execution without disabling workflow mode. `EXIT WORKFLOW` returns to ordinary ad hoc interaction without changing the underlying task/project state.
 
 `BRIEF` is the start-of-session recap command. `CLOSE` is the end-of-session synchronization command. `RESUME` must always recover authoritative project state before proceeding and all workflow responses must follow the mandatory `TASK ID / OBJECTIVE / ALEX ACTION` handoff footer defined in `WORKFLOW_COMMAND_PROMPT.md`.
 
