@@ -48,7 +48,7 @@ nav{
   width:min(100% - 44px,1160px);min-height:76px;margin-inline:auto;
   display:flex;align-items:center;justify-content:space-between;gap:22px;
 }
-.logo{font-size:17px;font-weight:900;letter-spacing:.17em;white-space:nowrap}
+.logo{font-size:14px;font-weight:900;letter-spacing:.11em;white-space:nowrap}
 .logo span{color:var(--teal)}
 .nav-links{display:flex;align-items:center;gap:28px;color:#bac5cf;font-size:14px;font-weight:600}
 .nav-links a{transition:color .18s ease}
@@ -70,8 +70,8 @@ nav{
 .btn-secondary:hover{border-color:rgba(131,227,200,.4);background:#121c27}
 .hero{
   position:relative;isolation:isolate;overflow:hidden;
-  min-height:calc(100svh - 76px);display:flex;align-items:center;
-  padding:86px 0 92px;
+  min-height:72svh;display:flex;align-items:center;
+  padding:72px 0;
 }
 .hero:before{
   content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;
@@ -102,7 +102,7 @@ nav{
 }
 .hero h1{
   max-width:900px;margin:0 auto;
-  font-size:clamp(48px,7vw,82px);line-height:1.02;letter-spacing:-.052em;
+  font-size:clamp(56px,8vw,96px);line-height:.98;letter-spacing:-.055em;
   text-wrap:balance;
 }
 .hero h1 .accent{
@@ -116,8 +116,8 @@ nav{
 }
 .hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
 .hero-note{margin-top:19px;color:#81909e;font-size:13px;letter-spacing:.01em}
-section{padding:104px 0}
-.section-head{max-width:760px;margin:0 auto 44px;text-align:center}
+section{padding:88px 0}
+.section-head{max-width:760px;margin:0 auto 38px;text-align:center}
 .section-head h2,.leak-copy h2,.cta h2{
   margin:0 0 16px;font-size:clamp(34px,4.7vw,54px);line-height:1.08;letter-spacing:-.038em;text-wrap:balance;
 }
@@ -218,12 +218,12 @@ footer{padding:36px 0 48px;border-top:1px solid rgba(255,255,255,.06);color:#7f8
   .nav-inner{min-height:68px}
   .nav-links{display:none}
   nav .btn{min-height:40px;padding-inline:13px;font-size:12px}
-  .logo{font-size:14px;letter-spacing:.13em}
-  .hero{min-height:auto;padding:88px 0 76px}
-  .hero h1{font-size:clamp(43px,13vw,62px)}
+  .logo{font-size:11px;letter-spacing:.08em;white-space:normal;max-width:190px;line-height:1.25}
+  .hero{min-height:62svh;padding:72px 0}
+  .hero h1{font-size:clamp(52px,15vw,70px)}
   .hero p{font-size:17px}
   .intelligence-field{width:135vw;top:42%;opacity:.28}
-  section{padding:78px 0}
+  section{padding:68px 0}
   .card-grid,.platform-grid,.mini-grid{grid-template-columns:1fr}
   .card{min-height:0}
   .process{grid-template-columns:1fr;gap:0}
@@ -252,14 +252,14 @@ footer{padding:36px 0 48px;border-top:1px solid rgba(255,255,255,.06);color:#7f8
 
 <nav>
   <div class="nav-inner">
-    <a href="#top" class="logo">[ <span>TAG</span> ] INTELLIGENCE</a>
+    <a href="#top" class="logo">TAG <span>INTELLIGENCE</span> MANAGEMENT SYSTEMS</a>
     <div class="nav-links">
       <a href="#solutions">Solutions</a>
       <a href="#leakage">Leakage</a>
       <a href="#process">How It Works</a>
       <a href="#platform">Platform</a>
     </div>
-    <a href="#audit" class="btn btn-primary">Start Business Audit</a>
+    <a href="/audit/" class="btn btn-primary">Start Business Audit</a>
   </div>
 </nav>
 
@@ -277,14 +277,7 @@ footer{padding:36px 0 48px;border-top:1px solid rgba(255,255,255,.06);color:#7f8
     </div>
     <div class="shell hero-grid">
       <div>
-        <div class="kicker">AI OPERATIONS & AUTOMATION</div>
-        <h1>Build a business that <span class="accent motion-word">runs intelligently.</span></h1>
-        <p>TAG Intelligence finds the operational gaps costing your business time, capacity, and revenue—then connects your systems and builds practical AI workflows that help your team scale with less friction.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#audit">Start Free Business Audit</a>
-          <a class="btn btn-secondary" href="#solutions">Explore TAG Solutions</a>
-        </div>
-        <div class="hero-note">Diagnose the highest-value leak. Prove the return. Expand with confidence.</div>
+        <h1>Operate <span class="accent">Intelligently.</span></h1>
       </div>
       </div>
     </section>
@@ -292,41 +285,39 @@ footer{padding:36px 0 48px;border-top:1px solid rgba(255,255,255,.06);color:#7f8
   <section id="solutions">
     <div class="shell">
       <div class="section-head">
-        <div class="kicker">WHAT TAG BUILDS</div>
-        <h2>Practical intelligence for the work that drives your business.</h2>
-        <p>TAG focuses on the operational layer between your people, software, customers, data, and decisions.</p>
+        <h2>What TAG Builds.</h2>
       </div>
 
       <div class="card-grid">
         <div class="card">
           <div class="num">01</div>
           <h3>Workflow Automation</h3>
-          <p>Automate repetitive handoffs, approvals, follow-ups, data entry, reminders, task creation, and recurring administrative work.</p>
+          <p>Remove repetitive work and manual handoffs.</p>
         </div>
         <div class="card">
           <div class="num">02</div>
           <h3>AI Operations</h3>
-          <p>Deploy AI assistants, agents, summaries, decision support, document generation, customer communication, and internal operations workflows.</p>
+          <p>Put practical AI inside daily operations.</p>
         </div>
         <div class="card">
           <div class="num">03</div>
           <h3>System Integration</h3>
-          <p>Connect CRM, accounting, scheduling, email, calendar, documents, project tools, and industry platforms into one coordinated system.</p>
+          <p>Connect the tools your business already uses.</p>
         </div>
         <div class="card">
           <div class="num">04</div>
           <h3>Management Intelligence</h3>
-          <p>Surface KPIs, overdue work, revenue, workload, cash flow, bottlenecks, and exceptions without manually gathering information.</p>
+          <p>See performance, risks, and bottlenecks faster.</p>
         </div>
         <div class="card">
           <div class="num">05</div>
           <h3>Document Intelligence</h3>
-          <p>Generate, classify, organize, search, and route estimates, reports, proposals, SOPs, contracts, files, and business knowledge.</p>
+          <p>Create, organize, and retrieve business knowledge.</p>
         </div>
         <div class="card">
           <div class="num">06</div>
           <h3>Managed AI Systems</h3>
-          <p>Ongoing monitoring, optimization, maintenance, workflow improvement, and system expansion as the business evolves.</p>
+          <p>Keep systems useful as your business changes.</p>
         </div>
       </div>
     </div>
@@ -335,14 +326,13 @@ footer{padding:36px 0 48px;border-top:1px solid rgba(255,255,255,.06);color:#7f8
   <section class="leak-section" id="leakage">
     <div class="shell leak-wrap">
       <div class="leak-copy">
-        <div class="kicker">OPERATIONAL LEAKAGE</div>
-        <h2>The most expensive problems are often hidden in the handoffs.</h2>
-        <p>TAG looks for hidden leakage across revenue, labor, workflow, communication, financial systems, company knowledge, and management visibility.</p>
+        <h2>Find the Leaks.</h2>
+        <p>See where time, capacity, and revenue disappear.</p>
         <div class="leak-points">
-          <div class="leak-point">Revenue lost between inquiry, follow-up, estimate, and close</div>
-          <div class="leak-point">Labor consumed by repetitive or duplicate work</div>
-          <div class="leak-point">Management time lost gathering information and making routine decisions</div>
-          <div class="leak-point">Cash-flow friction caused by weak invoicing and collections workflows</div>
+          <div class="leak-point">Missed leads and weak follow-up</div>
+          <div class="leak-point">Repetitive and duplicate work</div>
+          <div class="leak-point">Slow reporting and routine decisions</div>
+          <div class="leak-point">Invoice and collection friction</div>
         </div>
       </div>
 
@@ -379,36 +369,34 @@ footer{padding:36px 0 48px;border-top:1px solid rgba(255,255,255,.06);color:#7f8
   <section id="process">
     <div class="shell">
       <div class="section-head">
-        <div class="kicker">THE TAG MODEL</div>
-        <h2><span class="motion-word">Land.</span> Measure. <span class="motion-word">Expand.</span></h2>
-        <p>TAG starts with the highest-value operational problem, proves the result, then expands only where additional value is measurable.</p>
+        <h2>Audit. Fix. Expand.</h2>
       </div>
 
       <div class="process">
         <div class="step">
           <div class="dot">01</div>
           <h4>Audit</h4>
-          <p>Identify operational leakage and automation opportunities.</p>
+          <p>Find the biggest leaks.</p>
         </div>
         <div class="step">
           <div class="dot">02</div>
           <h4>Prioritize</h4>
-          <p>Rank opportunities by impact, feasibility, and ROI.</p>
+          <p>Choose the best first move.</p>
         </div>
         <div class="step">
           <div class="dot">03</div>
           <h4>Implement</h4>
-          <p>Fix the highest-value leak first.</p>
+          <p>Build the solution.</p>
         </div>
         <div class="step">
           <div class="dot">04</div>
           <h4>Measure</h4>
-          <p>Track time, capacity, revenue, or cost recovered.</p>
+          <p>Prove the result.</p>
         </div>
         <div class="step">
           <div class="dot">05</div>
           <h4>Expand</h4>
-          <p>Address the next leak and deepen the system.</p>
+          <p>Scale what works.</p>
         </div>
       </div>
     </div>
@@ -417,20 +405,18 @@ footer{padding:36px 0 48px;border-top:1px solid rgba(255,255,255,.06);color:#7f8
   <section id="platform">
     <div class="shell">
       <div class="section-head">
-        <div class="kicker">ONE INTELLIGENCE LAYER</div>
-        <h2>One intelligence layer across the systems you already use.</h2>
-        <p>TAG is built to orchestrate the tools you already use rather than forcing unnecessary replacements.</p>
+        <h2>Works With What You Use.</h2>
       </div>
 
       <div class="platform-grid">
-        <div class="platform"><h4>Email</h4><p>Prioritization, routing, response, task creation, document extraction.</p></div>
-        <div class="platform"><h4>Calendar</h4><p>Scheduling, reminders, coordination, capacity, route-aware workflows.</p></div>
-        <div class="platform"><h4>CRM</h4><p>Lead capture, follow-up, status, pipeline visibility, customer history.</p></div>
-        <div class="platform"><h4>Accounting</h4><p>Invoices, receivables, payment follow-up, expense workflows, visibility.</p></div>
-        <div class="platform"><h4>Documents</h4><p>Generation, organization, retrieval, classification, knowledge systems.</p></div>
-        <div class="platform"><h4>Tasks</h4><p>Automatic task capture, assignment, reminders, accountability, exceptions.</p></div>
-        <div class="platform"><h4>Operations</h4><p>Project status, handoffs, approvals, recurring workflows, bottleneck detection.</p></div>
-        <div class="platform"><h4>AI</h4><p>Assistants, agents, analysis, natural-language control, intelligent automation.</p></div>
+        <div class="platform"><h4>Email</h4><p>Route, respond, and capture tasks.</p></div>
+        <div class="platform"><h4>Calendar</h4><p>Schedule and coordinate automatically.</p></div>
+        <div class="platform"><h4>CRM</h4><p>Capture leads and maintain follow-up.</p></div>
+        <div class="platform"><h4>Accounting</h4><p>Improve billing and cash visibility.</p></div>
+        <div class="platform"><h4>Documents</h4><p>Generate, organize, and retrieve.</p></div>
+        <div class="platform"><h4>Tasks</h4><p>Capture, assign, and track work.</p></div>
+        <div class="platform"><h4>Operations</h4><p>Coordinate handoffs and approvals.</p></div>
+        <div class="platform"><h4>AI</h4><p>Add intelligence to real workflows.</p></div>
       </div>
     </div>
   </section>
@@ -439,11 +425,10 @@ footer{padding:36px 0 48px;border-top:1px solid rgba(255,255,255,.06);color:#7f8
     <div class="shell">
       <div class="service-area">
         <div>
-          <div class="kicker">SERVING NORTHWEST FLORIDA</div>
-          <h2>Local expertise for Pensacola-area businesses.</h2>
+          <h2>Serving Pensacola & Beyond.</h2>
         </div>
         <div>
-          <p>TAG Intelligence serves businesses throughout Pensacola and the surrounding Gulf Coast communities, with remote consulting and implementation available for organizations beyond the region.</p>
+          <p>Local across Northwest Florida. Available remotely everywhere.</p>
           <div class="service-list" aria-label="Primary service areas">
             <span>Pensacola</span>
             <span>Gulf Breeze</span>
@@ -462,12 +447,11 @@ footer{padding:36px 0 48px;border-top:1px solid rgba(255,255,255,.06);color:#7f8
   <section id="audit">
     <div class="shell">
       <div class="cta">
-        <div class="kicker">START WITH THE DATA</div>
-        <h2>Find out where your business is <span class="motion-word">leaking.</span></h2>
-        <p>Complete the TAG Business Intelligence Audit to identify operational leakage, automation readiness, owner dependency, AI maturity, and your highest-value implementation opportunities.</p>
+        <h2>Find Your Biggest Leak.</h2>
+        <p>Take the business audit. Get a clear starting point.</p>
         <div class="hero-actions" style="justify-content:center">
           <a class="btn btn-primary" href="/audit/">Start Business Audit</a>
-          <a class="btn btn-secondary" href="#solutions">Review Solutions</a>
+          
         </div>
       </div>
     </div>
@@ -476,9 +460,9 @@ footer{padding:36px 0 48px;border-top:1px solid rgba(255,255,255,.06);color:#7f8
 
 <footer>
   <div class="shell footer-inner">
-    <div>[ TAG ] INTELLIGENCE</div>
-    <div>TAG Intelligence Management Systems LLC</div>
-    <div>AI Operations • Automation • Business Intelligence</div>
+    <div>TAG Intelligence Management Systems</div>
+    <div>Pensacola, Florida</div>
+    <div>Operate Intelligently.</div>
   </div>
 </footer>
 
