@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>TAG Business Intelligence Audit — Prototype v0.3</title>
+<title>TAG Business Intelligence Audit | TAG Intelligence</title>
 <style>
 :root{
   --bg:#0a0d12;
@@ -358,6 +358,26 @@ button{
 .moderate{color:var(--warn)}
 .significant{color:#ef8a5d}
 .critical{color:#ef6670}
+.consultation{
+  margin-top:34px;padding:32px;border:1px solid #2c4950;border-radius:22px;
+  background:linear-gradient(145deg,rgba(126,224,195,.08),rgba(90,184,255,.045)),var(--panel);
+}
+.consultation-head{text-align:center;max-width:720px;margin:0 auto 26px}
+.consultation-head h2{margin:0 0 10px;font-size:clamp(28px,4vw,40px);letter-spacing:-.035em}
+.consultation-head p{margin:0;color:var(--muted);line-height:1.6}
+.consult-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.form-field{display:grid;gap:7px}
+.form-field.full{grid-column:1/-1}
+.form-field label{font-size:13px;font-weight:700;color:#dce4eb}
+.form-field input,.form-field select,.form-field textarea{
+  width:100%;border:1px solid var(--line);border-radius:11px;padding:13px 14px;
+  color:var(--text);background:#0d141d;font:inherit;outline:none;
+}
+.form-field textarea{min-height:120px;resize:vertical}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(126,224,195,.08)}
+.form-field select{color-scheme:dark}
+.form-note{margin:14px 0 0;color:var(--muted);font-size:12px;line-height:1.5;text-align:center}
+.consult-submit{display:flex;justify-content:center;margin-top:20px}
 .footer-actions{display:flex;gap:12px;justify-content:center;margin-top:28px;flex-wrap:wrap}
 
 @media(max-width:950px){
@@ -369,9 +389,11 @@ button{
   .bar-row{grid-template-columns:150px 1fr 45px}
   .leakage-hero-inner{grid-template-columns:1fr}
   .leakage-grid{grid-template-columns:1fr}
+  .consult-grid{grid-template-columns:1fr}
 }
 @media(max-width:520px){
   .hero,.card{padding:22px 18px}
+  .consultation{padding:24px 18px}
   .score-grid{grid-template-columns:1fr 1fr}
   .question h2{font-size:23px}
 }
@@ -380,8 +402,8 @@ button{
 <body>
 <div class="shell">
   <div class="brand">
-    <div class="logo">[ <span>TAG</span> ] INTELLIGENCE</div>
-    <div class="badge">Prototype v0.3</div>
+    <a class="logo" href="/" style="color:inherit;text-decoration:none">[ <span>TAG</span> ] INTELLIGENCE</a>
+    <div class="badge">Business Intelligence Audit</div>
   </div>
 
   <section id="startScreen" class="hero">
@@ -412,7 +434,7 @@ button{
     <div class="results-head">
       <div class="question-kicker">TAG AUDIT COMPLETE</div>
       <h1>Your Business Intelligence Scorecard</h1>
-      <p>A prototype diagnostic generated from your questionnaire responses.</p>
+      <p>A practical diagnostic generated from your questionnaire responses.</p>
     </div>
 
     <div class="overall">
@@ -475,9 +497,53 @@ button{
 
     <div id="opportunities"></div>
 
+    <section class="consultation" id="consultation">
+      <div class="consultation-head">
+        <div class="question-kicker">NEXT STEP</div>
+        <h2>Turn your audit results into an action plan.</h2>
+        <p>Request a consultation with TAG Intelligence to review your highest-priority leakage areas and identify the most practical first implementation.</p>
+      </div>
+      <form id="consultationForm">
+        <div class="consult-grid">
+          <div class="form-field">
+            <label for="consultName">Name</label>
+            <input id="consultName" name="name" autocomplete="name" required />
+          </div>
+          <div class="form-field">
+            <label for="consultEmail">Business email</label>
+            <input id="consultEmail" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="form-field">
+            <label for="consultCompany">Company</label>
+            <input id="consultCompany" name="company" autocomplete="organization" required />
+          </div>
+          <div class="form-field">
+            <label for="consultPhone">Phone <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+            <input id="consultPhone" name="phone" type="tel" autocomplete="tel" />
+          </div>
+          <div class="form-field full">
+            <label for="consultMethod">Preferred contact method</label>
+            <select id="consultMethod" name="method">
+              <option>Email</option>
+              <option>Phone</option>
+              <option>Either email or phone</option>
+            </select>
+          </div>
+          <div class="form-field full">
+            <label for="consultGoals">What would you most like to improve?</label>
+            <textarea id="consultGoals" name="goals" placeholder="Tell us about the workflow, bottleneck, or opportunity you want to address." required></textarea>
+          </div>
+        </div>
+        <div class="consult-submit">
+          <button class="primary" type="submit">Request My Consultation</button>
+        </div>
+        <p class="form-note">Submitting opens a pre-addressed email containing your contact information and audit summary. You can review it before sending.</p>
+      </form>
+    </section>
+
     <div class="footer-actions">
       <button class="secondary" id="restartBtn">Retake Audit</button>
-      <button class="primary" id="demoCta">Build My TAG System</button>
+      <button class="primary" id="demoCta">Request a Consultation</button>
     </div>
   </section>
 </div>
@@ -575,7 +641,34 @@ document.getElementById("nextBtn").addEventListener("click", () => {
   else { showResults(); }
 });
 document.getElementById("restartBtn").addEventListener("click", () => location.reload());
-document.getElementById("demoCta").addEventListener("click", () => alert("Prototype CTA: this would route the qualified prospect into the TAG implementation funnel."));
+document.getElementById("demoCta").addEventListener("click", () => {
+  document.getElementById("consultation").scrollIntoView({behavior:"smooth",block:"start"});
+  document.getElementById("consultName").focus({preventScroll:true});
+});
+
+let consultationAuditSummary = "";
+
+document.getElementById("consultationForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const form = new FormData(event.currentTarget);
+  const subject = `Consultation request — ${form.get("company")} — TAG Business Audit`;
+  const body = [
+    "TAG Intelligence consultation request",
+    "",
+    `Name: ${form.get("name")}`,
+    `Business email: ${form.get("email")}`,
+    `Company: ${form.get("company")}`,
+    `Phone: ${form.get("phone") || "Not provided"}`,
+    `Preferred contact method: ${form.get("method")}`,
+    "",
+    "Primary goals:",
+    form.get("goals"),
+    "",
+    "Audit summary:",
+    consultationAuditSummary || "Audit completed; summary unavailable."
+  ].join("\n");
+  window.location.href = `mailto:alex@tagims.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+});
 
 function renderQuestion(){
   const q = questions[index];
@@ -688,6 +781,13 @@ function showResults(){
     : overall >= 45 ? "Your business has significant automation potential."
     : overall >= 25 ? "Your business is carrying substantial manual operational load."
     : "Your business is operating with severe structural leakage.";
+
+  consultationAuditSummary = [
+    `Overall TAG score: ${overall}/100`,
+    `Operational leakage: ${leakage}/100`,
+    `Automation opportunity potential: ${opportunityPotential}/100`,
+    `Largest leakage areas: ${topOne[0]} and ${topTwo[0]}`
+  ].join("\n");
 
   document.getElementById("overallHeadline").textContent = headline;
   document.getElementById("overallSummary").textContent =
