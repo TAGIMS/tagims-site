@@ -16,9 +16,9 @@ Before handling an owner workflow command, read and follow `WORKFLOW_COMMAND_PRO
 
 Commands defined there are mandatory operating protocols, not conversational suggestions.
 
-The canonical workflow command set includes project lifecycle, orchestration, review/approval, multi-project routing, work-mode, and CHEATSHEET commands. Do not maintain a conflicting local command definition here.
+The canonical workflow command set includes project lifecycle, orchestration, review/approval, multi-project routing, work-mode, CHEATSHEET, and workflow-administration commands. `WCPADD <request>` is the only command for adding or revising workflow commands; it must update the canonical workflow file and propagate only to materially affected control-plane files/projects.
 
-`RESUME` must always recover authoritative project state before proceeding and all workflow responses must follow the mandatory `TASK ID / OBJECTIVE / ALEX ACTION` handoff footer defined in `WORKFLOW_COMMAND_PROMPT.md`.
+`BRIEF` is the start-of-session recap command. `CLOSE` is the end-of-session synchronization command. `RESUME` must always recover authoritative project state before proceeding and all workflow responses must follow the mandatory `TASK ID / OBJECTIVE / ALEX ACTION` handoff footer defined in `WORKFLOW_COMMAND_PROMPT.md`.
 
 ## 3. Source-of-truth precedence
 1. Actual authoritative Git/deployment state
