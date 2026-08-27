@@ -1,4 +1,4 @@
-const TAGIM_ORIGIN = "https://app.tagims.com";
+const TAGIM_ORIGIN = "https://ta-gi-m.vercel.app";
 const WEBSITE_ORIGIN = "https://tagims-site-production.pages.dev";
 const BRAND_PATH = "/__tagims/brand.png";
 
@@ -124,4 +124,3 @@ export default {
       .transform(response);
   },
 };
-
