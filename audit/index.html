@@ -782,13 +782,6 @@ function showResults(){
     : overall >= 25 ? "Your business is carrying substantial manual operational load."
     : "Your business is operating with severe structural leakage.";
 
-  consultationAuditSummary = [
-    `Overall TAG score: ${overall}/100`,
-    `Operational leakage: ${leakage}/100`,
-    `Automation opportunity potential: ${opportunityPotential}/100`,
-    `Largest leakage areas: ${topOne[0]} and ${topTwo[0]}`
-  ].join("\n");
-
   document.getElementById("overallHeadline").textContent = headline;
   document.getElementById("overallSummary").textContent =
     `Your overall TAG score is ${overall}/100. Estimated operational leakage is ${leakage}/100, while automation opportunity potential is ${opportunityPotential}/100. ` +
@@ -828,6 +821,13 @@ function showResults(){
   const topLeaks = [...leaks].sort((a,b)=>b[1]-a[1]);
   const topOne = topLeaks[0];
   const topTwo = topLeaks[1];
+
+  consultationAuditSummary = [
+    `Overall TAG score: ${overall}/100`,
+    `Operational leakage: ${leakage}/100`,
+    `Automation opportunity potential: ${opportunityPotential}/100`,
+    `Largest leakage areas: ${topOne[0]} and ${topTwo[0]}`
+  ].join("\n");
 
   document.getElementById("overallLeakNum").textContent = leakage;
   document.getElementById("overallLeakStatus").textContent = leakSeverityLabel(leakage);
