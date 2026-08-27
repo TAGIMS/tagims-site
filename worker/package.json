@@ -1,0 +1,14 @@
+{
+  "name": "tagims-tagim-shell",
+  "private": true,
+  "scripts": {
+    "check": "wrangler deploy --dry-run",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.1",
+    "wrangler": "^4.0.0"
+  }
+}
+
