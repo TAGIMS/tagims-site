@@ -12,31 +12,19 @@ Status: Active control-plane rules
 This repository is separate from `TAGIMS/TAGiM`, which serves the TAGiM application at `app.tagims.com`. Do not merge their deployment or repository responsibilities.
 
 ## 2. Owner workflow commands — mandatory
-Before handling an owner workflow command, read `WORKFLOW_COMMANDS.md`.
+Before handling an owner workflow command, read and follow `WORKFLOW_COMMAND_PROMPT.md`.
 
 Commands defined there are mandatory operating protocols, not conversational suggestions.
 
-Recognized owner commands include:
-- `RESUME TAGIMS.COM`
-- `RESUME`
-- `CONTINUE`
-- `STATUS`
-- `PAUSE TAGIMS.COM`
-- `PAUSE`
-- `QUESTION`
-- `CONVO`
+The canonical workflow command set includes project lifecycle, orchestration, review/approval, multi-project routing, work-mode, and CHEATSHEET commands. Do not maintain a conflicting local command definition here.
 
-`RESUME` must always recover authoritative project state before proceeding and every production/workflow response triggered by RESUME, CONTINUE, STATUS, PAUSE, or a Codex completion must end with exactly:
-
-`TASK ID #N: <READY / IN PROGRESS / COMPLETE / BLOCKED / PAUSED>`
-`OBJECTIVE: <one short plain-language phrase>`
-`ALEX ACTION: <one exact next action or None — GPT is handling the next step.>`
+`RESUME` must always recover authoritative project state before proceeding and all workflow responses must follow the mandatory `TASK ID / OBJECTIVE / ALEX ACTION` handoff footer defined in `WORKFLOW_COMMAND_PROMPT.md`.
 
 ## 3. Source-of-truth precedence
 1. Actual authoritative Git/deployment state
 2. `CURRENT_STATE.md` when present
 3. `AGENTS.md`
-4. `WORKFLOW_COMMANDS.md`
+4. `WORKFLOW_COMMAND_PROMPT.md`
 5. Explicit active task contract
 6. Supporting project documentation
 7. Historical conversation/checkpoints
@@ -78,4 +66,4 @@ Diagnose before editing when root cause is uncertain. Do not expand scope withou
 ## 7. Completion
 A task is COMPLETE only when the stated objective is actually achieved. Implementation, merge, deployment, and acceptance are distinct states unless the objective explicitly combines them.
 
-Always follow the mandatory workflow footer defined in `WORKFLOW_COMMANDS.md`.
+Always follow the mandatory workflow footer defined in `WORKFLOW_COMMAND_PROMPT.md`.
