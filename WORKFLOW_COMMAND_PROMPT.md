@@ -9,185 +9,823 @@ The commands below are operating protocols, not conversational suggestions.
 ---
 
 # 0. SELF-INSTALL / BOOTSTRAP RULE
-When an AI agent reads this file inside a repository, it must ensure root-level `AGENTS.md` points to this file. Preserve existing `AGENTS.md` content. If missing, create a minimal `AGENTS.md` telling agents to read `WORKFLOW_COMMAND_PROMPT.md`. Never overwrite existing agent instructions.
+
+When an AI agent reads this file inside a repository, it must first ensure that the repository's root-level `AGENTS.md` points back to this file.
+
+## If `AGENTS.md` already exists
+
+Preserve all existing content.
+
+Add the following instruction only if an equivalent instruction is not already present:
+
+> Before handling owner workflow commands, read and follow `WORKFLOW_COMMAND_PROMPT.md`. Commands defined there are mandatory operating protocols, not conversational suggestions.
+
+Do not overwrite, replace, truncate, or discard existing `AGENTS.md` instructions.
+
+If the repository already has a workflow-command reference using an older filename, update that reference to `WORKFLOW_COMMAND_PROMPT.md`.
+
+## If `AGENTS.md` does not exist
+
+Create a minimal root-level `AGENTS.md` containing:
+
+```md
+# Agent Instructions
+
+Before handling owner workflow commands, read and follow `WORKFLOW_COMMAND_PROMPT.md`.
+
+Commands defined there are mandatory operating protocols, not conversational suggestions.
+
+Preserve project-specific architecture, security, deployment, and repository instructions added later.
+```
+
+## Bootstrap completion
+
+After the reference is present, use this file as the canonical definition of owner workflow commands.
+
+Never create duplicate workflow command files unless explicitly required for compatibility.
 
 ---
 
 # 1. MANDATORY HANDOFF FOOTER
-Every workflow response triggered by `START`, `BRIEF`, `RESUME`, `CONTINUE`, `STATUS`, `PAUSE`, `CHECKPOINT`, `CLOSE`, `HANDOFF`, `REVIEW`, `APPROVE`, `REJECT`, `ABORT`, or a Codex completion must end with exactly:
+
+Every workflow/production response triggered by `START`, `RESUME`, `CONTINUE`, `STATUS`, `PAUSE`, `CHECKPOINT`, `BRIEF`, `CLOSE`, `WCPADD`, `HANDOFF`, `REVIEW`, `APPROVE`, `REJECT`, `ABORT`, or a Codex completion must end with exactly:
 
 `TASK ID #N: <READY / IN PROGRESS / COMPLETE / BLOCKED / PAUSED>`
+
 `OBJECTIVE: <one short plain-language phrase>`
+
 `ALEX ACTION: <one exact next action or None — GPT is handling the next step.>`
+
+Do not substitute a generic summary.
 
 `ALEX ACTION` must contain exactly one next action.
 
 ---
 
-# 2. TASK IDS AND STATES
-Use sequential `TASK ID #N` values within each project. Same-slice continuation, refinement, retry, debugging, deployment follow-through, and acceptance normally preserve the same Task ID. Create a new Task ID only when a genuinely new objective begins.
+# 2. TASK IDs AND STATES
 
-Supported states: `READY`, `IN PROGRESS`, `COMPLETE`, `BLOCKED`, `PAUSED`.
+Use sequential `TASK ID #N` values within each project.
+
+Same-slice continuation, refinement, retry, debugging, deployment follow-through, and acceptance normally preserve the same Task ID.
+
+Create a new Task ID only when a genuinely new objective begins.
+
+Supported task states:
+
+- `READY`
+- `IN PROGRESS`
+- `COMPLETE`
+- `BLOCKED`
+- `PAUSED`
+
+A task is `COMPLETE` only when its stated objective is actually achieved.
+
+Local implementation success does not equal merged, deployed, or physically accepted success unless the objective explicitly ends there.
 
 ---
 
 # 3. START <PROJECT>
-Initialize a new project or formalize an unstructured project. Verify project/repository identity, read existing instructions, establish source-of-truth files, create `CURRENT_STATE.md` when needed, assign Task #1, define one objective, identify the current owner, and record exactly one next operational action.
 
----
+Initialize a brand-new project or formalize an existing unstructured project.
 
-# 4. BRIEF [PROJECT | ALL]
-Create a fast operational recap before work begins.
+When `START <PROJECT>` is issued:
 
-`BRIEF <PROJECT>` reads the Master Project Registry when available, the project `CURRENT_STATE.md`, and authoritative Git/deployment state when relevant. Return only what was completed most recently, where work stopped, current Task ID/status, current owner, blocker if any, and highest-value next action. Do not advance the task.
-
-`BRIEF ALL` reads the Master Project Registry and active/high-priority project checkpoints. Summarize material recent changes, where each active project stopped, blockers, current owners, recommended priority order, and the single best task/project to resume next.
+1. Identify the intended project/repository.
+2. Verify whether a repository already exists.
+3. Read any existing `AGENTS.md` and project documentation before modifying anything.
+4. Run the self-install/bootstrap rule in Section 0.
+5. Establish project identity, source-of-truth files, repository/default branch, deployment target if any, and project boundaries.
+6. Create `CURRENT_STATE.md` if the project does not already have an equivalent authoritative resume checkpoint.
+7. Assign `TASK ID #1`.
+8. Define one initial objective.
+9. Identify the current owner of the next step.
+10. Record exactly one next operational action.
+11. Do not begin speculative implementation unless explicitly requested or clearly included in the START instruction.
 
 End with the mandatory handoff footer.
 
 ---
 
-# 5. RESUME <PROJECT>
-Recover authoritative project state and continue exactly where it stopped. Read `AGENTS.md`, this file, `CURRENT_STATE.md`, and other authoritative state files. Verify actual Git/deployment state when relevant. Do not restart planning or invent a new task.
+# 4. RESUME <PROJECT>
+
+Recover an existing project's authoritative state and continue exactly where it stopped.
+
+When `RESUME` or `RESUME <PROJECT>` is issued:
+
+1. Read `AGENTS.md`.
+2. Read this file.
+3. Read `CURRENT_STATE.md` if present.
+4. Read other authoritative workflow/state files required by the project.
+5. Verify actual Git/deployment state when relevant.
+6. Recover:
+   - active Task ID
+   - task status
+   - objective
+   - last accepted checkpoint
+   - current owner
+   - branch/SHA when relevant
+   - test/deployment state
+   - blockers
+   - exact next operational step
+7. Continue from the checkpoint.
+8. Do not restart planning.
+9. Do not invent a new task.
+10. Do not treat `RESUME` as ordinary conversation.
+
+If state is contradictory, stale, or unsafe to infer, return `BLOCKED` and identify one exact action required to reconcile it.
+
+End with the mandatory handoff footer.
 
 ---
 
-# 6. SWITCH <PROJECT>
-Change active project context without changing task state. Load enough state to establish context, report the active task/current owner briefly, and preserve other project states. Use `RESUME <PROJECT>` when work should immediately continue.
+# 5. SWITCH <PROJECT>
+
+Change the active conversational/project context without changing that project's task state.
+
+Use when multiple projects are running in parallel.
+
+When `SWITCH <PROJECT>` is issued:
+
+1. Identify the target project.
+2. Load enough authoritative state to establish context.
+3. Do not advance, pause, or modify the target project merely because it became active.
+4. Report its active task and current owner briefly.
+5. Preserve all other project states.
+
+If the user wants work to continue immediately after switching, use `RESUME <PROJECT>` instead.
 
 ---
 
-# 7. CONTINUE
-Advance from the current checkpoint and previous `ALEX ACTION`. Do not regenerate the plan. Preserve the Task ID unless a genuinely new objective begins.
+# 6. CONTINUE
+
+Advance from the current checkpoint and previous `ALEX ACTION`.
+
+Do not regenerate the project plan from scratch.
+
+Preserve the current Task ID unless a genuinely new objective begins.
+
+If the previous action was an owner handoff to another agent, interpret `CONTINUE` as processing the returned result and advancing the workflow.
+
+End with the mandatory handoff footer.
 
 ---
 
-# 8. STATUS [PROJECT]
-Report current Task ID/status, objective, what changed, current owner, blocker if any, and exact next operational action. Do not advance the task merely by reporting status.
+# 7. STATUS [PROJECT]
+
+Provide an orientation snapshot.
+
+Report only:
+
+- current Task ID/status
+- current objective
+- what just completed or changed
+- current owner / who has the ball
+- blocker, if any
+- exact next operational action
+
+Do not restart or advance the task unless explicitly asked.
+
+End with the mandatory handoff footer.
 
 ---
 
-# 9. PAUSE [PROJECT]
-Create a clean resumable stopping point. Update `CURRENT_STATE.md` when used and record Task ID/status, branch/SHA, accepted work, validation/deployment state, blockers/risks, current owner, and exactly one next operational step.
+# 8. PAUSE [PROJECT]
+
+Create a clean resumable stopping point.
+
+Before pausing:
+
+1. Update `CURRENT_STATE.md` when used by the repository.
+2. Record Task ID/status.
+3. Record branch/SHA when relevant.
+4. Record accepted work.
+5. Record validation/deployment state.
+6. Record blockers/risks.
+7. Record current owner.
+8. Record exactly one next operational step.
+
+Use `PAUSED` unless the task is actually `BLOCKED` or `COMPLETE`.
+
+End with the mandatory handoff footer.
 
 ---
 
-# 10. CHECKPOINT
-Persist current state without necessarily pausing. The checkpoint must allow a fresh agent/thread to resume without chat memory.
+# 9. CHECKPOINT
+
+Persist the current state immediately without necessarily pausing work.
+
+Update `CURRENT_STATE.md` or the project's equivalent authoritative checkpoint with:
+
+- Task ID/status
+- objective
+- branch/SHA when relevant
+- completed/accepted work
+- evidence and validation
+- deployment/runtime state
+- blockers/risks
+- current owner
+- exactly one next operational step
+
+The checkpoint must be sufficient for a fresh agent/thread to resume without relying on chat memory.
+
+End with the mandatory handoff footer.
+
+---
+
+# 10. BRIEF [PROJECT | ALL]
+
+Create a fast operational recap before work begins.
+
+## `BRIEF <PROJECT>`
+
+Read, as applicable:
+
+1. `SYSTEM - Master Project Registry.md`
+2. the project's `CURRENT_STATE.md`
+3. authoritative Git/deployment state when the current task depends on it
+4. recent accepted checkpoints/decisions needed to understand the immediate context
+
+Return only:
+
+- what was completed most recently
+- where the project stopped
+- current Task ID/status
+- current owner
+- blocker, if any
+- highest-value next task/action
+
+Do not advance the task merely by briefing it.
+
+## `BRIEF ALL`
+
+Read the Master Project Registry and the `CURRENT_STATE.md` files for active/high-priority projects.
+
+Produce a concise portfolio recap:
+
+- what materially changed most recently
+- where each active project stopped
+- blockers
+- current owners
+- recommended priority order
+- the single best project/task to resume next
+
+Prefer signal over exhaustive history.
+
+End with the mandatory handoff footer.
 
 ---
 
 # 11. CLOSE [PROJECT | ALL]
-Perform end-of-work-session synchronization so the next session can resume without relying on chat history.
 
-`CLOSE <PROJECT>` reconciles current state, updates `CURRENT_STATE.md`, updates the Master Project Registry when status/priority/owner/repo/deployment/next action changed, and updates durable decision/architecture/workflow docs only when material facts changed. For Git-backed projects, ensure repo workflow/state docs accurately reflect accepted state. Record completed work, validation/deployment status, blockers/risks, current owner, and exactly one next operational step. Do not create meaningless commits or documentation churn solely because `CLOSE` was issued.
+Perform an end-of-work-session synchronization so the next session can resume without relying on chat history.
 
-`CLOSE ALL` repeats this synchronization for every project materially touched during the session.
+## `CLOSE <PROJECT>`
 
-`CLOSE` does not mean the project/task is complete. Leave unfinished work in the accurate state.
+Before closing:
+
+1. reconcile the current project state with authoritative files/systems;
+2. update the project's `CURRENT_STATE.md`;
+3. update `SYSTEM - Master Project Registry.md` when status, priority, owner, repo, deployment, or next action changed;
+4. update durable decision/architecture/workflow documentation only when the session materially changed those facts;
+5. for Git-backed projects, ensure repository workflow/state docs accurately reflect the accepted state;
+6. record completed work, validation/deployment status, blockers/risks, current owner, and exactly one next operational step;
+7. do not create meaningless commits or documentation churn solely because `CLOSE` was issued.
+
+If closing all active work, use `CLOSE ALL` and repeat this synchronization for every project materially touched during the session.
+
+`CLOSE` is an end-of-session synchronization command. It does not mean the project or active task is complete.
+
+When unfinished work remains, leave the task in the accurate state (`IN PROGRESS`, `BLOCKED`, or `PAUSED`) and make the next action explicit.
 
 End with the mandatory handoff footer.
 
 ---
 
-# 12. QUESTION
-Answer without executing workflow changes by default.
+# 12. WCPADD [X-TASK]
 
-# 13. CONVO
-Discussion/planning mode. No execution by default.
+Add or revise a command in the canonical workflow command language.
 
-# 14. NOTE <TEXT>
-Record relevant project information without automatically changing execution state. Persist only materially useful durable context.
+Use:
 
-# 15. STEPS
-Show the current task as a concise operational sequence: current state, what happened, what happens next, owners, and any unavoidable manual owner action.
+`WCPADD <command definition or requested workflow behavior>`
 
-# 16. ROUTE <OBJECTIVE>
-Determine the best execution owner/path: GPT, Codex, specialized agent, owner/manual action, or external tool/service. Produce the smallest safe task contract. Do not automatically route to Codex when GPT can safely complete the work directly.
+Examples:
 
-# 17. HANDOFF
-Generate the exact next agent-ready transfer from current authoritative state. Include Task ID, objective, repo/project, branch/SHA when relevant, context, scope, locks, validation, stop condition, and expected completion report. Large transfers use `TASK #N — HANDOFF X/Y` in screen-sized blocks.
+- `WCPADD add a DEPLOY command for production releases`
+- `WCPADD update BRIEF so it includes blocked dependencies`
+- `WCPADD add a SECURITY REVIEW command`
 
-# 18. SPLIT
-Decompose an objective into parallel-safe independent tasks with explicit ownership, scope, dependencies, acceptance criteria, stop conditions, and merge/integration order.
+When issued:
 
-# 19. SYNC [PROJECT]
-Reconcile documented state with authoritative repo/branch/SHA/PR/CI/deployment/runtime/workflow state. Identify drift without silently changing production or merging merely to force alignment.
+1. Read the current canonical `WORKFLOW_COMMAND_PROMPT.md`.
+2. Determine whether the requested behavior:
+   - belongs in an existing command;
+   - requires a new command;
+   - conflicts with or duplicates an existing command.
+3. Prefer extending an existing command when that keeps the language simpler.
+4. If a new command is justified, define:
+   - command name/syntax;
+   - purpose;
+   - trigger conditions;
+   - required reads/writes;
+   - stop/approval conditions;
+   - handoff-footer behavior where applicable.
+5. Update the canonical `WORKFLOW_COMMAND_PROMPT.md`.
+6. Update `AGENTS.md`, `SYSTEM - Daily Ops.md`, `SYSTEM - Project Bootstrap.md`, `SYSTEM - Master Project Registry.md`, naming/system docs, and repo-local workflow files only where the new command materially affects them.
+7. Propagate the updated command definition to all active Git-backed project workflow copies that use the canonical protocol.
+8. Preserve project-specific instructions and do not overwrite unrelated agent rules.
+9. Do not create conflicting duplicate workflow-command files.
+10. Report exactly what was changed and where.
 
-# 20. REVIEW
-Perform an independent checksum against the task contract and return `PASS`, `FAIL`, or `NEEDS REVISION`.
+`WCPADD` changes the workflow control plane itself. Treat it as an administrative/meta command, not as a normal project task.
 
-# 21. APPROVE
-Approve the current gate and advance only to the next already-authorized stage.
+When the requested addition is ambiguous or could materially alter safety/approval behavior, stop and ask for clarification before propagating.
 
-# 22. REJECT <REASON>
-Reject the current result, preserve the Task ID unless the objective is abandoned, record the reason, and route a focused correction contract.
-
-# 23. ABORT
-Terminate the active task without marking it complete. Record reason, surviving work/artifacts, cleanup/rollback, and whether the objective may restart later.
-
-# 24. LOCK <THING>
-Persist an accepted invariant as protected.
-
-# 25. UNLOCK <THING>
-Explicitly permit modification of a lock and record scope/reason/duration.
-
-# 26. PRIORITY <PROJECT OR TASK>
-Raise/set execution priority without cancelling unrelated work.
-
-# 27. QUEUE
-Show project, Task ID, status, objective, current owner, blocker, priority, and next action for active work.
-
-# 28. MOBILE MODE
-Use shorter handoffs, minimal typing, one owner action at a time, cloud execution, and small copyable blocks without changing project state.
-
-# 29. OFFICE MODE
-Use fuller diagnostics, local tools, larger review surfaces, multiple windows, and direct file inspection without changing project state.
-
-# 30. USAGE
-Report available workload/resource/usage information when accessible. Do not fabricate unavailable account usage.
-
-# 31. CHEATSHEET <TOPIC>
-Create a high-information-density, single-glance visual explainer. Supported modifiers: `IMAGE`, `TEXT`, `UPDATE`, `COMPARE`, `FLOW`, `SYSTEM`. Default is visual-first.
+End with the mandatory handoff footer.
 
 ---
 
-# 32. CORE EXECUTION PRINCIPLES
+# 13. QUESTION
+
+Answer the owner's question without executing workflow changes by default.
+
+Do not edit code, Git, deployments, infrastructure, files, or production systems unless the owner explicitly converts the request into execution.
+
+Do not require the workflow footer for an ordinary question unless workflow state is also requested.
+
+---
+
+# 14. CONVO
+
+Enter discussion/planning mode.
+
+Use for brainstorming, architecture discussion, weighing alternatives, or talking through a decision.
+
+No execution by default.
+
+Do not change task state merely because a conversation occurred.
+
+---
+
+# 15. NOTE <TEXT>
+
+Record information relevant to the active project without automatically changing execution state.
+
+Classify the note as appropriate:
+
+- durable project context
+- decision
+- constraint
+- future idea
+- temporary observation
+- acceptance result
+- blocker
+
+Update the appropriate authoritative project file when the note materially affects future work.
+
+Do not create unnecessary permanent documentation for trivial comments.
+
+---
+
+# 16. STEPS
+
+Show the current task as a concise operational sequence.
+
+Include:
+
+- where the task stands
+- what has already happened
+- what happens next
+- which actor owns each step
+- any unavoidable manual owner action
+
+Do not replace the task plan or create a new objective unless explicitly requested.
+
+---
+
+# 17. ROUTE <OBJECTIVE>
+
+Determine the best execution owner and path for a requested objective.
+
+Possible owners include:
+
+- GPT/orchestrator
+- Codex
+- another specialized agent
+- owner/manual action
+- external service/tool
+
+Consider:
+
+- required tools
+- repository access
+- risk
+- scope
+- parallelizability
+- need for coding
+- need for physical/user acceptance
+- deployment consequences
+
+Produce the smallest safe task contract and assign ownership.
+
+Do not automatically send work to Codex when GPT can complete it directly and safely.
+
+---
+
+# 18. HANDOFF
+
+Generate the exact next agent-ready transfer from current authoritative state.
+
+A handoff should include only what the receiving agent needs:
+
+- Task ID
+- objective
+- repository/project
+- starting branch/SHA when relevant
+- relevant context
+- allowed scope
+- locked invariants
+- validation requirements
+- stop condition
+- expected completion report
+
+For large transfers use:
+
+`TASK #N — HANDOFF X/Y`
+
+Split by semantic unit/file first and keep blocks practically screen-sized.
+
+End with the mandatory handoff footer.
+
+---
+
+# 19. SPLIT
+
+Decompose an objective into parallel-safe independent tasks.
+
+For each task force define:
+
+- Task ID/subtask ID
+- owner
+- objective
+- repository
+- base branch/SHA
+- feature branch/worktree if appropriate
+- allowed scope
+- locked invariants
+- dependencies
+- acceptance criteria
+- stop condition
+- merge/integration order
+
+Do not parallelize tasks that would edit the same state unsafely.
+
+---
+
+# 20. SYNC [PROJECT]
+
+Reconcile the project's documented state with actual authoritative systems.
+
+Check as relevant:
+
+- repository
+- branch
+- SHA
+- working tree
+- pull requests
+- CI/checks
+- deployment
+- production runtime
+- workflow/state docs
+
+Identify drift and establish the true source of truth.
+
+Do not silently change production or merge branches merely to make state match.
+
+---
+
+# 21. REVIEW
+
+Perform an independent checksum of the current result against the task contract.
+
+Review for:
+
+- acceptance criteria
+- missing requirements
+- unauthorized scope changes
+- monkey patches
+- regressions
+- insufficient testing
+- branch/SHA correctness
+- preview/deployment correctness
+- documentation/state accuracy
+
+Return one of:
+
+- `PASS`
+- `FAIL`
+- `NEEDS REVISION`
+
+Do not approve merely because implementation completed.
+
+When physical acceptance is required, produce one clear owner acceptance test.
+
+End with the mandatory handoff footer.
+
+---
+
+# 22. APPROVE
+
+Approve the current review/acceptance gate and advance only to the next already-authorized stage.
+
+Examples:
+
+- approve preview for merge
+- approve migration cutover
+- approve physical acceptance
+- approve locked design
+
+Approval does not grant unlimited scope.
+
+End with the mandatory handoff footer.
+
+---
+
+# 23. REJECT <REASON>
+
+Reject the current result while preserving the active Task ID unless the objective itself is abandoned.
+
+Record the rejection reason.
+
+Route the task back to the appropriate owner with a focused correction contract.
+
+Do not immediately generate speculative patches without identifying the reason for failure.
+
+End with the mandatory handoff footer.
+
+---
+
+# 24. ABORT
+
+Terminate the active task without marking it complete.
+
+Record:
+
+- why it was aborted
+- what work exists
+- whether any branch/deployment/artifact remains
+- rollback or cleanup requirement
+- whether the objective is abandoned or may be restarted later
+
+Use `PAUSED` or another accurate state if the project itself remains active.
+
+End with the mandatory handoff footer.
+
+---
+
+# 25. LOCK <THING>
+
+Mark an accepted design, behavior, interface, architecture decision, visual baseline, workflow rule, or other invariant as protected.
+
+Persist the lock in the appropriate durable project documentation.
+
+Future tasks must preserve the lock unless explicitly unlocked.
+
+---
+
+# 26. UNLOCK <THING>
+
+Explicitly permit modification of a previously locked invariant.
+
+Record:
+
+- what is unlocked
+- why
+- scope of permitted change
+- whether the unlock is temporary or permanent
+
+Do not interpret unrelated change requests as implicit unlocks.
+
+---
+
+# 27. PRIORITY <PROJECT OR TASK>
+
+Raise or set execution priority among parallel projects/tasks.
+
+Update queue/order information without silently cancelling other work.
+
+Priority changes sequencing, not scope or approval gates.
+
+---
+
+# 28. QUEUE
+
+Show the multi-project command view.
+
+For each active project/task show concisely:
+
+- project
+- Task ID
+- status
+- objective
+- current owner
+- blocker
+- priority
+- next action
+
+Use this to decide what should run, wait, split, or switch next.
+
+---
+
+# 29. MOBILE MODE
+
+Switch workflow ergonomics for mobile use without changing project state.
+
+Prefer:
+
+- shorter handoffs
+- minimal typing
+- one owner action at a time
+- cloud execution
+- no dependence on local desktop compute
+- small copyable blocks
+
+Project source of truth and Task IDs remain unchanged.
+
+---
+
+# 30. OFFICE MODE
+
+Switch workflow ergonomics for desktop/office use without changing project state.
+
+Desktop mode may use:
+
+- fuller diagnostics
+- local development tools when useful
+- larger review surfaces
+- multiple windows
+- direct file inspection
+
+Project source of truth and Task IDs remain unchanged.
+
+---
+
+# 31. USAGE
+
+Report available workload/resource/usage information relevant to the active environment when that information is actually accessible.
+
+Do not fabricate token, quota, billing, or account usage that cannot be read from an authoritative source.
+
+If unavailable, state what can and cannot be determined.
+
+---
+
+# 32. CHEATSHEET <TOPIC>
+
+Create a high-information-density, single-glance visual explainer for a complex topic.
+
+Primary goal:
+
+**compress a large amount of connected information into one coherent visual that can be absorbed quickly.**
+
+Default behavior:
+
+1. Identify the core concept.
+2. Extract the most important connected information.
+3. Organize it into a strong visual hierarchy.
+4. Select the best visual structure automatically, such as:
+   - system architecture map
+   - process flow
+   - layered diagram
+   - decision tree
+   - comparison grid
+   - timeline
+   - relationship map
+5. Optimize for high information density without becoming unreadable.
+6. Prefer visual generation when the environment supports it.
+
+Supported modifiers:
+
+- `CHEATSHEET IMAGE <TOPIC>` — generate the actual visual.
+- `CHEATSHEET TEXT <TOPIC>` — return the structured information architecture only.
+- `CHEATSHEET UPDATE` — revise the current cheatsheet while preserving accepted structure/style.
+- `CHEATSHEET COMPARE <A> vs <B>` — comparison-oriented visual.
+- `CHEATSHEET FLOW <TOPIC>` — process/workflow-oriented visual.
+- `CHEATSHEET SYSTEM <TOPIC>` — architecture/components/dependencies visual.
+
+Unless explicitly told otherwise, `CHEATSHEET` is visual-first.
+
+---
+
+# 33. CORE EXECUTION PRINCIPLES
+
+These rules apply across commands and projects:
+
 1. Build the smallest complete vertical slice before expanding.
 2. Diagnose root cause before patching.
-3. Refactor cleanly instead of stacking monkey patches.
+3. Refactor cleanly instead of stacking repeated overrides or monkey patches.
 4. Do not modify unrelated systems.
 5. Preserve accepted baselines and locks.
-6. Keep secrets/credentials/tokens/private keys/sensitive account data out of repos and prompts.
+6. Keep secrets, credentials, tokens, private keys, and sensitive account data out of repositories and prompts.
 7. Treat destructive/security/billing/auth/domain/production changes as approval-gated unless explicitly authorized.
 8. Prefer reversible changes and preserve rollback paths.
 9. Verify transport/deployment path before coding when publication is part of the objective.
 10. Do not treat sandbox/local success as production success.
-11. Keep unrelated repositories/products separate.
+11. Keep unrelated repositories and products separate.
 12. Do not expand scope without authorization.
-13. Do not merge without authorization unless explicitly granted.
+13. Do not merge without authorization unless the active task explicitly grants it.
 14. Do not use the owner as a technical courier when agents/tools can perform the transfer directly.
 
 ---
 
-# 33. CODEX TASK CONTRACT
-Every substantive Codex task should define Task ID, one objective, repo, base branch, exact base SHA when relevant, prerequisites, allowed scope, locked invariants, validation, transport/publication mode, and literal stop condition. Codex reads `AGENTS.md` and this protocol, verifies repo/branch/SHA/scope, stops on stale/inconsistent state, diagnoses before editing, implements complete fixes, tests, reports files/checks, stops at the stop condition, never merges without authorization unless explicitly granted, and never expands scope without authorization.
+# 34. CODEX TASK CONTRACT
 
-If an exact required base SHA is unavailable or mismatched: **STOP. DO NOT CODE.**
+Every substantive Codex implementation task should define:
+
+- Task ID
+- one objective
+- repository
+- base branch
+- exact base SHA when relevant
+- prerequisites
+- allowed scope
+- locked invariants
+- validation
+- transport/publication mode
+- literal stop condition
+
+Codex should:
+
+1. Read `AGENTS.md`.
+2. Read this workflow protocol.
+3. Verify repo/branch/SHA/scope.
+4. Stop if authoritative state is stale or inconsistent.
+5. Diagnose uncertain root causes before editing.
+6. Implement complete system-level fixes.
+7. Add/update tests where appropriate.
+8. Run required checks.
+9. Use focused branches/worktrees when appropriate.
+10. Use focused pull requests when review is required.
+11. Produce preview deployments when required.
+12. Report files changed and checks performed.
+13. Stop at the defined stop condition.
+14. Never merge without authorization unless explicitly granted.
+15. Never expand scope without authorization.
+
+If an exact required base SHA is unavailable or mismatched:
+
+**STOP. DO NOT CODE.**
 
 ---
 
-# 34. CURRENT_STATE.md RECOMMENDED FORMAT
-`CURRENT_STATE.md` should record Task ID, status, objective, repo, branch/SHA when relevant, current owner, completed work, validation, deployment/runtime, blockers/risks, and exactly one next operational step.
+# 35. CURRENT_STATE.md RECOMMENDED FORMAT
+
+Use `CURRENT_STATE.md` as the single resumable checkpoint when appropriate.
+
+```md
+# CURRENT STATE
+
+TASK ID: #N
+STATUS: READY | IN PROGRESS | COMPLETE | BLOCKED | PAUSED
+OBJECTIVE: <one short objective>
+
+REPOSITORY: <owner/repo>
+BRANCH: <branch>
+SHA: <sha if relevant>
+
+CURRENT OWNER: GPT | CODEX | ALEX | OTHER
+
+COMPLETED:
+- ...
+
+VALIDATION:
+- ...
+
+DEPLOYMENT / RUNTIME:
+- ...
+
+BLOCKERS / RISKS:
+- ...
+
+NEXT OPERATIONAL STEP:
+<exactly one next step>
+```
+
+A fresh agent should be able to resume from this file without relying on prior chat context.
 
 ---
 
-# 35. NEW REPOSITORY BOOTSTRAP SUMMARY
-1. Copy `WORKFLOW_COMMAND_PROMPT.md` into the repo root.
-2. Safely create/amend `AGENTS.md` to reference it.
-3. Preserve pre-existing `AGENTS.md` content.
+# 36. NEW REPOSITORY BOOTSTRAP SUMMARY
+
+For a new repository:
+
+1. Copy `WORKFLOW_COMMAND_PROMPT.md` into the repository root.
+2. The first agent that reads it must run Section 0 and safely create/amend `AGENTS.md`.
+3. Preserve all pre-existing `AGENTS.md` content.
 4. Create `CURRENT_STATE.md` when project work becomes stateful.
 5. Use `START <PROJECT>` for a new project.
 6. Use `BRIEF <PROJECT>` or `BRIEF ALL` to regain orientation.
 7. Use `RESUME <PROJECT>` to continue work.
 8. Use `CLOSE <PROJECT>` or `CLOSE ALL` before ending a meaningful work session.
+
+This protocol is designed to remain project-agnostic and durable across repositories, sessions, devices, and parallel AI-agent workflows.
