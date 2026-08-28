@@ -20,6 +20,10 @@ The canonical workflow command set includes project lifecycle, orchestration, re
 
 `WORKFLOW MODE` activates persistent structured workflow execution and remains active until `EXIT WORKFLOW` is explicitly issued. `QUESTION` and `CONVO` temporarily freeze execution without disabling workflow mode. `EXIT WORKFLOW` returns to ordinary ad hoc interaction without changing the underlying task/project state.
 
+`CHEATSHEET <topic>` means generate the actual visual/diagram/image by default. A prose-only or text-only result is noncompliant unless Alex explicitly uses `CHEATSHEET TEXT <topic>`. `CHEATSHEET` and `CHEATSHEET IMAGE` are functionally equivalent whenever visual generation is available.
+
+Any prompt, completion report, handoff, or other payload Alex must copy between GPT/Codex/agent windows MUST be placed inside a fenced code block so the UI exposes a one-click copy control. Plain prose requiring manual highlighting is not an acceptable owner-transfer format. Large transfers must be split into numbered screen-sized fenced blocks.
+
 `BRIEF` is the start-of-session recap command. `CLOSE` is the end-of-session synchronization command. `RESUME` must always recover authoritative project state before proceeding and all workflow responses must follow the mandatory `TASK ID / OBJECTIVE / ALEX ACTION` handoff footer defined in `WORKFLOW_COMMAND_PROMPT.md`.
 
 ## 3. Source-of-truth precedence
