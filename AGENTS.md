@@ -16,15 +16,20 @@ Before handling an owner workflow command, read and follow `WORKFLOW_COMMAND_PRO
 
 Commands defined there are mandatory operating protocols, not conversational suggestions.
 
-The canonical workflow command set includes project lifecycle, orchestration, review/approval, multi-project routing, work-mode, CHEATSHEET, workflow-administration commands, and the persistent `WORKFLOW MODE` / `EXIT WORKFLOW` execution-state commands. `WCPADD <request>` is the only command for adding or revising workflow commands; it must update the canonical workflow file and propagate only to materially affected control-plane files/projects.
+The canonical workflow command set includes project lifecycle, orchestration, review/approval, multi-project routing, work-mode, CHEATSHEET, workflow-administration commands, persistent `WORKFLOW MODE`, and the normalized workflow aliases below.
 
-`WORKFLOW MODE` activates persistent structured workflow execution and remains active until `EXIT WORKFLOW` is explicitly issued. `QUESTION` and `CONVO` temporarily freeze execution without disabling workflow mode. `EXIT WORKFLOW` returns to ordinary ad hoc interaction without changing the underlying task/project state.
+- `RESUME`, `CONTINUE`, and `PROCEED` are synonymous: recover authoritative current state when needed and advance from the exact recorded next action.
+- `CLOSE` and `EXIT WORKFLOW` are synonymous: reconcile/save durable state first, then leave Workflow Mode. `CLOSE WORKFLOW` is accepted as the same behavior.
+- `PROPAGATE` is the workflow-administration command for synchronizing an authoritative shared control-plane artifact. After workflow-command changes, plain `PROPAGATE` means `PROPAGATE WCP`.
+- `WCPADD <request>` is the command for adding/revising workflow commands and automatically propagates the canonical WCP unless the owner explicitly says not to propagate yet.
+
+`WORKFLOW MODE` activates persistent structured workflow execution and remains active until `CLOSE` or `EXIT WORKFLOW` is explicitly issued. `QUESTION` and `CONVO` temporarily freeze execution without disabling workflow mode.
 
 `CHEATSHEET <topic>` means generate the actual visual/diagram/image by default. A prose-only or text-only result is noncompliant unless Alex explicitly uses `CHEATSHEET TEXT <topic>`. `CHEATSHEET` and `CHEATSHEET IMAGE` are functionally equivalent whenever visual generation is available.
 
 Any prompt, completion report, handoff, or other payload Alex must copy between GPT/Codex/agent windows MUST be placed inside a fenced code block so the UI exposes a one-click copy control. Plain prose requiring manual highlighting is not an acceptable owner-transfer format. Large transfers must be split into numbered screen-sized fenced blocks.
 
-`BRIEF` is the start-of-session recap command. `CLOSE` is the end-of-session synchronization command. `RESUME` must always recover authoritative project state before proceeding and all workflow responses must follow the mandatory `TASK ID / OBJECTIVE / ALEX ACTION` handoff footer defined in `WORKFLOW_COMMAND_PROMPT.md`.
+`BRIEF` is the start-of-session recap command. All workflow responses must follow the mandatory `TASK ID / OBJECTIVE / ALEX ACTION` handoff footer defined in `WORKFLOW_COMMAND_PROMPT.md`.
 
 ## 3. Source-of-truth precedence
 1. Actual authoritative Git/deployment state
