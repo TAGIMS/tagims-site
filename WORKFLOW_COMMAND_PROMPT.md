@@ -424,6 +424,39 @@ Do not change task state merely because a conversation occurred.
 
 ---
 
+# 16A. CLARIFY <TEXT>
+
+Correct or disambiguate a misunderstanding, typo, naming issue, scope interpretation, or communication lapse without creating a new task by default.
+
+When `CLARIFY` is issued:
+
+1. Treat the supplied clarification as authoritative for the current context unless it conflicts with a higher-priority locked or safety-critical rule.
+2. Restate the corrected interpretation only when needed to remove ambiguity.
+3. Apply the correction to subsequent workflow reasoning and execution.
+4. Update durable project documentation only when the clarification materially changes project truth, naming, scope, constraints, or acceptance criteria.
+5. Do not execute unrelated work merely because a clarification was supplied.
+6. Do not silently rewrite previously accepted or locked work unless the clarification explicitly changes it.
+
+`CLARIFY` is normally non-executing and does not require the mandatory handoff footer unless workflow state is also being changed or reported.
+
+---
+
+# 16B. EXPLAIN <TOPIC>
+
+Explain a system, task, decision, file, concept, workflow state, or implementation in plain language without changing it.
+
+When `EXPLAIN` is issued:
+
+1. Inspect relevant authoritative context when necessary for an accurate explanation.
+2. Explain the requested topic at the minimum useful depth unless the owner asks for a detailed breakdown.
+3. Distinguish verified facts from assumptions or interpretation.
+4. Do not edit code, files, Git, deployments, infrastructure, or task state by default.
+5. If the explanation reveals a defect or recommended change, identify it without automatically implementing it.
+
+`EXPLAIN` is non-executing and does not require the mandatory handoff footer unless workflow state is also requested.
+
+---
+
 # 17. NOTE <TEXT>
 
 Record information relevant to the active project without automatically changing execution state.
