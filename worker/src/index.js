@@ -79,7 +79,7 @@ class BodyShell {
 }
 
 function isWebsitePath(pathname) {
-  return pathname === "/audit" || pathname.startsWith("/audit/") || pathname.startsWith("/apps/autoloan/") || pathname === "/WS/WCP" || pathname.startsWith("/WS/WCP/");
+  return pathname === "/audit" || pathname.startsWith("/audit/") || pathname.startsWith("/apps/autoloan/");
 }
 
 function upstreamRequest(request, origin) {
