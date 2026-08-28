@@ -67,127 +67,42 @@
     <table>
       <colgroup><col><col><col></colgroup>
       <thead><tr><th>COMMAND</th><th>SYNTAX</th><th>PURPOSE</th></tr></thead>
-      <tbody><tr class="cmd-row" style="--accent:#39e52f">
-      <td class="command-cell"><span class="icon">▶</span><span class="num">1</span><span class="command">START</span></td>
-      <td class="syntax">START &lt;PROJECT&gt;</td>
-      <td class="purpose">Initialize a new project</td>
-    </tr><tr class="cmd-row" style="--accent:#ff2a2a">
-      <td class="command-cell"><span class="icon">↻</span><span class="num">2</span><span class="command">RESUME</span></td>
-      <td class="syntax">RESUME &lt;PROJECT&gt;</td>
-      <td class="purpose">Reload authoritative project state and continue</td>
-    </tr><tr class="cmd-row" style="--accent:#38a7ff">
-      <td class="command-cell"><span class="icon">⇄</span><span class="num">3</span><span class="command">SWITCH</span></td>
-      <td class="syntax">SWITCH &lt;PROJECT&gt;</td>
-      <td class="purpose">Jump to another active project without advancing it</td>
-    </tr><tr class="cmd-row" style="--accent:#ff9b00">
-      <td class="command-cell"><span class="icon">Ⅱ</span><span class="num">4</span><span class="command">PAUSE</span></td>
-      <td class="syntax">PAUSE [PROJECT]</td>
-      <td class="purpose">Checkpoint and stop cleanly</td>
-    </tr><tr class="cmd-row" style="--accent:#a95cff">
-      <td class="command-cell"><span class="icon">≫</span><span class="num">5</span><span class="command">CONTINUE</span></td>
-      <td class="syntax">CONTINUE</td>
-      <td class="purpose">Advance from the last next action</td>
-    </tr><tr class="cmd-row" style="--accent:#38a7ff">
-      <td class="command-cell"><span class="icon">⌁</span><span class="num">6</span><span class="command">STATUS</span></td>
-      <td class="syntax">STATUS [PROJECT]</td>
-      <td class="purpose">See task, owner, blocker, and next step</td>
-    </tr><tr class="cmd-row" style="--accent:#20d9d4">
-      <td class="command-cell"><span class="icon">☷</span><span class="num">7</span><span class="command">STEPS</span></td>
-      <td class="syntax">STEPS</td>
-      <td class="purpose">Show the current work step-by-step</td>
-    </tr><tr class="cmd-row" style="--accent:#39e52f">
-      <td class="command-cell"><span class="icon">▮</span><span class="num">8</span><span class="command">CHECKPOINT</span></td>
-      <td class="syntax">CHECKPOINT</td>
-      <td class="purpose">Save current state immediately</td>
-    </tr><tr class="cmd-row" style="--accent:#61ccff">
-      <td class="command-cell"><span class="icon">⚑</span><span class="num">9</span><span class="command">BRIEF</span></td>
-      <td class="syntax">BRIEF [PROJECT | ALL]</td>
-      <td class="purpose">Fast operational recap before work begins</td>
-    </tr><tr class="cmd-row" style="--accent:#ff9b00">
-      <td class="command-cell"><span class="icon">■</span><span class="num">10</span><span class="command">CLOSE</span></td>
-      <td class="syntax">CLOSE [PROJECT | ALL]</td>
-      <td class="purpose">Synchronize durable state at end of session</td>
-    </tr><tr class="cmd-row" style="--accent:#ff5dae">
-      <td class="command-cell"><span class="icon">✚</span><span class="num">11</span><span class="command">WCPADD</span></td>
-      <td class="syntax">WCPADD &lt;request&gt;</td>
-      <td class="purpose">Add or revise the canonical workflow command language</td>
-    </tr><tr class="cmd-row" style="--accent:#ff9b00">
-      <td class="command-cell"><span class="icon">▤</span><span class="num">12</span><span class="command">NOTE</span></td>
-      <td class="syntax">NOTE &lt;text&gt;</td>
-      <td class="purpose">Record a durable note or update</td>
-    </tr><tr class="cmd-row" style="--accent:#ff2a2a">
-      <td class="command-cell"><span class="icon">?</span><span class="num">13</span><span class="command">QUESTION</span></td>
-      <td class="syntax">QUESTION</td>
-      <td class="purpose">Ask without executing</td>
-    </tr><tr class="cmd-row" style="--accent:#a95cff">
-      <td class="command-cell"><span class="icon">●</span><span class="num">14</span><span class="command">CONVO</span></td>
-      <td class="syntax">CONVO</td>
-      <td class="purpose">Discussion / planning mode</td>
-    </tr><tr class="cmd-row" style="--accent:#ff9b00">
-      <td class="command-cell"><span class="icon">☷</span><span class="num">15</span><span class="command">ROUTE</span></td>
-      <td class="syntax">ROUTE &lt;objective&gt;</td>
-      <td class="purpose">Decide who should own the work</td>
-    </tr><tr class="cmd-row" style="--accent:#a95cff">
-      <td class="command-cell"><span class="icon">↪</span><span class="num">16</span><span class="command">HANDOFF</span></td>
-      <td class="syntax">HANDOFF</td>
-      <td class="purpose">Generate the next agent-ready handoff</td>
-    </tr><tr class="cmd-row" style="--accent:#39e52f">
-      <td class="command-cell"><span class="icon">⑂</span><span class="num">17</span><span class="command">SPLIT</span></td>
-      <td class="syntax">SPLIT</td>
-      <td class="purpose">Break work into parallel-safe tasks</td>
-    </tr><tr class="cmd-row" style="--accent:#38a7ff">
-      <td class="command-cell"><span class="icon">⟳</span><span class="num">18</span><span class="command">SYNC</span></td>
-      <td class="syntax">SYNC [PROJECT]</td>
-      <td class="purpose">Reconcile docs, Git, PRs, deployments, and runtime</td>
-    </tr><tr class="cmd-row" style="--accent:#ff9b00">
-      <td class="command-cell"><span class="icon">◆</span><span class="num">19</span><span class="command">REVIEW</span></td>
-      <td class="syntax">REVIEW</td>
-      <td class="purpose">Independent quality / checksum review</td>
-    </tr><tr class="cmd-row" style="--accent:#39e52f">
-      <td class="command-cell"><span class="icon">✓</span><span class="num">20</span><span class="command">APPROVE</span></td>
-      <td class="syntax">APPROVE</td>
-      <td class="purpose">Advance through the next approval gate</td>
-    </tr><tr class="cmd-row" style="--accent:#ff2a2a">
-      <td class="command-cell"><span class="icon">×</span><span class="num">21</span><span class="command">REJECT</span></td>
-      <td class="syntax">REJECT &lt;reason&gt;</td>
-      <td class="purpose">Return work with a correction reason</td>
-    </tr><tr class="cmd-row" style="--accent:#b9c2cf">
-      <td class="command-cell"><span class="icon">⬡</span><span class="num">22</span><span class="command">ABORT</span></td>
-      <td class="syntax">ABORT</td>
-      <td class="purpose">Terminate the current task without marking complete</td>
-    </tr><tr class="cmd-row" style="--accent:#38a7ff">
-      <td class="command-cell"><span class="icon">▣</span><span class="num">23</span><span class="command">LOCK</span></td>
-      <td class="syntax">LOCK &lt;thing&gt;</td>
-      <td class="purpose">Protect an accepted invariant</td>
-    </tr><tr class="cmd-row" style="--accent:#ff9b00">
-      <td class="command-cell"><span class="icon">□</span><span class="num">24</span><span class="command">UNLOCK</span></td>
-      <td class="syntax">UNLOCK &lt;thing&gt;</td>
-      <td class="purpose">Permit changes to a locked invariant</td>
-    </tr><tr class="cmd-row" style="--accent:#a95cff">
-      <td class="command-cell"><span class="icon">⚑</span><span class="num">25</span><span class="command">PRIORITY</span></td>
-      <td class="syntax">PRIORITY &lt;task/project&gt;</td>
-      <td class="purpose">Raise execution priority</td>
-    </tr><tr class="cmd-row" style="--accent:#38a7ff">
-      <td class="command-cell"><span class="icon">☷</span><span class="num">26</span><span class="command">QUEUE</span></td>
-      <td class="syntax">QUEUE</td>
-      <td class="purpose">Show all active projects and tasks</td>
-    </tr><tr class="cmd-row" style="--accent:#39e52f">
-      <td class="command-cell"><span class="icon">▧</span><span class="num">27</span><span class="command">CHEATSHEET</span></td>
-      <td class="syntax">CHEATSHEET &lt;topic&gt;</td>
-      <td class="purpose">Create a dense visual explainer</td>
-    </tr><tr class="cmd-row" style="--accent:#ff9b00">
-      <td class="command-cell"><span class="icon">▯</span><span class="num">28</span><span class="command">MOBILE MODE</span></td>
-      <td class="syntax">MOBILE MODE</td>
-      <td class="purpose">Optimize workflow ergonomics for mobile</td>
-    </tr><tr class="cmd-row" style="--accent:#38a7ff">
-      <td class="command-cell"><span class="icon">▰</span><span class="num">29</span><span class="command">OFFICE MODE</span></td>
-      <td class="syntax">OFFICE MODE</td>
-      <td class="purpose">Optimize workflow ergonomics for desktop</td>
-    </tr><tr class="cmd-row" style="--accent:#b9c2cf">
-      <td class="command-cell"><span class="icon">◴</span><span class="num">30</span><span class="command">USAGE</span></td>
-      <td class="syntax">USAGE</td>
-      <td class="purpose">Show accessible usage / resource information</td>
-    </tr></tbody>
+      <tbody>
+        <tr class="cmd-row" style="--accent:#39e52f"><td class="command-cell"><span class="icon">▶</span><span class="num">1</span><span class="command">START</span></td><td class="syntax">START &lt;PROJECT&gt;</td><td class="purpose">Initialize a new project</td></tr>
+        <tr class="cmd-row" style="--accent:#ff2a2a"><td class="command-cell"><span class="icon">↻</span><span class="num">2</span><span class="command">RESUME</span></td><td class="syntax">RESUME &lt;PROJECT&gt;</td><td class="purpose">Reload authoritative project state and continue</td></tr>
+        <tr class="cmd-row" style="--accent:#38a7ff"><td class="command-cell"><span class="icon">⇄</span><span class="num">3</span><span class="command">SWITCH</span></td><td class="syntax">SWITCH &lt;PROJECT&gt;</td><td class="purpose">Jump to another active project without advancing it</td></tr>
+        <tr class="cmd-row" style="--accent:#ff9b00"><td class="command-cell"><span class="icon">Ⅱ</span><span class="num">4</span><span class="command">PAUSE</span></td><td class="syntax">PAUSE [PROJECT]</td><td class="purpose">Checkpoint and stop cleanly</td></tr>
+        <tr class="cmd-row" style="--accent:#a95cff"><td class="command-cell"><span class="icon">≫</span><span class="num">5</span><span class="command">CONTINUE</span></td><td class="syntax">CONTINUE</td><td class="purpose">Advance from the last next action</td></tr>
+        <tr class="cmd-row" style="--accent:#38a7ff"><td class="command-cell"><span class="icon">⌁</span><span class="num">6</span><span class="command">STATUS</span></td><td class="syntax">STATUS [PROJECT]</td><td class="purpose">See task, owner, blocker, and next step</td></tr>
+        <tr class="cmd-row" style="--accent:#20d9d4"><td class="command-cell"><span class="icon">☷</span><span class="num">7</span><span class="command">STEPS</span></td><td class="syntax">STEPS</td><td class="purpose">Show the current work step-by-step</td></tr>
+        <tr class="cmd-row" style="--accent:#39e52f"><td class="command-cell"><span class="icon">▮</span><span class="num">8</span><span class="command">CHECKPOINT</span></td><td class="syntax">CHECKPOINT</td><td class="purpose">Save current state immediately</td></tr>
+        <tr class="cmd-row" style="--accent:#61ccff"><td class="command-cell"><span class="icon">⚑</span><span class="num">9</span><span class="command">BRIEF</span></td><td class="syntax">BRIEF [PROJECT | ALL]</td><td class="purpose">Fast operational recap before work begins</td></tr>
+        <tr class="cmd-row" style="--accent:#ff9b00"><td class="command-cell"><span class="icon">■</span><span class="num">10</span><span class="command">CLOSE</span></td><td class="syntax">CLOSE [PROJECT | ALL]</td><td class="purpose">Synchronize durable state at end of session</td></tr>
+        <tr class="cmd-row" style="--accent:#ff5dae"><td class="command-cell"><span class="icon">✚</span><span class="num">11</span><span class="command">WCPADD</span></td><td class="syntax">WCPADD &lt;request&gt;</td><td class="purpose">Add or revise the canonical workflow command language</td></tr>
+        <tr class="cmd-row" style="--accent:#39e52f"><td class="command-cell"><span class="icon">⚙</span><span class="num">12</span><span class="command">WORKFLOW MODE</span></td><td class="syntax">WORKFLOW MODE</td><td class="purpose">Enter persistent structured workflow execution</td></tr>
+        <tr class="cmd-row" style="--accent:#ff2a2a"><td class="command-cell"><span class="icon">◉</span><span class="num">13</span><span class="command">EXIT WORKFLOW</span></td><td class="syntax">EXIT WORKFLOW</td><td class="purpose">Leave workflow execution without changing task state</td></tr>
+        <tr class="cmd-row" style="--accent:#ff2a2a"><td class="command-cell"><span class="icon">?</span><span class="num">14</span><span class="command">QUESTION</span></td><td class="syntax">QUESTION</td><td class="purpose">Ask without executing</td></tr>
+        <tr class="cmd-row" style="--accent:#a95cff"><td class="command-cell"><span class="icon">●</span><span class="num">15</span><span class="command">CONVO</span></td><td class="syntax">CONVO</td><td class="purpose">Discussion / planning mode</td></tr>
+        <tr class="cmd-row" style="--accent:#61ccff"><td class="command-cell"><span class="icon">≡</span><span class="num">16</span><span class="command">CLARIFY</span></td><td class="syntax">CLARIFY &lt;text&gt;</td><td class="purpose">Correct or disambiguate context without executing</td></tr>
+        <tr class="cmd-row" style="--accent:#20d9d4"><td class="command-cell"><span class="icon">i</span><span class="num">17</span><span class="command">EXPLAIN</span></td><td class="syntax">EXPLAIN &lt;topic&gt;</td><td class="purpose">Explain a system, task, decision, or concept without changing it</td></tr>
+        <tr class="cmd-row" style="--accent:#ff9b00"><td class="command-cell"><span class="icon">▤</span><span class="num">18</span><span class="command">NOTE</span></td><td class="syntax">NOTE &lt;text&gt;</td><td class="purpose">Record a durable note or update</td></tr>
+        <tr class="cmd-row" style="--accent:#ff9b00"><td class="command-cell"><span class="icon">☷</span><span class="num">19</span><span class="command">ROUTE</span></td><td class="syntax">ROUTE &lt;objective&gt;</td><td class="purpose">Decide who should own the work</td></tr>
+        <tr class="cmd-row" style="--accent:#a95cff"><td class="command-cell"><span class="icon">↪</span><span class="num">20</span><span class="command">HANDOFF</span></td><td class="syntax">HANDOFF</td><td class="purpose">Generate the next agent-ready handoff</td></tr>
+        <tr class="cmd-row" style="--accent:#39e52f"><td class="command-cell"><span class="icon">⑂</span><span class="num">21</span><span class="command">SPLIT</span></td><td class="syntax">SPLIT</td><td class="purpose">Break work into parallel-safe tasks</td></tr>
+        <tr class="cmd-row" style="--accent:#38a7ff"><td class="command-cell"><span class="icon">⟳</span><span class="num">22</span><span class="command">SYNC</span></td><td class="syntax">SYNC [PROJECT]</td><td class="purpose">Reconcile docs, Git, PRs, deployments, and runtime</td></tr>
+        <tr class="cmd-row" style="--accent:#ff9b00"><td class="command-cell"><span class="icon">◆</span><span class="num">23</span><span class="command">REVIEW</span></td><td class="syntax">REVIEW</td><td class="purpose">Independent quality / checksum review</td></tr>
+        <tr class="cmd-row" style="--accent:#39e52f"><td class="command-cell"><span class="icon">✓</span><span class="num">24</span><span class="command">APPROVE</span></td><td class="syntax">APPROVE</td><td class="purpose">Advance through the next approval gate</td></tr>
+        <tr class="cmd-row" style="--accent:#ff2a2a"><td class="command-cell"><span class="icon">×</span><span class="num">25</span><span class="command">REJECT</span></td><td class="syntax">REJECT &lt;reason&gt;</td><td class="purpose">Return work with a correction reason</td></tr>
+        <tr class="cmd-row" style="--accent:#b9c2cf"><td class="command-cell"><span class="icon">⬡</span><span class="num">26</span><span class="command">ABORT</span></td><td class="syntax">ABORT</td><td class="purpose">Terminate the current task without marking complete</td></tr>
+        <tr class="cmd-row" style="--accent:#38a7ff"><td class="command-cell"><span class="icon">▣</span><span class="num">27</span><span class="command">LOCK</span></td><td class="syntax">LOCK &lt;thing&gt;</td><td class="purpose">Protect an accepted invariant</td></tr>
+        <tr class="cmd-row" style="--accent:#ff9b00"><td class="command-cell"><span class="icon">□</span><span class="num">28</span><span class="command">UNLOCK</span></td><td class="syntax">UNLOCK &lt;thing&gt;</td><td class="purpose">Permit changes to a locked invariant</td></tr>
+        <tr class="cmd-row" style="--accent:#a95cff"><td class="command-cell"><span class="icon">⚑</span><span class="num">29</span><span class="command">PRIORITY</span></td><td class="syntax">PRIORITY &lt;task/project&gt;</td><td class="purpose">Raise execution priority</td></tr>
+        <tr class="cmd-row" style="--accent:#38a7ff"><td class="command-cell"><span class="icon">☷</span><span class="num">30</span><span class="command">QUEUE</span></td><td class="syntax">QUEUE</td><td class="purpose">Show all active projects and tasks</td></tr>
+        <tr class="cmd-row" style="--accent:#ff9b00"><td class="command-cell"><span class="icon">▯</span><span class="num">31</span><span class="command">MOBILE MODE</span></td><td class="syntax">MOBILE MODE</td><td class="purpose">Optimize workflow ergonomics for mobile</td></tr>
+        <tr class="cmd-row" style="--accent:#38a7ff"><td class="command-cell"><span class="icon">▰</span><span class="num">32</span><span class="command">OFFICE MODE</span></td><td class="syntax">OFFICE MODE</td><td class="purpose">Optimize workflow ergonomics for desktop</td></tr>
+        <tr class="cmd-row" style="--accent:#b9c2cf"><td class="command-cell"><span class="icon">◴</span><span class="num">33</span><span class="command">USAGE</span></td><td class="syntax">USAGE</td><td class="purpose">Show accessible usage / resource information</td></tr>
+        <tr class="cmd-row" style="--accent:#39e52f"><td class="command-cell"><span class="icon">▧</span><span class="num">34</span><span class="command">CHEATSHEET</span></td><td class="syntax">CHEATSHEET &lt;topic&gt;</td><td class="purpose">Create a dense visual explainer</td></tr>
+      </tbody>
     </table>
   </section>
 
@@ -199,7 +114,7 @@
       <div class="foot-item"><span class="foot-icon">➤</span><div><span class="label">ALEX ACTION:</span> <span class="placeholder">&lt;one exact next action&gt;</span></div></div>
     </div>
   </section>
-  <div class="legend-note">Canonical source: WORKFLOW_COMMAND_PROMPT.md</div>
+  <div class="legend-note">Canonical source: WORKFLOW_COMMAND_PROMPT.md · Sandbox reference</div>
 </main>
 </body>
 </html>
