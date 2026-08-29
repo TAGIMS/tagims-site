@@ -1,886 +1,477 @@
 # AI Workflow Command Protocol
 Status: Active, project-agnostic control-plane protocol
 Canonical filename: `WORKFLOW_COMMAND_PROMPT.md`
+WCP version: `2026-08-29-foundation-v1`
 
-This file defines the canonical command language for coordinating GPT, Codex, other AI agents, repositories, deployments, owner approvals, and durable project state.
-
-The commands below are operating protocols, not conversational suggestions.
-
----
-
-# RUNTIME RELIABILITY GATE
-
-Before acting, every agent must reduce the active request to one literal task contract and enforce all five rules:
-
-1. **Literal scope:** perform only the explicitly requested objective. Preserve everything else.
-2. **No inferred expansion:** discovering an adjacent problem is not authorization to fix, redesign, reorganize, or propagate it.
-3. **Authoritative state:** verify claims against the declared source of truth. Never present chat memory as durable state.
-4. **Transfer format:** every worker completion, agent handoff, or owner-transfer payload must be entirely inside exactly one fenced `text` code block.
-5. **Pre-send checksum:** before responding, verify requested outcome, scope compliance, files/systems touched, saved destination, durable state, and required output format.
-
-If any check fails, stop. Preserve work and report the smallest recovery action. A formatting-only failure must be reissued without rerunning the task.
-
-Before the first production assignment in any new agent, thread, or cloud environment, run a read-only reliability canary. The agent must correctly state its role, literal objective, scope ceiling, declared source of truth, prohibited actions, and required output format without advancing work. Production assignment is blocked until the canary passes.
+This file defines the canonical operating protocol for owner authorization, agent roles, project bootstrap, task state, routing, review, note capture, Relay, Audit, and workflow commands.
 
 ---
 
-# 0. SELF-INSTALL / BOOTSTRAP RULE
+# 0. RUNTIME RELIABILITY GATE
 
-When an AI agent reads this file inside a repository, it must ensure the root-level `AGENTS.md` points back to this file. Preserve all existing project-specific instructions. Never overwrite or truncate unrelated agent rules.
+Before acting, every agent must enforce:
 
-Required reference:
+1. **Literal scope** — perform only the explicitly authorized objective.
+2. **No inferred expansion** — discovery is not authorization.
+3. **Authoritative state** — use the declared source of truth and Task State Store; never substitute chat memory.
+4. **Transfer integrity** — every manual agent/owner transfer payload must be entirely inside exactly one fenced `text` block.
+5. **Pre-send checksum** — verify outcome, scope, touched systems, durable state, routing metadata, and required response format.
 
-> Before handling owner workflow commands, read and follow `WORKFLOW_COMMAND_PROMPT.md`. Commands defined there are mandatory operating protocols, not conversational suggestions.
-
-Never create conflicting duplicate workflow-command files.
+If a check fails, stop and report the smallest recovery action.
 
 ---
 
-# 1. AGENT ROLES
+# 1. AUTHORITY, ROLES, AND INFRASTRUCTURE
 
-Every workflow participant must operate in exactly one role:
+## Human authority
+
+**ALEX** is the owner and authorization authority. Alex is not an agent role.
+
+Alex authorizes new top-level projects, note disposition, approvals, credentials, destructive/security/billing/domain/production gates, and other owner-only decisions.
+
+## Formal agent roles
 
 - `ORCHESTRATOR`
 - `WORKER`
+- `REVIEWER`
+- `NOTE TAKER`
 
-Default role is `WORKER` unless the owner explicitly activates `ORCHESTRATOR MODE`.
+Roles are assigned to the active agent/session/task. A role may not self-promote or assume another role.
 
-## ORCHESTRATOR MODE
+### ORCHESTRATOR
+Interprets authorized material, creates task contracts, owns task sequencing, sizing/ETA, scope ceilings, attempts, actor assignment, routing contracts, review requirements, merge/deployment sequencing, checkpoints, and exact next operational action.
 
-Use:
+One logical ORC assignment per project is the default. ORC identity is replaceable/versioned and must not depend on a permanent chat session.
 
-`ORCHESTRATOR MODE`
+### WORKER
+Executes only the assigned task contract. Worker may diagnose within scope and report/checkpoint, but may not create objectives, expand scope, change routing, waive review, or self-authorize continuation after a checksum gate.
 
-The orchestrator owns:
+### REVIEWER
+Independently evaluates Worker results against the task contract and returns PASS, FAIL, or NEEDS REVISION. Reviewer does not change scope, routing, or implementation authority.
 
-- task sequencing and decomposition
-- task sizing and timebox assignment
-- scope ceilings
-- attempt limits
-- delegation
-- checksum decisions
-- authorization of additional timeboxes
-- checkpoint continuity
-- review/merge/deployment sequencing
-- deciding the exact next operational action
+### NOTE TAKER
+Constrained capture role. It may parse only the explicit note-taking grammar in this protocol and preserve owner content. It may not analyze, infer, summarize, create tasks, set priority, or authorize execution.
 
-An orchestrator may delegate but should directly handle work it can safely complete with available tools.
+## Deterministic infrastructure
 
-## WORKER MODE
+- `TASK STATE STORE` — authoritative mutable workflow-execution state.
+- `RELAY` — deterministic transport/dispatch and handoff validation.
+- `AUDIT` — deterministic append-only event history.
 
-`WORKER MODE` is the canonical worker-role command.
-
-Workers:
-
-- execute only the assigned task contract
-- may diagnose within authorized scope
-- may checkpoint and report
-- may not expand scope
-- may not create new objectives
-- may not resize/reclassify their own task
-- may not authorize another timebox after a failed checksum
-- may not become orchestrator unless the owner explicitly issues `ORCHESTRATOR MODE`
-
-Codex should normally operate as a WORKER.
+No separate GATEKEEPER or SYNTHESIZER exists at this stage.
 
 ---
 
 # 2. WORKFLOW ACTIVATION
 
-`WORKFLOW MODE` and `WORKFLOW START` are synonymous.
+Primary commands:
 
-Either command means:
+- `WORKFLOW MANUAL`
+- `WORKFLOW RELAY`
 
-1. Read `AGENTS.md`.
-2. Read this protocol.
-3. Read `CURRENT_STATE.md` when present, including its `SOURCE OF TRUTH` block.
-3a. Route reads, writes, reconciliation, and checkpointing to the authoritative system(s) declared there. `GIT`, `DRIVE`, and `HYBRID` are all valid; neither Git nor Drive globally overrides the other.
-4. Read role-specific control files required by the repository.
-5. Verify authoritative Git/deployment state when relevant.
-6. Recover Task ID, task state, objective, role, owner, blockers, branch/SHA, task size, timebox, scope ceiling, and exact next action.
-7. Mark workflow mode ACTIVE when the repository tracks that field.
-8. Do not advance the task merely because workflow mode was activated.
+Both activate persistent Workflow Mode and load the current WCP, relevant AGENTS/role instructions, project state projection, Task State Store record when available, and authoritative source context. Activation alone does not advance work.
 
-Workflow Mode remains active until `CLOSE` or `EXIT WORKFLOW` is explicitly issued.
+## WORKFLOW MANUAL
 
-`QUESTION` and `CONVO` temporarily freeze execution without disabling Workflow Mode.
+- transport mode = `MANUAL`
+- no autonomous model API calls by Relay
+- Alex physically carries inter-agent payloads when needed
+- the submitted result still passes Relay/task-state validation
+- Alex is courier, not routing authority
+
+## WORKFLOW RELAY
+
+- transport mode = `RELAY`
+- Relay may automatically move already-authorized handoffs and invoke configured API-backed actors
+- API usage/token/cost accounting is mandatory
+- task/routing/review authority is unchanged
+
+Switching MANUAL ↔ RELAY preserves project, role, Task ID, attempt, task state, scope, routing contract, and execution position. Do not switch in a way that duplicates or interrupts an in-flight handoff.
+
+Temporary migration aliases for this WCP version only:
+
+- `WORKFLOW MODE` → `WORKFLOW MANUAL`
+- `WORKFLOW START` → `WORKFLOW MANUAL`
+- `RELAY OFF` → `WORKFLOW MANUAL`
+- `RELAY ON` → `WORKFLOW RELAY`
+- `START <PROJECT>` → `BOOTSTRAP <PROJECT>`
+
+Alias use is deprecated and should be audit-recorded. `MOBILE MODE` and `OFFICE MODE` are removed from workflow authority.
 
 ## REFRESH WORKFLOW
 
-`REFRESH WORKFLOW` reloads the current authoritative workflow rules into an already-open agent without leaving Workflow Mode or changing task state.
+Reload the current authoritative WCP and materially relevant control files while preserving project, role, Task ID, objective, state, scope, owner, transport mode, and execution position. Do not advance work or create a new task. Return REFRESH PASS/FAIL and active conflicts only.
 
-When issued:
+## CLOSE / CLOSE WORKFLOW / EXIT WORKFLOW
 
-1. Reload the current authoritative `WORKFLOW_COMMAND_PROMPT.md`.
-2. Reload all materially relevant workflow control files for the active project and role.
-3. Preserve the current project, agent role, Task ID, objective, status, task size/ETA state, scope ceiling, current owner, and execution position.
-4. Do not advance work, create a new task, change scope, change owner, or exit Workflow Mode.
-5. Reconcile the agent's active workflow behavior and response formatting against the freshly loaded rules.
-6. Return `REFRESH PASS` or `REFRESH FAIL`, identify the authoritative WCP source loaded, and report only active control/format conflicts that prevent compliance.
-
-`REFRESH WORKFLOW` is the canonical command for refreshing WCP rules in existing/open agents after a WCP update or propagation. It does not replace `WORKFLOW MODE` for initial activation and does not replace `CLOSE` / `EXIT WORKFLOW` for clean shutdown.
+Reconcile durable state, update the `CURRENT_STATE.md` projection and registry when materially required, preserve the exact task state and one next operational action, then leave Workflow Mode. Closing does not mean completion.
 
 ---
 
-# 3. MANDATORY TASK HEADER + FOOTER
+# 3. MANDATORY TASK HEADER AND FOOTER
 
-Every workflow/production task must use the following header at task start and footer at task end/stop.
-
-## HEADER
+## Header
 
 `PROJECT: <project name>`
-
-`AGENT ROLE: <ORCHESTRATOR / WORKER / REVIEWER / NOTE TAKER / other explicitly assigned role>`
-
+`AGENT ROLE: <ORCHESTRATOR / WORKER / REVIEWER / NOTE TAKER>`
 `TASK ID: #N`
-
 `STARTED: <YYYY-MM-DD HH:MM CT>`
-
-`OBJECTIVE: <one short plain-language phrase>`
-
+`OBJECTIVE: <brief objective>`
 `SOURCE OF TRUTH: <GIT / DRIVE / HYBRID>`
+`STATUS: <task state>`
+`ALEX ACTION: <expected owner action after results>`
 
-`STATUS: <READY / IN PROGRESS / COMPLETE / BLOCKED / PAUSED>`
+Task ID and STARTED remain adjacent. OBJECTIVE precedes SOURCE OF TRUTH; SOURCE OF TRUTH precedes STATUS.
 
-`ALEX ACTION: <Await results, then <expected routing/action>>`
+## Footer
 
-Task ID and STARTED must remain adjacent. STARTED records when the task actually begins, not when a prompt is drafted. OBJECTIVE must appear before SOURCE OF TRUTH, and SOURCE OF TRUTH must appear immediately before STATUS.
-
-## FOOTER
-
-Every workflow/production response triggered by `BOOTSTRAP`, `RESUME`, `CONTINUE`, `PROCEED`, `STATUS`, `PAUSE`, `CHECKPOINT`, `BRIEF`, `CLOSE`, `EXIT WORKFLOW`, `WCPADD`, `WCPMODIFY`, `PROPAGATE`, `UPDATE`, `WORKFLOW MODE`, `WORKFLOW START`, `REFRESH WORKFLOW`, `RELAY ON`, `RELAY OFF`, `ORCHESTRATOR MODE`, `WORKER MODE`, `PROMPT`, `VERIFY`, `CHECKSUM`, `REPORT`, `AUDIT`, `REVIEW`, `APPROVE`, `REJECT`, `ABORT`, or a Codex completion must end with exactly:
-
-`TASK ID #N: <READY / IN PROGRESS / COMPLETE / BLOCKED / PAUSED>`
-
-`COMPLETED: <YYYY-MM-DD HH:MM CT>` when COMPLETE; otherwise `ENDED: <YYYY-MM-DD HH:MM CT>` for BLOCKED or PAUSED.
-
-`TASK DURATION: <elapsed time from STARTED to COMPLETED/ENDED>`
-
-`OBJECTIVE: <one short plain-language phrase>`
-
+`TASK ID #N: <task state>`
+`COMPLETED: <YYYY-MM-DD HH:MM CT>` for terminal COMPLETE, otherwise `ENDED: <timestamp>` when stopped/blocked/paused
+`TASK DURATION: <elapsed time>`
+`OBJECTIVE: <brief objective>`
 `TASK RESULT: <brief factual result>`
+`NEXT ACTOR: <service-derived next actor / NONE>`
+`ALEX ACTION: <exact next owner action>`
 
-`ALEX ACTION: <the exact next thing Alex must do>`
+**ALEX ACTION is always the final footer line.**
 
-Task ID and COMPLETED/ENDED must remain adjacent. TASK RESULT must be brief and factual, not analysis. ALEX ACTION is not limited to routing; use the exact next owner action, including routing such as `SEND TO ORC` or `SEND TO REVIEWER`, testing, approval, confirmation, or `NONE — GPT IS HANDLING NEXT STEP` when no owner action is required.
+`NEXT ACTOR` is rendered/validated from the immutable routing contract and is never actor-authoritative.
 
-Any payload the owner must copy between agent windows must be inside a fenced code block. Large transfers must be split into numbered screen-sized fenced blocks.
+If review is required, Worker completion must not mark the task COMPLETE. Use `REVIEW PENDING` and a factual result such as `WORKER COMPLETED — AWAITING REVIEW`.
 
----
-
-# 4. TASK IDs AND STATES
-
-Use sequential `TASK ID #N` values within each project.
-
-Same-slice continuation, refinement, retry, debugging, deployment follow-through, and acceptance normally preserve the same Task ID.
-
-Supported states:
-
-- `READY`
-- `IN PROGRESS`
-- `COMPLETE`
-- `BLOCKED`
-- `PAUSED`
-
-A task is COMPLETE only when its stated objective is actually achieved.
+In MANUAL mode, use `ALEX ACTION: SUBMIT THIS RESULT TO RELAY` when Alex must carry the result. In RELAY mode, use `ALEX ACTION: NONE — RELAY IS HANDLING NEXT STEP` when no owner action is required.
 
 ---
 
-# 5. TASK SIZE / ETA / SCOPE CHECKSUM
+# 4. TASK STATE STORE AND STATE MACHINES
 
-Every substantive task must be sized by the ORCHESTRATOR before delegation or execution.
+Task State Store is the sole authoritative mutable workflow-execution state. `CURRENT_STATE.md` is a durable human-readable projection and must reference the state-store version it reflects during active execution. Git/Drive source-of-truth rules continue to govern code, documents, artifacts, and history.
 
-Default classifications:
+Minimum task record:
 
-- `TINY` = 5 minutes
-- `SMALL` = 10 minutes
-- `MEDIUM` = 20 minutes
-- `LARGE` = 30 minutes
+- project_id, task_id, parent_task_id
+- task_attempt_id, task_state_version
+- task_contract_id/version
+- objective reference, scope ceiling
+- current task state, current route stage
+- current actor role/id and assignment lease/epoch
+- routing_contract_id/version
+- review_required and review state/stage
+- authorization_id when note-derived
+- source_truth_context_ref and source revision references
+- WCP version/digest
+- transport mode
+- blocker/reason code, dependency references
+- last_event_id
+- created/started/updated/completed timestamps
+- terminal result reference
 
-Sizing guidance:
+Task states:
+`READY`, `IN PROGRESS`, `REVIEW PENDING`, `NEEDS REVISION`, `BLOCKED`, `PAUSED`, `COMPLETE`, `FAILED`, `CANCELLED`, `SUPERSEDED`
 
-- TINY: one obvious bounded change, usually one file/system, low risk.
-- SMALL: a few related changes with straightforward validation.
-- MEDIUM: multi-component implementation or debugging with integration work.
-- LARGE: cross-system work, infrastructure, migrations, architecture changes, or broad regression work.
+Attempt states:
+`READY`, `RUNNING`, `COMPLETED`, `FAILED`, `INVALIDATED`
 
-Every substantive task contract must include:
+Handoff states:
+`PERSISTED`, `DELIVERY PENDING`, `DELIVERED`, `ACKNOWLEDGED`, `FAILED`
 
+Every mutation validates the expected prior state and `task_state_version`. Superseded/cancelled attempts may not later emit authoritative transitions.
+
+---
+
+# 5. TASK CONTRACT / ETA / CHECKSUM
+
+Every substantive Worker task is sized by ORC:
+
+- `TINY` = 5m
+- `SMALL` = 10m
+- `MEDIUM` = 20m
+- `LARGE` = 30m
+
+Required contract fields:
+
+- Task ID / attempt
+- one objective
+- authoritative starting source/revision
 - `TASK SIZE`
 - `ETA`
 - `SCOPE CEILING`
 - `ATTEMPT LIMIT` (default 2 substantially similar approaches)
 - `CHECKSUM TRIGGER`
+- allowed systems/paths
+- locked invariants
+- validation
+- routing/review requirements
+- literal stop condition
 
-The timebox is not a completion deadline. It is a mandatory control-plane checkpoint.
+`ETA <5|10|20|30>` may be set by Alex/ORC; Worker may not self-renew.
 
-## Mandatory Scope Checksum
+## Scope checksum
 
-When the timebox expires, the WORKER must stop active implementation and answer:
+At the ETA/checksum trigger Worker stops and checks:
 
-1. Am I still solving the exact original objective?
-2. Am I still inside the authorized scope ceiling?
-3. Have I discovered a separate/new problem?
-4. Have I attempted substantially the same fix more than twice?
-5. Has the task grown beyond its original size classification?
-6. Am I now touching infrastructure, architecture, deployment, auth, DNS, databases, security, billing, or another system not explicitly authorized?
-7. Is the current blocker outside the task's scope ceiling?
+1. still solving the exact objective?
+2. still inside scope ceiling?
+3. separate/new problem discovered?
+4. substantially repeated the same fix more than twice?
+5. task grown beyond original size?
+6. touching unapproved infrastructure/architecture/deployment/auth/DNS/database/security/billing/other systems?
+7. blocker outside scope?
 
-### PASS
+PASS → preserve Task ID; ORC may authorize another timebox.
 
-If the checksum passes:
+FAIL → stop, preserve state, report drift and smallest additional scope; ORC/owner must explicitly authorize further scope.
 
-- record the checkpoint
-- state why continuation is justified
-- request/receive the next timebox from the ORCHESTRATOR
-- preserve the same Task ID
+`CHECKSUM [PROJECT | TASK]` forces this check immediately.
 
-A WORKER may not self-authorize a fresh timebox.
-
-### FAIL
-
-If any checksum item indicates scope drift or unauthorized expansion:
-
-- STOP
-- preserve current work
-- update/checkpoint state
-- report the original objective
-- report what caused drift
-- identify the smallest additional scope required
-- do not proceed until the ORCHESTRATOR explicitly authorizes a new scope/timebox
-
-## Scope Escalation Gate
-
-Discovering a new problem is not authorization to fix it.
-
-If completing the objective requires modifying a system outside the task's original scope ceiling, STOP and escalate instead of silently expanding the task.
-
-## ETA override
-
-`ETA <5|10|20|30>` allows the ORCHESTRATOR/owner to explicitly override the current task's default timebox without changing its Task ID. A WORKER cannot issue this override for itself.
+Checksum is not Reviewer: checksum prevents drift during work; Reviewer evaluates semantic correctness after a result exists.
 
 ---
 
 # 6. BOOTSTRAP <PROJECT>
 
-Initialize a new project or formalize an existing unstructured project.
+Alex calls BOOTSTRAP; ORC executes it. ORC may recommend but may not independently establish a new top-level project.
 
-When issued:
+BOOTSTRAP must be idempotent and:
 
-1. Identify project/repository.
-2. Read existing agent/project documentation.
-3. Establish and record `SOURCE OF TRUTH` in `CURRENT_STATE.md` as `GIT`, `DRIVE`, or `HYBRID`; for `HYBRID`, explicitly record which system is authoritative for each project area. Then establish default branch, deployment target, and project boundaries as applicable.
-4. Create `CURRENT_STATE.md` if no equivalent checkpoint exists.
-5. Assign `TASK ID #1`.
-6. Define one objective and one next action.
-7. Do not begin speculative implementation unless requested.
-
-End with the mandatory handoff footer.
-
----
-
-# 7. RESUME / CONTINUE / PROCEED [PROJECT]
-
-`RESUME`, `CONTINUE`, and `PROCEED` are synonymous.
-
-All mean: recover authoritative state when needed and advance from the exact recorded next operational action.
-
-Accepted syntax includes:
-
-- `RESUME`
-- `RESUME <PROJECT>`
-- `CONTINUE`
-- `CONTINUE <PROJECT>`
-- `PROCEED`
-- `PROCEED <PROJECT>`
-
-Do not restart planning or invent a new task. If state is stale or contradictory, return BLOCKED and identify one reconciliation action.
-
-After QUESTION/CONVO, any alias restores the exact prior workflow execution state.
-
-End with the mandatory handoff footer.
+1. reserve a globally unique project_id before artifacts
+2. detect duplicate project name/ID
+3. create `PROJECT - <Project Name>` in the appropriate Drive container when applicable
+4. establish SOURCE OF TRUTH: GIT / DRIVE / HYBRID and version the authority split
+5. establish exactly one writable `CURRENT_STATE.md` projection home: GIT or DRIVE
+6. initialize that projection and its Task State Store version reference
+7. establish the project note file and stable note-entry identity rules; new entries default PARK
+8. register the project in `SYSTEM - Master Project Registry.md`
+9. assign a logical primary ORC with assignment version/epoch
+10. create initial Task State Store project record and exactly one next action
+11. emit PROJECT_BOOTSTRAPPED only after required setup records succeed
+12. recover interrupted setup against the same reserved project_id instead of creating a competing project
+13. stop without speculative implementation
 
 ---
 
-# 8. SWITCH <PROJECT>
+# 7. NOTE TAKER AND OWNER NOTE AUTHORIZATION
 
-Change active project context without changing that project's task state. If work should immediately continue, use RESUME, CONTINUE, or PROCEED.
+Note-taking commands are parsed only inside an explicit note-taking session:
 
----
+- `NEW NOTE <PROJECT>`
+- `UPDATE NOTE <PROJECT>` / `MODIFY NOTE <PROJECT>`
+- `SECTION <SUBJECT>` / `NEW SECTION <SUBJECT>`
+- `NOTE <BODY>`
+- `END NOTE TAKING`
 
-# 9. STATUS [PROJECT]
+Natural command order may be normalized only when unambiguous. Project ambiguity stops for confirmation. SECTION always creates a new section.
 
-Report only:
+NOTE body is authoritative owner content. Permitted cleanup only: obvious spelling, grammatical punctuation, capitalization, removal of non-content filler (um/uh), and immediate accidental speech-stumble repetition. Preserve original captured text or digest when cleanup occurs.
 
-- agent role
-- workflow mode state
-- current Task ID/status
-- current objective
-- task size/timebox when active
-- scope ceiling
-- what just changed
-- current owner / who has the ball
-- blocker if any
-- exact next action
+Every appended entry gets stable `note_entry_id` and revision-safe append handling. NOTE outside an active note-taking session must not be silently interpreted.
 
-Do not advance the task merely by reporting status.
+Owner disposition commands:
 
-End with the mandatory handoff footer.
+- `PARK NOTE` — preserve; no ORC processing
+- `REVIEW NOTE` — authorize ORC read-only interpretation/analysis/proposal creation for the exact authorized snapshot; no implementation task creation or project/system changes
+- `EXECUTE NOTE` — authorize ORC to create normal task contracts from the exact authorized snapshot; all downstream WCP controls remain mandatory
 
----
-
-# 10. PAUSE [PROJECT]
-
-Create a clean resumable stopping point without leaving Workflow Mode. Persist Task ID/status, role, `SOURCE OF TRUTH` type and authority split, branch/SHA, accepted work, validation/deployment state, blockers, task size/timebox/scope ceiling, current owner, and exactly one next action.
-
-End with the mandatory handoff footer.
+Every disposition binds to project_id, note_entry_id, Drive file/version, content digest, authorization_id, authenticated owner identity, and timestamp. Later appended content never inherits an earlier authorization. Authorization may be explicitly superseded/revoked.
 
 ---
 
-# 11. CHECKPOINT
+# 8. RELAY / ROUTING / RESULT ENVELOPE
 
-Persist current state immediately without necessarily pausing work. The checkpoint must be sufficient for a fresh agent/thread to resume without relying on chat memory.
-
-Include Task ID/status, objective, agent role, workflow mode, `SOURCE OF TRUTH` type and authority split, task size, timebox cycle, scope ceiling, attempt count, branch/SHA, completed work, validation, deployment/runtime, blockers, current owner, and exactly one next step.
-
-End with the mandatory handoff footer.
-
----
-
-# 12. BRIEF [PROJECT | ALL]
-
-Create a concise operational recap without advancing work. Include recent material change, stopping point, role, task status, owner, blocker, and highest-value next action.
-
-End with the mandatory handoff footer.
-
----
-
-# 13. CLOSE / CLOSE WORKFLOW / EXIT WORKFLOW [PROJECT | ALL]
-
-`CLOSE`, `CLOSE WORKFLOW`, and `EXIT WORKFLOW` are synonymous.
-
-All mean: reconcile and save durable state first, then leave persistent Workflow Mode.
-
-Before exiting:
-
-1. reconcile project state with authoritative systems
-2. update `CURRENT_STATE.md`
-3. update registry/durable docs when materially changed
-4. preserve accurate task state
-5. record exactly one resumable next action
-6. mark Workflow Mode INACTIVE when tracked
-
-Closing does not mean complete, approved, merged, or deployed.
-
-End with the mandatory handoff footer.
-
----
-
-# 14. WCPADD <REQUEST>
-
-Add or revise the canonical workflow command language.
-
-Prefer aliases/extensions over unnecessary new commands. Update materially affected control-plane files and run `PROPAGATE WCP` automatically unless the owner explicitly says not to propagate yet. If the visible WCP command set, command naming, grouping, or ordering changes, update the WCP visual from the current approved design reference. Preserve that reference unchanged, create a new versioned copy in the Workflow Control Plane folder, and make only the minimum content/layout changes required. Do not redesign or add explanatory content unless explicitly requested.
-
-End with the mandatory handoff footer.
-
----
-
-# 15. WCPMODIFY <REQUEST>
-
-Modify, rename, merge, deprecate, or remove an existing workflow command or rule in the canonical WCP.
-
-Rules:
-- Use `WCPMODIFY` when the requested change affects an existing command/rule rather than creating a new one.
-- Preserve command intent unless the owner explicitly changes it.
-- Update all materially affected references, aliases, examples, trigger lists, and supporting control-plane documents.
-- Remove obsolete command names when the owner replaces them; do not leave ambiguous legacy aliases unless explicitly requested.
-- Run `PROPAGATE WCP` automatically after the modification unless the owner explicitly says not to propagate yet.
-- If the visible WCP command set, command naming, grouping, or ordering changes, update the WCP visual from the current approved design reference, preserve the reference unchanged, and save the result as a new versioned copy in the Workflow Control Plane folder before reporting completion.
-- Validate the canonical WCP and active propagated copies before reporting completion.
-
-Accepted syntax includes:
-- `WCPMODIFY <COMMAND> <REQUEST>`
-- `WCPMODIFY <OLD> > <NEW>`
-- `WCPMODIFY <REQUEST>`
-
-End with the mandatory handoff footer.
-
----
-
-# 16. PROPAGATE [WCP | <ARTIFACT>]
-
-Synchronize an authoritative shared control-plane artifact to all materially affected active copies without changing product/task state.
-
-Plain `PROPAGATE` means `PROPAGATE WCP` when the immediately preceding change was a workflow-command change.
-
-Do not overwrite project-specific instructions. Never propagate secrets or unrelated project files.
-
-End with the mandatory handoff footer.
-
----
-
-# 17. RELAY ON / RELAY OFF
-
-Control whether approved inter-agent handoffs are transported manually by the owner or autonomously by the deterministic RELAY service.
-
-`RELAY OFF` is MANUAL mode:
-- no autonomous OpenAI API model calls are authorized by RELAY;
-- Alex may manually transfer the exact same routing envelope between agents;
-- audit/chain-of-custody recording may remain active;
-- turning RELAY OFF does not change task authority, routing, review requirements, or scope.
-
-`RELAY ON` is AUTONOMOUS mode:
-- RELAY may automatically transport already-authorized handoffs;
-- RELAY may invoke the configured API execution path when the next authorized actor is an API-backed agent;
-- API token/cost accounting must be recorded for each API-triggered intelligent-agent call;
-- RELAY ON authorizes transport automation only. It does not create work, expand scope, select actors, waive review, or change routing.
-
-`RELAY PAUSED` is a service state, not independent workflow authority. RELAY enters PAUSED when autonomous transport must fail closed because of stale rules/state, checksum mismatch, missing acknowledgment beyond retry policy, budget ceiling, audit/transport integrity failure, missing authorized recipient, or another hard control failure. Only an authorized owner/ORC action may resume autonomous transport after the blocker is resolved.
-
-The routing envelope and workflow semantics must be identical in MANUAL and AUTONOMOUS modes. The mode changes transport execution only.
-
-End with the mandatory handoff footer.
-
----
-
-# 18. RELAY + AUDIT CONTROL PLANE
-
-RELAY is a deterministic transport service. AUDIT is a separate logical module that may initially run inside the same deterministic service and durable datastore. Neither module is an intelligent agent.
-
-## ORC-issued routing contract
-
-Only ORC may create tasks, change scope, assign actors, change the authorized route, define whether review is required, or authorize a revised attempt. Each task/attempt must carry an immutable, versioned routing contract containing at minimum:
-- project/task identity;
-- task_state_version;
-- task_attempt_id;
-- REVIEW_REQUIRED true/false;
-- expected next role / ordered reviewer stage when applicable;
-- authorized source/scope references;
-- ruleset_ref / WCP digest.
-
-RELAY validates declared routing values against this contract. RELAY must never infer review requirements, scope, actor selection, task completion, or semantic correctness.
-
-## Authoritative routing
+ORC is routing authority. Relay is messenger/runner only.
 
 Normal reviewed flow:
 `ORC → RELAY → WORKER → RELAY → REVIEWER → RELAY → ORC`
 
-Allowed exceptions:
-- no review: `WORKER → RELAY → ORC` only when ORC explicitly declares `REVIEW_REQUIRED=false`;
-- BLOCKED / checksum / scope escalation / unauthorized discovery: `WORKER → RELAY → ORC`;
-- revision: `REVIEWER → RELAY → ORC`, then ORC authorizes the next attempt/route;
-- cancellation/supersession: `ORC → RELAY → affected actor`;
-- parallel work: ORC creates explicit child tasks/work units and performs fan-in;
-- reviewer chains: ORC declares the ordered reviewer stages and RELAY validates only the declared next stage.
+No-review path is allowed only when the routing contract explicitly declares review not required. Blocked/checksum/scope/discovery escalations return through Relay to ORC. Reviewer revision returns to ORC; ORC creates/authorizes the next attempt.
 
-Every authoritative delivery requires recipient acknowledgment through RELAY. Direct actor-to-actor or actor-to-ORC communication is non-authoritative until accepted through RELAY. Acknowledgment proves receipt only, not correctness, approval, or semantic validity.
+Every task attempt carries an immutable versioned routing contract including project/task/attempt identity, task_state_version, review requirement, expected next actor/stage, authorized source/scope refs, and WCP/ruleset identity.
 
-## Durable transport semantics
+Relay must not infer or repair routing.
 
-Transport and audit are not assumed to be externally atomic. The service must use durable outbox/inbox semantics:
-- accepted handoff gets one immutable handoff_id, payload digest, and idempotency key;
-- audit intent/outbox state is persisted before external delivery; if that persistence fails, do not deliver;
-- recipient inbox processing is idempotent;
-- missing acknowledgment retries the same handoff_id with bounded backoff; never invent a replacement ID automatically;
-- delivery is at-least-once; processing/state transitions are effectively-once through idempotency;
-- delivery failure appends a factual failure event and retries according to policy;
-- stale task/ruleset versions, out-of-order events, corrupted integrity chains, or partial audit/transport failures fail closed.
+Minimum result/handoff envelope:
 
-## Audit provenance
+- routing_contract_id
+- handoff_id
+- project_id, task_id, task_attempt_id
+- task_state_version
+- from actor role/id
+- result_status
+- expected_next_actor
+- review_required
+- payload/result reference and digest
+- source-truth context
+- WCP version/digest
+- idempotency key
 
-Audit records are append-only machine records. Distinguish:
-- `SERVICE_OBSERVED`: facts directly observed by RELAY/AUDIT, such as delivery attempt, receipt, checksum comparison, duplicate suppression, persistence result;
-- `ACTOR_ASSERTED`: lifecycle/result/state claims emitted by ORC/WORKER/REVIEWER.
+Relay validates authenticated submitter, handoff/routing IDs, attempt/state version, actor assignment, payload digest, expected result schema, and expected next actor.
 
-Actor assertions must never be silently converted into service-observed facts. Checksum verification proves content identity only, not semantic validity.
+Missing/invalid machine metadata fails closed. Missing visible NEXT ACTOR may be rendered from valid machine metadata. Malformed/stale/contradictory/unauthorized routing is rejected, audit-recorded, and returned to ORC.
 
-Minimum audit event identity/integrity fields:
-- event_id, schema_version, ledger_sequence;
-- occurred_at, recorded_at;
-- project_id, task_id, task_attempt_id, parent_task_id when applicable;
-- actor_role, stable actor_id, session_id;
-- event_origin and event_type;
-- task_state_version;
-- from_role/to_role and handoff_id when applicable;
-- causation_event_id or parent_handoff_id;
-- idempotency_key;
-- ruleset_ref and immutable WCP digest;
-- source_truth_context_ref;
-- artifact/repository/branch/SHA or Drive file/version references when applicable;
-- payload/result digest;
-- previous_event_digest and event_digest;
-- bounded result/status code.
-
-Boundary events may additionally include objective, ALEX ACTION, and duration_ms. Do not store unrestricted prompts, transcripts, credentials, secrets, or protected payloads in the audit ledger.
-
-For `HYBRID` source of truth, the machine record must resolve the context to the specific authoritative Git repository/branch/SHA and/or Drive file/version references that apply to that task.
-
-## Fail-closed invariants
-
-- review-required tasks cannot enter authoritative COMPLETE without the declared reviewer result;
-- actors may emit only event types authorized for their role;
-- state transitions require the expected task_state_version;
-- superseded attempts cannot emit later authoritative transitions;
-- broken hash/integrity chain halts the affected stream; history is never rewritten;
-- relay/audit outage blocks new authoritative handoffs; local actor work may be preserved but cannot claim workflow completion;
-- stale WCP/ruleset or task state is rejected and returned to ORC with the expected version;
-- task duration derives from authoritative start and terminal timestamps;
-- ALEX ACTION remains human operational instruction and is never machine routing authority.
+Delivery is at-least-once; processing/state transitions are effectively-once through idempotency. Retry the same handoff ID; do not create replacement IDs automatically.
 
 ---
 
-# 19. QUESTION
+# 9. AUDIT
 
-Answer without executing workflow changes by default. If Workflow Mode is active, QUESTION freezes execution but does not exit it.
+AUDIT is append-only history; it is not mutable task state and does not interpret results.
 
----
+Provenance:
 
-# 20. CONVO
+- `SERVICE_OBSERVED` — facts infrastructure directly witnessed
+- `ACTOR_ASSERTED` — lifecycle/result/checksum/review claims made by intelligent actors
 
-Discussion/planning mode. No execution by default. If Workflow Mode is active, CONVO freezes execution but does not exit it.
+Representative service events include NOTE_CAPTURED, NOTE_DISPOSITION_SET/SUPERSEDED, PROJECT_BOOTSTRAPPED, HANDOFF_PERSISTED, DELIVERY_ATTEMPTED/FAILED, RESPONSE_RECEIVED, ROUTE_VALIDATION_FAILED, RESULT_ENVELOPE_REJECTED, MODE_CHANGED, OWNER_SUBMISSION_RECEIVED, duplicate suppression, checksum comparison, and API usage/cost.
 
----
+State transition, audit event, and durable outbox mutation should commit atomically where possible. If required audit persistence fails, authoritative state must not silently advance.
 
-# 21. CLARIFY <TEXT>
-
-Correct or disambiguate a misunderstanding, typo, naming issue, scope interpretation, or communication lapse without creating a new task by default.
-
----
-
-# 22. EXPLAIN <TOPIC>
-
-Explain a system, task, decision, file, concept, workflow state, or implementation without changing it.
+Do not store unrestricted prompts/transcripts, credentials, secrets, or protected payloads in the audit ledger. Store bounded metadata/digests/references.
 
 ---
 
-# 23. NOTE <TEXT>
+# 10. PROJECT / SOURCE-OF-TRUTH RULES
 
-Record durable information relevant to the active project without automatically changing execution state.
+Project containers use `PROJECT - <Human Readable Project Name>` when Drive applies. Avoid duplicate project containers and competing writable current-state files.
 
----
+SOURCE OF TRUTH:
 
-# 24. STEPS
+- `GIT` — Git/repository controls code/history/repo-local authoritative artifacts
+- `DRIVE` — Drive controls project documents/artifacts
+- `HYBRID` — authority split is explicit and versioned
 
-Show the current task as a concise operational sequence including where it stands, what happened, what happens next, actor ownership, and any unavoidable owner action.
+Task State Store remains authoritative for active workflow execution regardless of artifact source.
 
----
-
----
-
-# 26. PROMPT
-
-Generate the exact next agent-ready transfer. Include Task ID, objective, AGENT ROLE, repository/project, starting branch/SHA, TASK SIZE, ETA, SCOPE CEILING, ATTEMPT LIMIT, relevant context, allowed scope, locked invariants, validation requirements, stop condition, and expected completion report.
-
-End with the mandatory handoff footer.
+`WS - GPT` is a durable control-plane workspace as well as a GPT working area. Only one active discoverable canonical-named `WORKFLOW_COMMAND_PROMPT.md` should exist in Drive control-plane locations; historical copies must be clearly archived/renamed.
 
 ---
 
-# 27. SPLIT
+# 11. CORE WORKFLOW COMMANDS
 
-ORCHESTRATOR-only decomposition of an objective into parallel-safe independent tasks. Workers may recommend a split but may not authorize it.
+`RESUME [PROJECT]` / `CONTINUE [PROJECT]` / `PROCEED [PROJECT]`
+Recover authoritative state and advance from the exact recorded next action. Do not invent a new task.
 
----
+`SWITCH <PROJECT>`
+Change active project context without changing project task state.
 
-# 28. SYNC [PROJECT]
+`STATUS [PROJECT]`
+Report role, workflow/transport mode, task ID/state, objective, size/ETA, scope ceiling, current actor/who has the ball, blocker, and exact next action. Do not advance work.
 
-Reconcile documented project state with authoritative systems. Do not silently change production merely to make states match.
+`UPDATE [PROJECT | TARGET]`
+Apply the explicitly requested bounded change to the authoritative system(s). Preserve Task ID for same-objective revisions; no unrelated scope expansion.
 
----
+`PAUSE [PROJECT]`
+Persist a clean resumable stop while Workflow Mode remains active.
 
-# 29. REVIEW
+`CHECKPOINT`
+Persist current state/projection without necessarily pausing.
 
-Perform an independent checksum against the task contract. Return PASS, FAIL, or NEEDS REVISION. Review scope, timebox/checksum compliance, acceptance criteria, regressions, branch/SHA, deployment, and documentation accuracy.
+`BRIEF [PROJECT | ALL]`
+Read-only operational recap; do not advance work.
 
-End with the mandatory handoff footer.
+`STEPS`
+Show concise operational sequence/current position/ownership.
 
----
+`PROMPT`
+Generate the exact next agent-ready task transfer from the current authorized contract. Manual owner transfers must be entirely inside one fenced `text` block.
 
-# 30. APPROVE
+`SPLIT`
+ORC-only decomposition into parallel-safe child tasks.
 
-Approve the current review/acceptance gate and advance only to the next already-authorized stage. Approval does not grant unlimited scope.
+`SYNC [PROJECT]`
+Reconcile documented/project state with authoritative systems without silently changing production.
 
----
+`PRIORITY <PROJECT OR TASK>`
+ORC changes sequencing priority without scope change.
 
-# 31. REJECT <REASON>
+`QUEUE`
+Show active project/task queue and ownership.
 
-Reject the current result while preserving the active Task ID unless the objective itself is abandoned.
-
----
-
-# 32. ABORT
-
-Terminate the active task without marking it complete. Preserve existing work/state and record rollback/cleanup needs.
-
----
-
-# 33. LOCK <THING>
-
-Mark an accepted design, behavior, interface, architecture decision, workflow rule, or invariant as protected.
-
----
-
-# 34. UNLOCK <THING>
-
-Explicitly permit modification of a previously locked invariant.
+`USAGE`
+Report available workflow/API usage/cost information only when actually accessible.
 
 ---
 
-# 35. PRIORITY <PROJECT OR TASK>
+# 12. QUALITY / CONTROL COMMANDS
 
-ORCHESTRATOR changes sequencing priority without changing scope or approval gates.
+`VERIFY [PROJECT | TARGET]`
+Confirm a specific result against authoritative state; return PASS/FAIL/UNKNOWN.
 
----
+`REVIEW`
+Independent task/result evaluation against contract; return PASS/FAIL/NEEDS REVISION.
 
-# 36. QUEUE
+`APPROVE`
+Advance only to the next already-authorized stage.
 
-Show active project/task queue: project, Task ID, status, role/owner, objective, blocker, priority, timebox state, and next action.
+`REJECT <REASON>`
+Reject current result while preserving task identity unless objective is abandoned.
 
----
+`ABORT`
+Terminate active task without marking it complete; preserve state/cleanup requirements.
 
-# 37. MOBILE MODE
+`LOCK <THING>` / `UNLOCK <THING>`
+Protect or explicitly reopen an accepted invariant.
 
-Switch workflow ergonomics for mobile use without changing project state.
+`REPORT [PROJECT | TASK]`
+Read-only creep/monkey-patch/root-cause diagnostic; does not authorize implementation.
 
----
-
-# 38. OFFICE MODE
-
-Switch workflow ergonomics for desktop/office use without changing project state.
-
----
-
-# 39. USAGE
-
-Report available workload/resource/usage information only when actually accessible. Never fabricate usage data.
+`AUDIT [PROJECT | SYSTEM | ALL]`
+Broad read-only integrity audit across sources of truth, state, control-plane rules, documentation, implementation boundaries, and unresolved blockers. Findings do not authorize fixes.
 
 ---
 
-# 40. CHEATSHEET <TOPIC>
+# 13. CONVERSATION COMMANDS
 
-Create a high-information-density, single-glance visual explainer. Unless explicitly told otherwise, CHEATSHEET is visual-first and equivalent to `CHEATSHEET IMAGE` when image generation is available.
+`QUESTION`
+Answer without execution; freezes active workflow execution but does not exit it.
 
-## WCP CHEATSHEET LOCK
+`CONVO`
+Discussion/planning only; freezes execution but does not exit active workflow.
 
-The current approved WCP image is the locked visual design reference. Preserve that reference unchanged unless the owner explicitly authorizes replacement or redesign.
+`CLARIFY <TEXT>`
+Correct/disambiguate communication without creating a new task by default.
 
-Treat each updated WCP image as a derived synchronized artifact of `WORKFLOW_COMMAND_PROMPT.md`, never as the source of truth. When `WCPADD` or `WCPMODIFY` changes the visible command set, naming, grouping, or ordering, create a new updated copy from the approved visual reference after WCP propagation and before reporting completion. Do not overwrite the approved reference.
-
-Locked visual design — preserve unless the owner explicitly unlocks or redesigns it:
-- dark near-black background
-- narrow portrait command-dashboard proportions
-- two equal columns
-- thin rounded rectangular panels with subtle borders
-- neon cyan/teal role and mode section
-- electric blue workflow/navigation section
-- purple conversation section
-- yellow/orange transfer/control-plane section
-- orange review/quality/control section with green CHEATSHEET accent
-- simple line icons aligned left of each command
-- uppercase white command labels
-- commands only; no descriptions, title, legend, or decorative copy
-- keep like commands grouped together
-- preserve balanced spacing, row heights, margins, and existing visual hierarchy
-
-Image update requirements:
-1. read the current canonical WCP command set first;
-2. preserve this locked design rather than redesigning from scratch;
-3. update only the commands/grouping/order that materially changed;
-4. verify the rendered image against the canonical WCP;
-5. preserve the approved reference unchanged and save the updated image as a new version in the Workflow Control Plane folder.
+`EXPLAIN <TOPIC>`
+Explain without changing state.
 
 ---
 
-# 41. CORE EXECUTION PRINCIPLES
+# 14. WCP MAINTENANCE
 
-1. Build the smallest complete vertical slice before expanding.
+`WCPADD <REQUEST>`
+Add/revise canonical workflow language and propagate materially affected active text copies unless explicitly deferred.
+
+`WCPMODIFY <REQUEST>`
+Modify/rename/merge/deprecate/remove existing WCP rules; reconcile all materially affected references and propagate unless explicitly deferred.
+
+`PROPAGATE [WCP | ARTIFACT]`
+Synchronize the authoritative shared artifact to materially affected active copies without changing product/task state.
+
+`CHEATSHEET <TOPIC>`
+Generate the requested visual cheatsheet. WCP visual is derived from text, never source of truth.
+
+**Current temporary exception:** WCP PNG/visual refresh is explicitly deferred during the active foundation reconciliation until Alex authorizes the final visual update. Text/control-plane reconciliation may complete first.
+
+---
+
+# 15. EXECUTION PRINCIPLES
+
+1. Build the smallest complete vertical slice before expansion.
 2. Diagnose root cause before patching.
 3. Refactor cleanly instead of stacking monkey patches.
 4. Do not modify unrelated systems.
-5. Preserve accepted baselines and locks.
-6. Keep secrets/credentials out of repositories and prompts.
+5. Preserve accepted baselines/locks.
+6. Keep credentials/secrets out of repos, prompts, logs, and audit payloads.
 7. Treat destructive/security/billing/auth/domain/production changes as approval-gated unless explicitly authorized.
-8. Prefer reversible changes and rollback paths.
+8. Prefer reversible changes/rollback paths.
 9. Verify publication transport before coding when publication is part of the objective.
-10. Do not treat local success as production success.
-11. Keep unrelated repositories/products separate.
-12. Do not expand scope without authorization.
-13. Do not merge without authorization unless explicitly granted.
-14. Do not use the owner as a technical courier when agents/tools can perform the transfer directly.
-15. Discovering a new problem does not authorize fixing it.
-16. A WORKER must stop at the scope ceiling or mandatory c
+10. Local success is not production success.
+11. Keep unrelated projects/repositories separate.
+12. Discovery is not authorization.
+13. Do not merge/deploy beyond explicit authority.
+14. Do not use Alex as technical courier when RELAY mode can safely perform the transport.
+15. Worker stops at scope ceiling or checksum trigger.
+16. Reviewer and ORC share synthesis for current scale; add a dedicated synthesizer only when demonstrated fan-in load requires it.
 
 ---
 
-# 42. CODEX / WORKER TASK CONTRACT
-
-Every substantive worker task must define:
-
-- AGENT ROLE: WORKER
-- Task ID
-- one objective
-- repository
-- base branch
-- exact base SHA when relevant
-- prerequisites
-- TASK SIZE
-- ETA
-- SCOPE CEILING
-- ATTEMPT LIMIT
-- CHECKSUM TRIGGER
-- allowed paths/systems
-- locked invariants
-- validation
-- transport/publication mode
-- literal stop condition
-
-If any required contract element is missing for substantive delegated work, WORKER should return `BLOCKED — task contract incomplete` rather than inventing the missing authority.
-
----
-
-# 43. CURRENT_STATE.md RECOMMENDED FORMAT
-
-```md
-# CURRENT STATE
-
-AGENT ROLE: ORCHESTRATOR | WORKER
-WORKFLOW MODE: ACTIVE | INACTIVE
-
-TASK ID: #N
-STATUS: READY | IN PROGRESS | COMPLETE | BLOCKED | PAUSED
-OBJECTIVE: <one short objective>
-TASK SIZE: TINY | SMALL | MEDIUM | LARGE
-ETA: 5m | 10m | 20m | 30m
-ETA CYCLE: <integer>
-SCOPE CEILING: <explicit boundary>
-ATTEMPT LIMIT: 2
-ATTEMPTS USED: <integer>
-
-REPOSITORY: <owner/repo>
-BRANCH: <branch>
-SHA: <sha if relevant>
-CURRENT OWNER: GPT | CODEX | ALEX | OTHER
-
-COMPLETED:
-- ...
-VALIDATION:
-- ...
-DEPLOYMENT / RUNTIME:
-- ...
-BLOCKERS / RISKS:
-- ...
-NEXT OPERATIONAL STEP:
-<exactly one next step>
-```
-
-A fresh agent should be able to resume from this file without relying on prior chat context.
-
----
-
-# 44. RECOMMENDED MULTI-WINDOW BOOTSTRAP
-
-Primary control window:
-
-```text
-ORCHESTRATOR MODE
-WORKFLOW START
-STATUS
-```
-
-Worker GPT/Codex windows:
-
-```text
-WORKER MODE
-WORKFLOW START
-STATUS
-RESUME <PROJECT>
-```
-
-Only the explicitly designated ORCHESTRATOR may assign/reassign tasks, set timeboxes/scope ceilings, split work, or authorize continuation after a failed c
-
----
-
-# 45. UPDATE [PROJECT | <TARGET>]
-
-Apply a requested change to the active project's authoritative system(s) without changing task identity unless the requested change creates a genuinely new objective.
-
-Rules:
-- Read `CURRENT_STATE.md` and its `SOURCE OF TRUTH` block first when project routing is not already authoritative in context.
-- Route the change to `GIT`, `DRIVE`, or the correct authority split for `HYBRID` projects.
-- Preserve the active Task ID for same-objective revisions, corrections, refinements, documentation changes, configuration changes, or requested project-state updates.
-- Create a new Task ID only when the requested update establishes a separate objective rather than modifying the current one.
-- Update `CURRENT_STATE.md`, checkpoints, registry entries, or other durable control files only when the change materially affects them.
-- Do not use UPDATE as authorization for unrelated scope expansion.
-- Validate the requested change against the authoritative system before reporting completion.
-
-Accepted syntax includes:
-- `UPDATE`
-- `UPDATE <PROJECT>`
-- `UPDATE <TARGET>`
-- `UPDATE <PROJECT> <REQUEST>`
-
-End with the mandatory handoff footer.
-
----
-
-# 46. VERIFY [PROJECT | <TARGET>]
-
-Confirm the requested result against the authoritative system without changing project state. Verify the actual file, repository state, deployment/runtime, or other declared source of truth rather than relying on chat memory or an agent claim. Return PASS, FAIL, or UNKNOWN with the smallest concrete reason.
-
-End with the mandatory handoff footer.
-
----
-
-# 47. CHECKSUM [PROJECT | TASK]
-
-Run the scope/root-cause checksum immediately. Compare current work against the original objective, scope ceiling, attempt history, accepted baseline, and authoritative state. Identify scope drift, repeated fixes, monkey patches, new-system creep, or work that has grown beyond the original task. If drift is found, STOP implementation and report the smallest recovery action; do not self-authorize additional scope.
-
-End with the mandatory handoff footer.
-
----
-
-# 48. REPORT [PROJECT | TASK]
-
-Create a diagnostic creep report without continuing implementation. Use when an agent appears to be monkey patching, repeating fixes, or moving off course.
-
-Report only:
-- original objective
-- point where drift began
-- changes/attempts made after that point
-- repeated or stacked patches
-- root cause known vs symptom-only fixes
-- systems/files touched beyond the original scope
-- current authoritative state
-- rollback/recovery options
-- smallest next action to return to the intended objective
-
-REPORT does not authorize additional implementation.
-
-End with the mandatory handoff footer.
-
----
-
-# 49. AUDIT [PROJECT | SYSTEM | ALL]
-
-Perform a broad read-only integrity audit across the requested project or system. AUDIT is wider than REVIEW: it evaluates alignment across authoritative sources, durable state, documentation, workflow controls, and implementation boundaries rather than judging only one task result.
-
-Audit for:
-- conflicting or stale sources of truth
-- missing or stale `CURRENT_STATE.md` / checkpoint data
-- undocumented changes or configuration drift
-- control-plane / WCP drift
-- scope creep or architectural drift
-- duplicated or conflicting instructions
-- stale branches, deployment references, or runtime assumptions when relevant
-- missing validation or unresolved blockers
-- gaps between documented state and authoritative Git/Drive/runtime state
-
-AUDIT is read-only by default. Do not fix findings, change state, commit, merge, deploy, or rewrite documentation unless the owner separately authorizes the corrective action through `UPDATE`, `PROMPT`, or another explicit execution command.
-
-Return findings grouped by severity and include the smallest recommended corrective action for each material issue.
-
-End with the mandatory handoff footer.
-
----
-
-This protocol is designed to remain project-agnostic and durable across repositories, sessions, devices, and parallel AI-agent workflows.
+This protocol is designed to remain durable from small MANUAL-mode projects through multi-project RELAY-mode execution without changing its core authority contracts.
