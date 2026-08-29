@@ -15,8 +15,11 @@ This repository is separate from `TAGIMS/TAGiM`, which serves the TAGiM applicat
 Default agent role is **WORKER**.
 
 - `ORCHESTRATOR MODE` explicitly designates the current agent as ORCHESTRATOR.
-- `WORKER MODE` = `WORK MODE`.
 - `WORKFLOW MODE` = `WORKFLOW START` and does not assign orchestrator authority.
+- `REFRESH WORKFLOW` reloads the current authoritative WCP/control files in place without advancing or changing task state.
+- `RELAY OFF` keeps transport manual and authorizes no autonomous API model calls by RELAY.
+- `RELAY ON` authorizes autonomous transport/API execution only for already-authorized routing contracts.
+- `RELAY PAUSED` is the deterministic fail-closed service state.
 - `RESUME` = `CONTINUE` = `PROCEED`.
 - `CLOSE` = `CLOSE WORKFLOW` = `EXIT WORKFLOW`; all must save/reconcile durable state before leaving Workflow Mode.
 - `WCPADD <request>` updates the workflow command protocol and propagates it unless explicitly told not to.
@@ -35,8 +38,14 @@ Only an explicitly designated ORCHESTRATOR may:
 - split tasks
 - authorize continuation after checksum
 - change execution priority
+- issue or revise the authoritative routing contract
+- decide whether review is required
 
 Workers execute only their assigned contract and must stop at scope/timebox gates.
+
+Authoritative inter-agent transfers must follow the ORC-issued immutable routing contract and pass through RELAY. RELAY validates declared routing/state values but never infers scope, review requirements, actor selection, or completion.
+
+RELAY transport facts and actor lifecycle/result claims must preserve `SERVICE_OBSERVED` versus `ACTOR_ASSERTED` provenance in the append-only audit record.
 
 ## 4. Mandatory task controls
 Every substantive worker task requires:
@@ -101,4 +110,4 @@ Any payload Alex must copy/paste/forward between GPT/Codex/agent windows must be
 ## 9. Completion semantics
 A task is COMPLETE only when the stated objective is actually achieved. Implementation, merge, deployment, and acceptance remain distinct unless the task contract explicitly combines them.
 
-Every workflow production task must use the mandatory task header/footer defined in `WORKFLOW_COMMAND_PROMPT.md`, including `TASK ID` + `STARTED` in the header and `TASK ID` + `COMPLETED/ENDED` + `TASK DURATION` + `OBJECTIVE` + `TASK RESULT` + `ALEX ACTION` in the footer.
+Every workflow production task must use the mandatory task header/footer defined in `WORKFLOW_COMMAND_PROMPT.md`, including `TASK ID` + `STARTED` in the header and `TASK ID` + `COMPLETED/ENDED` + `TASK DURATION` + `OBJECTIVE` + `TASK RESULT` + `ALEX ACTION` in the footer. The header order is PROJECT, AGENT ROLE, TASK ID, STARTED, OBJECTIVE, SOURCE OF TRUTH, STATUS, ALEX ACTION.
