@@ -126,7 +126,8 @@ Task ID and STARTED remain adjacent. OBJECTIVE precedes SOURCE OF TRUTH; SOURCE 
 ## Footer
 
 `TASK ID #N: <task state>`
-`COMPLETED: <YYYY-MM-DD HH:MM CT>` for terminal COMPLETE, otherwise `ENDED: <timestamp>` when stopped/blocked/paused
+`COMPLETED: <YYYY-MM-DD HH:MM CT>` when the current actor/stage completed successfully, including WORKER → REVIEW PENDING and REVIEWER → NEEDS REVISION/PASS transitions
+`ENDED: <YYYY-MM-DD HH:MM CT>` when the current actor/stage stopped without successful stage completion, including BLOCKED, PAUSED, FAILED, CANCELLED, or SUPERSEDED
 `TASK DURATION: <elapsed time>`
 `OBJECTIVE: <brief objective>`
 `TASK RESULT: <brief factual result>`
@@ -448,6 +449,8 @@ Synchronize the authoritative shared artifact to materially affected active copi
 
 `CHEATSHEET <TOPIC>`
 Generate the requested visual cheatsheet. WCP visual is derived from text, never source of truth.
+
+**WCP digest rule:** the immutable WCP digest recorded in routing/state/audit records is SHA-256 over the exact canonical WCP file bytes for that version. Do not embed the digest into the file itself, which would make the digest self-referential.
 
 **Current temporary exception:** WCP PNG/visual refresh is explicitly deferred during the active foundation reconciliation until Alex authorizes the final visual update. Text/control-plane reconciliation may complete first.
 
