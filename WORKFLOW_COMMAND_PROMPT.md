@@ -1,7 +1,7 @@
 # AI Workflow Command Protocol
 Status: Active, project-agnostic control-plane protocol
 Canonical filename: `WORKFLOW_COMMAND_PROMPT.md`
-WCP version: `2026-08-29-foundation-v2`
+WCP version: `2026-08-29-foundation-v3`
 
 This file defines the canonical operating protocol for owner authorization, agent roles, project bootstrap, task state, routing, review, note capture, Relay, Audit, and workflow commands.
 
@@ -125,9 +125,27 @@ Task ID and STARTED remain adjacent. OBJECTIVE precedes SOURCE OF TRUTH; SOURCE 
 
 ## Footer
 
+Every workflow production response ends with:
+
 `TASK ID #N: <task state>`
-`COMPLETED: <YYYY-MM-DD HH:MM CT>` for terminal COMPLETE, otherwise `ENDED: <timestamp>` when stopped/blocked/paused
-`TASK DURATION: <elapsed time>`
+
+Then use exactly one timestamp/duration pair appropriate to the state transition:
+
+- Terminal `COMPLETE`:
+  - `COMPLETED: <YYYY-MM-DD HH:MM CT>`
+  - `TASK DURATION: <elapsed time from task STARTED to terminal COMPLETE>`
+- Terminal non-complete task state (`FAILED`, `CANCELLED`, `SUPERSEDED`):
+  - `ENDED: <YYYY-MM-DD HH:MM CT>`
+  - `TASK DURATION: <elapsed time from task STARTED to terminal state>`
+- Successful nonterminal stage transition (`REVIEW PENDING`, `NEEDS REVISION`, or another completed actor stage while the task remains active):
+  - `STAGE ENDED: <YYYY-MM-DD HH:MM CT>`
+  - `STAGE DURATION: <elapsed time for the actor/stage that just ended>`
+- Nonterminal stopped/checkpoint state (`BLOCKED`, `PAUSED`, or an explicit in-progress checkpoint):
+  - `ENDED: <YYYY-MM-DD HH:MM CT>` for the stopped actor/stage, or `CHECKPOINTED: <YYYY-MM-DD HH:MM CT>` when work remains actively resumable
+  - `STAGE DURATION: <elapsed time for the actor/stage represented by this response>`
+
+Then always:
+
 `OBJECTIVE: <brief objective>`
 `TASK RESULT: <brief factual result>`
 `NEXT ACTOR: <service-derived next actor / NONE>`
@@ -135,9 +153,13 @@ Task ID and STARTED remain adjacent. OBJECTIVE precedes SOURCE OF TRUTH; SOURCE 
 
 **ALEX ACTION is always the final footer line.**
 
+`TASK DURATION` is reserved for terminal task duration only. Nonterminal responses use `STAGE DURATION`; they must not relabel stage elapsed time as TASK DURATION.
+
 `NEXT ACTOR` is rendered/validated from the immutable routing contract and is never actor-authoritative.
 
-If review is required, Worker completion must not mark the task COMPLETE. Use `REVIEW PENDING` and a factual result such as `WORKER COMPLETED — AWAITING REVIEW`.
+If review is required, Worker completion must not mark the task COMPLETE. Use `REVIEW PENDING`, `STAGE ENDED`, `STAGE DURATION`, and a factual result such as `WORKER COMPLETED — AWAITING REVIEW`.
+
+A Reviewer returning `NEEDS REVISION` likewise ends the review stage with `STAGE ENDED` / `STAGE DURATION`; the overall task remains nonterminal.
 
 In MANUAL mode, use `ALEX ACTION: SUBMIT THIS RESULT TO RELAY` when Alex must carry the result. In RELAY mode, use `ALEX ACTION: NONE — RELAY IS HANDLING NEXT STEP` when no owner action is required.
 
@@ -198,15 +220,25 @@ HANDOFF transitions:
 - `PERSISTED → DELIVERY PENDING | FAILED`
 - `DELIVERY PENDING → DELIVERED | FAILED`
 - `DELIVERED → ACKNOWLEDGED | FAILED`
-- `ACKNOWLEDGED` and `FAILED` are terminal for that handoff ID; retry uses the same handoff ID/state semantics and idempotency key, never a silent replacement handoff
+- `ACKNOWLEDGED` and `FAILED` are terminal for that handoff ID
+
+Retry semantics:
+- a transient delivery-attempt failure is recorded as an Audit delivery-attempt event and does **not** transition the handoff to terminal `FAILED`
+- while delivery is retryable, the handoff remains `DELIVERY PENDING`; if the payload was delivered and only acknowledgment is pending, it remains `DELIVERED`
+- bounded automatic retries reuse the same `handoff_id` and idempotency key while the handoff remains nonterminal
+- transition to terminal `FAILED` only after retry-policy exhaustion or an irrecoverable validation/policy failure
+- once terminal `FAILED`, the same handoff record is immutable and is not retried; any later recovery requires a new ORC-authorized handoff that explicitly references/supersedes the failed handoff
 
 Every transition validates the expected prior state and `task_state_version`. Superseded/cancelled attempts may not later emit authoritative transitions.
 
 ## Duration semantics
 
-- `TASK DURATION` measures authoritative task elapsed time from the task STARTED timestamp to terminal task transition, excluding no time unless a future metric explicitly defines active-only duration.
-- Actor/stage durations (Worker execution, Review, Relay delivery, pause/block intervals) are separate audit/telemetry metrics and must not replace TASK DURATION.
-- A Worker footer at REVIEW PENDING reports the Worker/actor-stage duration when useful, but the final task footer reports full TASK DURATION.
+- `TASK DURATION` measures authoritative task elapsed time from the task STARTED timestamp to a terminal task transition only, excluding no time unless a future metric explicitly defines active-only duration.
+- `STAGE DURATION` measures the elapsed time for the actor/stage represented by a nonterminal response, including Worker execution, Review, Relay stage, or a bounded pause/block/checkpoint stage.
+- Actor/stage durations remain separate audit/telemetry metrics and must never replace or redefine TASK DURATION.
+- A Worker footer at `REVIEW PENDING` uses `STAGE ENDED` + `STAGE DURATION`.
+- A Reviewer footer at `NEEDS REVISION` uses `STAGE ENDED` + `STAGE DURATION`.
+- Only the final terminal task footer reports full `TASK DURATION`.
 
 ---
 
@@ -345,7 +377,7 @@ Relay validates authenticated submitter, handoff/routing IDs, attempt/state vers
 
 Missing/invalid machine metadata fails closed. Missing visible NEXT ACTOR may be rendered from valid machine metadata. Malformed/stale/contradictory/unauthorized routing is rejected, audit-recorded, and returned to ORC.
 
-Delivery is at-least-once; processing/state transitions are effectively-once through idempotency. Retry the same handoff ID; do not create replacement IDs automatically.
+Delivery is at-least-once; processing/state transitions are effectively-once through idempotency. Transient delivery attempts retry the same handoff ID while it remains nonterminal. Terminal `FAILED` occurs only after retry exhaustion or irrecoverable failure; after terminal failure, recovery requires a new ORC-authorized handoff referencing the failed handoff.
 
 ---
 
