@@ -1,7 +1,7 @@
 # AI Workflow Command Protocol
 Status: Active, project-agnostic control-plane protocol
 Canonical filename: `WORKFLOW_COMMAND_PROMPT.md`
-WCP version: `2026-08-29-foundation-v1`
+WCP version: `2026-08-29-foundation-v2`
 
 This file defines the canonical operating protocol for owner authorization, agent roles, project bootstrap, task state, routing, review, note capture, Relay, Audit, and workflow commands.
 
@@ -126,8 +126,7 @@ Task ID and STARTED remain adjacent. OBJECTIVE precedes SOURCE OF TRUTH; SOURCE 
 ## Footer
 
 `TASK ID #N: <task state>`
-`COMPLETED: <YYYY-MM-DD HH:MM CT>` when the current actor/stage completed successfully, including WORKER → REVIEW PENDING and REVIEWER → NEEDS REVISION/PASS transitions
-`ENDED: <YYYY-MM-DD HH:MM CT>` when the current actor/stage stopped without successful stage completion, including BLOCKED, PAUSED, FAILED, CANCELLED, or SUPERSEDED
+`COMPLETED: <YYYY-MM-DD HH:MM CT>` for terminal COMPLETE, otherwise `ENDED: <timestamp>` when stopped/blocked/paused
 `TASK DURATION: <elapsed time>`
 `OBJECTIVE: <brief objective>`
 `TASK RESULT: <brief factual result>`
@@ -176,7 +175,38 @@ Attempt states:
 Handoff states:
 `PERSISTED`, `DELIVERY PENDING`, `DELIVERED`, `ACKNOWLEDGED`, `FAILED`
 
-Every mutation validates the expected prior state and `task_state_version`. Superseded/cancelled attempts may not later emit authoritative transitions.
+## Authoritative transition table
+
+TASK transitions:
+- `READY → IN PROGRESS | CANCELLED`
+- `IN PROGRESS → REVIEW PENDING | BLOCKED | PAUSED | FAILED | CANCELLED`
+- `REVIEW PENDING → COMPLETE | NEEDS REVISION | BLOCKED | CANCELLED`
+- `NEEDS REVISION → IN PROGRESS | CANCELLED | SUPERSEDED` only through a new authorized attempt
+- `BLOCKED → IN PROGRESS | PAUSED | CANCELLED | FAILED` after the blocker is explicitly cleared/authorized
+- `PAUSED → IN PROGRESS | CANCELLED | SUPERSEDED`
+- `COMPLETE`, `FAILED`, `CANCELLED`, and `SUPERSEDED` are terminal and immutable; corrections create a new task/attempt or explicit superseding record rather than rewriting history
+
+No-review tasks may transition `IN PROGRESS → COMPLETE` only after ORC validates/accepts the Worker result and the routing contract explicitly declares `review_required=false`. A Worker may never directly author the terminal task COMPLETE transition. Review-required tasks may enter COMPLETE only from REVIEW PENDING after the required Reviewer result and ORC acceptance.
+
+ATTEMPT transitions:
+- `READY → RUNNING | INVALIDATED`
+- `RUNNING → COMPLETED | FAILED | INVALIDATED`
+- `COMPLETED`, `FAILED`, and `INVALIDATED` are terminal for that attempt
+- revision creates a new `task_attempt_id`; the prior attempt remains immutable
+
+HANDOFF transitions:
+- `PERSISTED → DELIVERY PENDING | FAILED`
+- `DELIVERY PENDING → DELIVERED | FAILED`
+- `DELIVERED → ACKNOWLEDGED | FAILED`
+- `ACKNOWLEDGED` and `FAILED` are terminal for that handoff ID; retry uses the same handoff ID/state semantics and idempotency key, never a silent replacement handoff
+
+Every transition validates the expected prior state and `task_state_version`. Superseded/cancelled attempts may not later emit authoritative transitions.
+
+## Duration semantics
+
+- `TASK DURATION` measures authoritative task elapsed time from the task STARTED timestamp to terminal task transition, excluding no time unless a future metric explicitly defines active-only duration.
+- Actor/stage durations (Worker execution, Review, Relay delivery, pause/block intervals) are separate audit/telemetry metrics and must not replace TASK DURATION.
+- A Worker footer at REVIEW PENDING reports the Worker/actor-stage duration when useful, but the final task footer reports full TASK DURATION.
 
 ---
 
@@ -233,21 +263,27 @@ Checksum is not Reviewer: checksum prevents drift during work; Reviewer evaluate
 
 Alex calls BOOTSTRAP; ORC executes it. ORC may recommend but may not independently establish a new top-level project.
 
-BOOTSTRAP must be idempotent and:
+BOOTSTRAP must be atomic/idempotent at the project-reservation boundary and:
 
-1. reserve a globally unique project_id before artifacts
-2. detect duplicate project name/ID
-3. create `PROJECT - <Project Name>` in the appropriate Drive container when applicable
-4. establish SOURCE OF TRUTH: GIT / DRIVE / HYBRID and version the authority split
-5. establish exactly one writable `CURRENT_STATE.md` projection home: GIT or DRIVE
-6. initialize that projection and its Task State Store version reference
-7. establish the project note file and stable note-entry identity rules; new entries default PARK
-8. register the project in `SYSTEM - Master Project Registry.md`
-9. assign a logical primary ORC with assignment version/epoch
-10. create initial Task State Store project record and exactly one next action
-11. emit PROJECT_BOOTSTRAPPED only after required setup records succeed
-12. recover interrupted setup against the same reserved project_id instead of creating a competing project
-13. stop without speculative implementation
+1. normalize the requested project name into a deterministic `project_key` used only for uniqueness (for example case-folded, trimmed, whitespace-normalized; the human display name is preserved separately)
+2. derive/accept a `bootstrap_idempotency_key` for the owner-authorized bootstrap request
+3. atomically reserve a globally unique `project_id` with a datastore unique constraint on `project_key` and idempotency key before creating artifacts
+4. create the bootstrap record in `BOOTSTRAPPING` state; simultaneous duplicate requests must resolve to the same reservation or fail closed, never create competing projects
+5. detect duplicate project name/ID and return the existing reservation/current project rather than creating another
+6. create `PROJECT - <Project Name>` in the appropriate Drive container when applicable
+7. establish SOURCE OF TRUTH: GIT / DRIVE / HYBRID and version the authority split
+8. establish exactly one writable `CURRENT_STATE.md` projection home: GIT or DRIVE
+9. initialize that projection and its Task State Store version reference
+10. establish the project note file and stable note-entry identity rules; new entries default PARK
+11. register the project in `SYSTEM - Master Project Registry.md`
+12. assign a logical primary ORC with assignment version/epoch
+13. create initial Task State Store project record and exactly one next action
+14. transition bootstrap state `BOOTSTRAPPING → READY` only after all required records/artifacts succeed, then emit PROJECT_BOOTSTRAPPED
+15. on unrecoverable partial failure transition bootstrap state to `FAILED`, preserve the same project_id/reservation and recovery metadata, and never silently create a replacement project
+16. retry/recovery with the same bootstrap idempotency key resumes the existing `BOOTSTRAPPING`/`FAILED` reservation
+17. stop without speculative implementation
+
+Project-bootstrap states are `BOOTSTRAPPING`, `READY`, `FAILED`. `READY` is terminal for that bootstrap operation; a failed operation is repaired/retried against the same reserved identity.
 
 ---
 
@@ -334,13 +370,18 @@ Do not store unrestricted prompts/transcripts, credentials, secrets, or protecte
 
 Project containers use `PROJECT - <Human Readable Project Name>` when Drive applies. Avoid duplicate project containers and competing writable current-state files.
 
-SOURCE OF TRUTH:
+SOURCE OF TRUTH values are exactly `GIT`, `DRIVE`, or `HYBRID`; the value identifies artifact/document authority and does not override workflow-state authority.
 
-- `GIT` — Git/repository controls code/history/repo-local authoritative artifacts
-- `DRIVE` — Drive controls project documents/artifacts
-- `HYBRID` — authority split is explicit and versioned
+Authority is scoped by domain:
+- **Workflow execution state:** Task State Store is authoritative for active task/attempt/handoff state, actor assignment, routing stage, review state, and transport mode.
+- **Code/repository artifacts:** Git is authoritative when the project authority split assigns code/history to Git.
+- **Drive documents/artifacts:** Drive is authoritative for the document/artifact areas assigned to Drive.
+- **Human-readable resume projection:** exactly one writable `CURRENT_STATE.md` projection exists and reflects a specific Task State Store version during active execution; it never overrides newer Task State Store state.
+- `GIT` — project artifacts are Git-authoritative except explicitly external runtime facts.
+- `DRIVE` — project documents/artifacts are Drive-authoritative.
+- `HYBRID` — Git and Drive each control explicitly named domains; the split is versioned.
 
-Task State Store remains authoritative for active workflow execution regardless of artifact source.
+No global precedence list may be used to let Git or Drive override Task State Store workflow state outside its authority domain.
 
 `WS - GPT` is a durable control-plane workspace as well as a GPT working area. Only one active discoverable canonical-named `WORKFLOW_COMMAND_PROMPT.md` should exist in Drive control-plane locations; historical copies must be clearly archived/renamed.
 
@@ -449,8 +490,6 @@ Synchronize the authoritative shared artifact to materially affected active copi
 
 `CHEATSHEET <TOPIC>`
 Generate the requested visual cheatsheet. WCP visual is derived from text, never source of truth.
-
-**WCP digest rule:** the immutable WCP digest recorded in routing/state/audit records is SHA-256 over the exact canonical WCP file bytes for that version. Do not embed the digest into the file itself, which would make the digest self-referential.
 
 **Current temporary exception:** WCP PNG/visual refresh is explicitly deferred during the active foundation reconciliation until Alex authorizes the final visual update. Text/control-plane reconciliation may complete first.
 
