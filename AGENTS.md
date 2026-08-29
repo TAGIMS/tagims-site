@@ -101,8 +101,4 @@ Any payload Alex must copy/paste/forward between GPT/Codex/agent windows must be
 ## 9. Completion semantics
 A task is COMPLETE only when the stated objective is actually achieved. Implementation, merge, deployment, and acceptance remain distinct unless the task contract explicitly combines them.
 
-Every workflow production handoff ends with:
-
-`TASK ID #N: <READY / IN PROGRESS / COMPLETE / BLOCKED / PAUSED>`
-`OBJECTIVE: <one short plain-language phrase>`
-`ALEX ACTION: <one exact next action or None — GPT is handling the next step.>`
+Every workflow production task must use the mandatory task header/footer defined in `WORKFLOW_COMMAND_PROMPT.md`, including `TASK ID` + `STARTED` in the header and `TASK ID` + `COMPLETED/ENDED` + `TASK DURATION` + `OBJECTIVE` + `TASK RESULT` + `ALEX ACTION` in the footer.
