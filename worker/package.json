@@ -1,14 +1,21 @@
 {
   "name": "tagims-tagim-shell",
   "private": true,
+  "type": "module",
   "scripts": {
     "check": "wrangler deploy --dry-run",
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "test": "node --test"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd"
+    ]
   },
   "devDependencies": {
     "esbuild": "0.28.1",
     "wrangler": "^4.0.0"
   }
 }
-

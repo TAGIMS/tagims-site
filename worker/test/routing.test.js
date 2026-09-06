@@ -1,0 +1,57 @@
+import assert from "node:assert/strict";
+import { afterEach, test } from "node:test";
+
+import worker from "../src/index.js";
+
+const originalFetch = globalThis.fetch;
+
+afterEach(() => {
+  globalThis.fetch = originalFetch;
+});
+
+async function routedUrl(path) {
+  let target;
+  globalThis.fetch = async request => {
+    target = request.url;
+    return new Response("ok", { headers: { "content-type": "text/plain" } });
+  };
+
+  await worker.fetch(new Request(`https://tagims.com${path}`), {});
+  return target;
+}
+
+test("routes the main website homepage through the Pages origin", async () => {
+  assert.equal(await routedUrl("/"), "https://tagims-site-production.pages.dev/");
+});
+
+test("routes /apps/tagim through the Pages origin", async () => {
+  assert.equal(
+    await routedUrl("/apps/tagim"),
+    "https://tagims-site-production.pages.dev/apps/tagim"
+  );
+});
+
+test("routes /apps/tagim/ through the Pages origin", async () => {
+  assert.equal(
+    await routedUrl("/apps/tagim/"),
+    "https://tagims-site-production.pages.dev/apps/tagim/"
+  );
+});
+
+test("proxies application paths through app.tagims.com", async () => {
+  assert.equal(
+    await routedUrl("/api/status?detail=full"),
+    "https://app.tagims.com/api/status?detail=full"
+  );
+});
+
+test("preserves existing audit and auto-loan website routing", async () => {
+  assert.equal(
+    await routedUrl("/audit/"),
+    "https://tagims-site-production.pages.dev/audit/"
+  );
+  assert.equal(
+    await routedUrl("/apps/autoloan/"),
+    "https://tagims-site-production.pages.dev/apps/autoloan/"
+  );
+});

@@ -1,4 +1,4 @@
-const TAGIM_ORIGIN = "https://ta-gi-m.vercel.app";
+const TAGIM_ORIGIN = "https://app.tagims.com";
 const WEBSITE_ORIGIN = "https://tagims-site-production.pages.dev";
 const BRAND_PATH = "/__tagims/brand.png";
 
@@ -79,7 +79,10 @@ class BodyShell {
 }
 
 function isWebsitePath(pathname) {
-  return pathname === "/audit" || pathname.startsWith("/audit/") || pathname.startsWith("/apps/autoloan/");
+  return pathname === "/" ||
+    pathname === "/audit" || pathname.startsWith("/audit/") ||
+    pathname.startsWith("/apps/autoloan/") ||
+    pathname === "/apps/tagim" || pathname.startsWith("/apps/tagim/");
 }
 
 function upstreamRequest(request, origin) {
