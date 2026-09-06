@@ -82,6 +82,7 @@ function isWebsitePath(pathname) {
   return pathname === "/" ||
     pathname === "/audit" || pathname.startsWith("/audit/") ||
     pathname.startsWith("/apps/autoloan/") ||
+    pathname === "/apps/hubbahub" || pathname.startsWith("/apps/hubbahub/") ||
     pathname === "/apps/tagim" || pathname.startsWith("/apps/tagim/");
 }
 
