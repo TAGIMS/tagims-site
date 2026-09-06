@@ -38,6 +38,20 @@ test("routes /apps/tagim/ through the Pages origin", async () => {
   );
 });
 
+test("routes /apps/hubbahub through the Pages origin", async () => {
+  assert.equal(
+    await routedUrl("/apps/hubbahub"),
+    "https://tagims-site-production.pages.dev/apps/hubbahub"
+  );
+});
+
+test("routes /apps/hubbahub/ through the Pages origin", async () => {
+  assert.equal(
+    await routedUrl("/apps/hubbahub/"),
+    "https://tagims-site-production.pages.dev/apps/hubbahub/"
+  );
+});
+
 test("proxies application paths through app.tagims.com", async () => {
   assert.equal(
     await routedUrl("/api/status?detail=full"),
