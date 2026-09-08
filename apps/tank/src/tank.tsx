@@ -1,0 +1,36 @@
+'use client';
+import {useEffect,useRef} from 'react';
+export type Decoration={id:number,kind:number,x:number,y:number,size:number,flip:boolean};
+export type TankState={fish:number[],decor:Decoration[],bubblers:{id:number,x:number,power:number,size:number}[],substrate:number,color:string,brightness:number,angle:number,caustics:number,speed:number,paused:boolean};
+type Props={state:TankState,selected:number|null,editing:boolean,onSelect:(id:number|null)=>void,onMove:(id:number,x:number,y:number)=>void,onReady:()=>void,onError:()=>void};
+type Swimmer={kind:number,x:number,y:number,phase:number,dir:number,speed:number,depth:number};
+const clamp=(v:number,a:number,b:number)=>Math.max(a,Math.min(b,v));
+export default function Aquarium(props:Props){
+const canvas=useRef<HTMLCanvasElement>(null),current=useRef(props),swimmers=useRef<Swimmer[]>([]),bounds=useRef<{id:number,x:number,y:number,w:number,h:number}[]>([]),drag=useRef<{id:number,dx:number,dy:number}|null>(null);
+current.current=props;
+useEffect(()=>{const old=swimmers.current;swimmers.current=props.state.fish.flatMap((count,kind)=>Array.from({length:count},(_,i)=>old.filter(f=>f.kind===kind)[i]||{kind,x:Math.random(),y:.16+Math.random()*.56,phase:Math.random()*Math.PI*2,dir:Math.random()>.5?1:-1,speed:.5+Math.random()*.5,depth:.65+Math.random()*.4}));},[props.state.fish]);
+useEffect(()=>{const el=canvas.current!,ctx=el.getContext('2d',{alpha:false});if(!ctx){current.current.onError();return}const c=ctx;let frame=0,alive=true,t=0,last=performance.now(),w=1,h=1;const img=(src:string)=>new Promise<HTMLImageElement>((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src=src});
+let assets:HTMLImageElement[]=[];Promise.all(['/apps/tank/assets/background.jpg',...Array.from({length:6},(_,i)=>'/apps/tank/assets/fish-'+i+'.png'),...Array.from({length:6},(_,i)=>'/apps/tank/assets/decor-'+i+'.png')].map(img)).then(a=>{assets=a;if(alive)current.current.onReady()}).catch(()=>{if(alive)current.current.onError()});
+const observer=new ResizeObserver(()=>{w=el.clientWidth;h=el.clientHeight;const dpr=Math.min(window.devicePixelRatio,1.8);el.width=w*dpr;el.height=h*dpr;c.setTransform(dpr,0,0,dpr,0,0)});observer.observe(el);
+function draw(now:number){if(!alive)return;frame=requestAnimationFrame(draw);const dt=Math.min((now-last)/1000,.04);last=now;const {state:s,selected,editing}=current.current;if(!s.paused&&!document.hidden)t+=dt;c.fillStyle='#031b20';c.fillRect(0,0,w,h);if(!assets.length)return;
+c.drawImage(assets[0],0,0,w,h);
+if(s.substrate){c.save();const mask=c.createLinearGradient(0,h*.68,0,h*.77);mask.addColorStop(0,'transparent');mask.addColorStop(1,['','#15191d','#967247','#e6ece5'][s.substrate]);c.fillStyle=mask;c.globalCompositeOperation=s.substrate===3?'screen':'multiply';c.fillRect(0,h*.65,w,h*.35);c.restore()}
+const brightness=.09+s.brightness/100*.96,beamX=w*(s.angle/100);c.save();c.globalCompositeOperation='screen';const glow=c.createRadialGradient(beamX,-h*.13,0,beamX,h*.06,h*1.2);glow.addColorStop(0,s.color+'77');glow.addColorStop(.5,s.color+'19');glow.addColorStop(1,'transparent');c.fillStyle=glow;c.fillRect(0,0,w,h);c.restore();
+function fish(f:Swimmer){const scale=Math.min(w/1400,h/850),sizes=[78,132,135,88,112,75],fw=sizes[f.kind]*scale*f.depth,fh=fw*assets[f.kind+1].height/assets[f.kind+1].width,py=(f.y+Math.sin(t*.32+f.phase)*.028)*h;c.save();c.translate(f.x*w,py);c.scale(f.dir*(.93+Math.sin(t*.8+f.phase)*.07),1);c.globalAlpha=.65+f.depth*.3;const image=assets[f.kind+1],strips=18;for(let k=0;k<strips;k++){const x=k/strips,sw=image.width/strips,bend=Math.sin(t*(3+s.speed*.055)+f.phase+x*4)*fw*.024*(1-x)*(1-x);c.drawImage(image,k*sw,0,sw,image.height,-fw/2+k*fw/strips,-fh/2+bend,fw/strips+.5,fh)}c.restore()}
+for(const f of swimmers.current){if(!s.paused&&!document.hidden){f.x+=f.dir*dt*(.01+s.speed*.00045)*f.speed;if(f.x>1.08){f.dir=-1;f.x=1.08}if(f.x<-.08){f.dir=1;f.x=-.08}}if(f.depth<.83)fish(f)}
+bounds.current=[];for(const d of [...s.decor].sort((a,b)=>a.y-b.y)){const im=assets[d.kind+7],dh=h*(d.kind<3?.45:d.kind===4?.36:.22)*d.size,dw=dh*im.width/im.height,x=d.x*w,y=d.y*h;bounds.current.push({id:d.id,x:x-dw/2,y:y-dh,w:dw,h:dh});
+// Project each photographic silhouette onto the bottom, away from the light.
+c.save();c.translate(x,y-2);c.transform(d.flip?-1:1,0,(d.x-s.angle/100)*1.6,-.17,0,0);c.filter='brightness(0) blur(7px)';c.globalAlpha=.4;c.drawImage(im,-dw/2,-dh,dw,dh);c.restore();
+c.save();c.translate(x,y);c.scale(d.flip?-1:1,1);if(d.kind<3)c.transform(1,0,Math.sin(t*.52+d.id)*.014,1,0,0);c.drawImage(im,-dw/2,-dh,dw,dh);c.restore();if(editing&&selected===d.id){c.save();c.strokeStyle='#b8eed1aa';c.lineWidth=1;c.setLineDash([4,6]);c.strokeRect(x-dw/2-7,y-dh-7,dw+14,dh+14);c.restore()}}
+for(const f of swimmers.current)if(f.depth>=.83)fish(f);
+for(const b of s.bubblers){if(b.power===0)continue;const amount=Math.ceil(b.power*.8);for(let i=0;i<amount;i++){const seed=(i*73.13+b.id*.17)%1,p=((t*(.075+(i%7)*.007)+i/amount)%1),x=b.x*w+Math.sin(p*9+i)*(.005+p*.012)*w,y=h*(.96-p*.98),r=(1.2+b.size*.04)*(0.6+seed)*Math.min(w/1000,1.5);c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.strokeStyle='rgba(195,239,246,.32)';c.lineWidth=.65;c.stroke();c.beginPath();c.arc(x-r*.27,y-r*.28,r*.25,0,Math.PI*2);c.fillStyle='rgba(235,255,255,.55)';c.fill()}}
+// Moving refracted light across the sand.
+c.save();c.globalCompositeOperation='screen';c.globalAlpha=s.caustics/100*.12;c.strokeStyle=s.color;c.lineWidth=1.3;for(let j=0;j<16;j++){c.beginPath();for(let i=0;i<=80;i++){const x=i/80*w,y=h*.75+j*h*.018+Math.sin(i*.53+j*.7+t*.4)*h*.009+Math.sin(i*.25-t*.24)*h*.01;if(!i)c.moveTo(x,y);else c.lineTo(x,y)}c.stroke()}c.restore();
+c.save();c.globalCompositeOperation='soft-light';c.globalAlpha=.65;c.fillStyle=s.color;c.fillRect(0,0,w,h);c.restore();c.fillStyle=`rgba(0,7,14,${Math.max(0,1-brightness)})`;c.fillRect(0,0,w,h);
+const vig=c.createRadialGradient(w*.5,h*.42,h*.2,w*.5,h*.5,w*.72);vig.addColorStop(0,'transparent');vig.addColorStop(1,'rgba(0,10,13,.35)');c.fillStyle=vig;c.fillRect(0,0,w,h);
+for(let i=0;i<35;i++){c.fillStyle='rgba(220,250,240,.13)';c.fillRect(((i*.618+t*.003)%1)*w,((i*.371-t*.005)%1+1)%1*h,1.3,1.3)}
+}
+frame=requestAnimationFrame(draw);return()=>{alive=false;cancelAnimationFrame(frame);observer.disconnect()};},[]);
+return <canvas ref={canvas} className="tank-canvas" aria-label="Living aquarium. Use the studio to add fish, arrange decorations, and adjust lighting." onPointerDown={e=>{if(!current.current.editing)return;const r=e.currentTarget.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,b=[...bounds.current].reverse().find(b=>x>=b.x&&x<=b.x+b.w&&y>=b.y&&y<=b.y+b.h);current.current.onSelect(b?.id??null);if(b){const d=current.current.state.decor.find(d=>d.id===b.id)!;drag.current={id:b.id,dx:x/r.width-d.x,dy:y/r.height-d.y};e.currentTarget.setPointerCapture(e.pointerId)}}} onPointerMove={e=>{if(!drag.current)return;const r=e.currentTarget.getBoundingClientRect();current.current.onMove(drag.current.id,clamp((e.clientX-r.left)/r.width-drag.current.dx,.02,.98),clamp((e.clientY-r.top)/r.height-drag.current.dy,.7,.98))}} onPointerUp={()=>drag.current=null} onPointerCancel={()=>drag.current=null}/>;
+}
+
