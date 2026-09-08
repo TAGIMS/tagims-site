@@ -69,3 +69,11 @@ test("preserves existing audit and auto-loan website routing", async () => {
     "https://tagims-site-production.pages.dev/apps/autoloan/"
   );
 });
+
+
+test("routes aquarium page and assets to Pages without capturing other apps", async () => {
+  for (const path of ["/apps/tank", "/apps/tank/", "/apps/tank/assets/fish-0.png", "/apps/tank/static/a.js?v=1"]) {
+    assert.equal(await routedUrl(path), `https://tagims-site-production.pages.dev${path}`);
+  }
+  assert.equal(await routedUrl("/apps/tank-other"), "https://app.tagims.com/apps/tank-other");
+});
