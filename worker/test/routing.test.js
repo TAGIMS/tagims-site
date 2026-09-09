@@ -77,3 +77,10 @@ test("routes aquarium page and assets to Pages without capturing other apps", as
   }
   assert.equal(await routedUrl("/apps/tank-other"), "https://app.tagims.com/apps/tank-other");
 });
+
+test("routes estimates pages and assets to Pages without capturing other apps", async () => {
+  for (const path of ["/apps/estimates", "/apps/estimates/", "/apps/estimates/index.html", "/apps/estimates/assets/app.js?v=1"]) {
+    assert.equal(await routedUrl(path), `https://tagims-site-production.pages.dev${path}`);
+  }
+  assert.equal(await routedUrl("/apps/estimates-other"), "https://app.tagims.com/apps/estimates-other");
+});

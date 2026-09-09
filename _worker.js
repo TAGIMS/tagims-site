@@ -10,12 +10,6 @@ export default {
       return env.ASSETS.fetch(new Request(url.toString(), request));
     }
 
-    // Friendly route for the Instant Estimates app placeholder.
-    if (path === "/apps/estimates") {
-      url.pathname = "/apps/estimates/index.html";
-      return env.ASSETS.fetch(new Request(url.toString(), request));
-    }
-
     return env.ASSETS.fetch(request);
   }
 };
