@@ -8,13 +8,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Estimates · TAGIMS</title>
+  <title>Command Hub</title>
 
 <!-- HUB GUIDE ============================================================
      RESOURCE: https://fonts.googleapis.com
      External stylesheet or connection hint used by this page.
      ====================================================================== -->
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
 <!-- HUB GUIDE ============================================================
      RESOURCE: https://fonts.gstatic.com
@@ -26,15 +26,15 @@
      RESOURCE: https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400..700&family=DM+Sans:wght@400..700&family=Lora:wght@400..700&family=Manrope:wght@400..800&family=Montserrat:wght@400..700&family=Playfair+Display:wght@400..700&family=Raleway:wght@400..700&display=swap
      External stylesheet or connection hint used by this page.
      ====================================================================== -->
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400..700&amp;family=DM+Sans:wght@400..700&amp;family=Lora:wght@400..700&amp;family=Manrope:wght@400..800&amp;family=Montserrat:wght@400..700&amp;family=Playfair+Display:wght@400..700&amp;family=Raleway:wght@400..700&amp;display=swap">
 
 <!-- HUB GUIDE ============================================================
      RESOURCE: css/hub.css
      External stylesheet or connection hint used by this page.
      ====================================================================== -->
-<link rel="stylesheet" href="/apps/_hub/css/hub.css">
-<link rel="stylesheet" href="/apps/_hub/css/financial-dashboard.css">
-<link rel="stylesheet" href="/apps/_hub/operations.css"></head>
+<link rel="stylesheet" href="css/hub.css">
+<link rel="stylesheet" href="css/financial-dashboard.css">
+</head>
 
 <!-- HUB GUIDE ============================================================
      BODY: HUB BOOTING
@@ -314,21 +314,55 @@
 <div class="accordion-content">
           <div class="widget-drag-instruction"><strong>DRAG WIDGETS →</strong></div>
           <div class="widget-library" aria-label="Widget library">
+<button class="widget-library-item" type="button" data-content-type="financialdashboard" title="Financial Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 10h18M10 10v11"/></svg><span>Financial Dashboard</span></button>
+<button class="widget-library-item" type="button" data-content-type="clock" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></svg>
+              <span>Clock</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="calendar" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M7.5 3v4M16.5 3v4M3.5 9.5h17"/></svg>
+              <span>Calendar</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="weather" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 18H7a4 4 0 1 1 1.3-7.8A5.5 5.5 0 0 1 19 12a3 3 0 0 1-2 6Z"/><path d="M8.5 6.5A4 4 0 0 1 16 8"/></svg>
+              <span>Weather</span>
+            </button>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<button class="widget-library-item" type="button" data-content-type="notes" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3.5h14v17H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+              <span>Notes</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="todo" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="m7.5 8 1.4 1.4L11.5 7M13.5 8.5h3M7.5 14l1.4 1.4 2.6-2.4M13.5 14.5h3"/></svg>
+              <span>To-Do</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="reminders" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span>Reminders</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="tagim" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></svg><span>TAGIM</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="music" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><span>Music</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="youtube" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="4"/><path d="m10 9 5 3-5 3Z"/></svg><span>YouTube</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="photos" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m3 17 5-5 4 4 3-3 6 6"/></svg><span>Photos</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="performance" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V9m4 10V5m4 14v-7m4 7V3m4 16v-9"/><path d="M3 19h18"/></svg>
+              <span>Hub Performance</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="gmail" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 6.5 12 13l8.5-6.5"/><rect x="3.5" y="5" width="17" height="14" rx="2"/></svg>
+              <span>Gmail</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="drive" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 3-5 9 3 5h10l3-5-5-9Z"/><path d="M4 12h16M9 3l5 9M7 17l3-5"/></svg>
+              <span>Google Drive</span>
+            </button>
 </div>
         </div>
       </details>
@@ -692,7 +726,7 @@
      ELEMENT: BACKGROUND URL
      DOM ID: backgroundURL. JavaScript uses this exact identifier when binding or updating the control.
      ====================================================================== -->
-<input id="backgroundURL" type="text" placeholder="" aria-label="Background image URL or path"></label>
+<input id="backgroundURL" type="text" placeholder="assets/backgrounds/image.jpg" aria-label="Background image URL or path"></label>
 
 <!-- HUB GUIDE ============================================================
      ELEMENT: APPLY BACKGROUND URL
@@ -835,13 +869,13 @@
      SCRIPT LOAD: hub.js
      Loads the file at this point in document order. Keep dependency order intact.
      ====================================================================== -->
+<link rel="stylesheet" href="finance/native/widgets.css">
+<script src="finance/native/config.js" defer></script>
+<script src="finance/native/engine.js" defer></script>
+<script src="finance/native/store.js" defer></script>
+<script src="hub.js" defer></script>
 
 
 
-
-
-
-
-
-<script src="/apps/_hub/config.js"></script><script src="/apps/_hub/domain.js"></script><script src="/apps/_hub/store.js"></script><script src="/apps/_hub/prototype-import.js"></script><script src="/apps/_hub/operations.js"></script><script src="/apps/_hub/bootstrap.js"></script><script src="/apps/_hub/hub.js"></script></body>
+</body>
 </html>

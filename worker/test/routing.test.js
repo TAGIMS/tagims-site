@@ -5,6 +5,15 @@ import worker from "../src/index.js";
 
 const originalFetch = globalThis.fetch;
 
+test("routes the Hub app directory, CRM, Photo Center, and shared assets to Pages", async () => {
+  for(const path of ['/apps','/apps/','/apps/crm','/apps/crm/','/apps/photo-center','/apps/photo-center/','/apps/_hub/hub.js?v=1','/apps/_hub/css/base.css']) {
+    assert.equal(await routedUrl(path), `https://tagims-site-production.pages.dev${path}`);
+  }
+  for(const path of ['/apps/crm-other','/apps/photo-center-other','/apps/estimate']) {
+    assert.equal(await routedUrl(path),`https://app.tagims.com${path}`);
+  }
+});
+
 afterEach(() => {
   globalThis.fetch = originalFetch;
 });
