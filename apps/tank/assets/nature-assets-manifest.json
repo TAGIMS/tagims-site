@@ -1,0 +1,400 @@
+{
+  "mode": "built-in imagegen",
+  "assets": [
+    {
+      "name": "broadleaf-rosette",
+      "requested_size": "2160x3840",
+      "prompt": "Use case: photorealistic-natural. Asset type: a single isolated aquascape editor photographic cutout, not a sheet. Subject: one lush living aquatic broadleaf rosette plant, naturally varying emerald oval leaves with visible veins and thin petioles, an Anubias-like healthy underwater growth habit, no exposed roots. Entire plant fully inside frame with generous clear margin around every leaf tip, viewed from front and slightly above as in an aquarium, natural dense irregular organic silhouette. Photoreal macrophotography with lifelike fine botanical texture and neutral studio-soft lighting compatible with underwater compositing. Genuine transparent background and clean alpha throughout all gaps between leaves, no background color, no fake checkerboard, no ground or shadow, no pot, no labels, no aquarium, no other objects. Request native 2160x3840 pixels with maximum supported real detail, no cartoon, no illustration, no plastic, no fantasy.",
+      "path": "nature-rosette.png",
+      "native_dimensions": [
+        941,
+        1672
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "object_bounds": [
+        6,
+        234,
+        935,
+        1362
+      ],
+      "opaque_bounds": [
+        21,
+        242,
+        915,
+        1354
+      ],
+      "transparent_fraction": 0.5906,
+      "object_dimensions": [
+        929,
+        1128
+      ],
+      "issues": [
+        "Native output is below requested 4K resolution; not upscaled.",
+        "Left leaf tip touches the image edge; prefer masked overlap in composition."
+      ]
+    },
+    {
+      "name": "feathery-stems",
+      "requested_size": "2160x3840",
+      "prompt": "Use case: photorealistic-natural. Asset type: a single isolated aquascape editor photographic cutout, not a sheet. Subject: one natural bunch of fine feathery aquatic green stems, dense delicate needlelike whorls, subtly irregular stems and detailed fine leaflets, realistic Limnophila-like foliage. Entire plant fully inside frame with generous clear margin around every leaf tip, viewed from front and slightly above as in an aquarium, natural dense irregular organic silhouette. Photoreal macrophotography with lifelike fine botanical texture and neutral studio-soft lighting compatible with underwater compositing. Genuine transparent background and clean alpha throughout all gaps between leaves, no background color, no fake checkerboard, no ground or shadow, no pot, no labels, no aquarium, no other objects. Request native 2160x3840 pixels with maximum supported real detail, no cartoon, no illustration, no plastic, no fantasy.",
+      "path": "nature-feathery.png",
+      "native_dimensions": [
+        941,
+        1672
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "object_bounds": [
+        26,
+        40,
+        922,
+        1638
+      ],
+      "opaque_bounds": [
+        180,
+        260,
+        669,
+        1636
+      ],
+      "transparent_fraction": 0.4338,
+      "object_dimensions": [
+        896,
+        1598
+      ],
+      "issues": [
+        "Native output is below requested 4K resolution; not upscaled.",
+        "Fine translucent foliage edges may show light green fringe on dark backgrounds; inspect in final composition."
+      ]
+    },
+    {
+      "name": "ribbon-grass",
+      "requested_size": "2160x3840",
+      "prompt": "Use case: photorealistic-natural. Asset type: a single isolated aquascape editor photographic cutout, not a sheet. Subject: one natural bunch of long ribbonlike aquatic grass, graceful arching slender translucent green blades with natural twists and varying heights, Vallisneria-like plant. Entire plant fully inside frame with generous clear margin around every leaf tip, viewed from front and slightly above as in an aquarium, natural dense irregular organic silhouette. Photoreal macrophotography with lifelike fine botanical texture and neutral studio-soft lighting compatible with underwater compositing. Genuine transparent background and clean alpha throughout all gaps between leaves, no background color, no fake checkerboard, no ground or shadow, no pot, no labels, no aquarium, no other objects. Request native 2160x3840 pixels with maximum supported real detail, no cartoon, no illustration, no plastic, no fantasy.",
+      "path": "nature-ribbon.png",
+      "native_dimensions": [
+        941,
+        1672
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "object_bounds": [
+        44,
+        20,
+        899,
+        1650
+      ],
+      "opaque_bounds": [
+        47,
+        49,
+        860,
+        1629
+      ],
+      "transparent_fraction": 0.6205,
+      "object_dimensions": [
+        855,
+        1630
+      ],
+      "issues": [
+        "Native output is below requested 4K resolution; not upscaled."
+      ]
+    },
+    {
+      "name": "red-stems",
+      "requested_size": "2160x3840",
+      "prompt": "Use case: photorealistic-natural. Asset type: individual aquascape editor photographic cutout, not a sheet. Subject: one natural dense bunch of red aquatic stems, realistic Ludwigia-like small pointed oval leaves in deep burgundy red, copper and muted rose, thin branching stems, lush healthy underwater growth. Entire subject fully inside frame, never cropped, 10 percent clear margin all around. Lifelike natural photography with extremely fine real surface detail, neutral studio-soft lighting compatible with underwater compositing. Genuine transparent background and clean alpha through any gaps, no background color, no fake checkerboard, no ground or cast shadow, no pot, no labels, no aquarium, no other objects. Request native 2160x3840 pixels maximum supported real detail, no cartoon, no illustration, no plastic, no fantasy.",
+      "path": "nature-red-stems.png",
+      "native_dimensions": [
+        941,
+        1672
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "object_bounds": [
+        26,
+        119,
+        915,
+        1574
+      ],
+      "opaque_bounds": [
+        42,
+        129,
+        898,
+        1572
+      ],
+      "transparent_fraction": 0.5815,
+      "object_dimensions": [
+        889,
+        1455
+      ],
+      "issues": [
+        "Native output is below requested 4K resolution; not upscaled."
+      ]
+    },
+    {
+      "name": "carpet-patch",
+      "requested_size": "3840x2160",
+      "prompt": "Use case: photorealistic-natural. Asset type: individual aquascape editor photographic cutout, not a sheet. Subject: one low dense irregular oval patch of living aquatic carpeting plants, tiny fresh green rounded Monte Carlo-like leaves on finely branching creeping stems, an organic shallow mound, front view slightly from above. Entire subject fully inside frame, never cropped, 10 percent clear margin all around. Lifelike natural photography with extremely fine real surface detail, neutral studio-soft lighting compatible with underwater compositing. Genuine transparent background and clean alpha through any gaps, no background color, no fake checkerboard, no ground or cast shadow, no pot, no labels, no aquarium, no other objects. Request native 3840x2160 pixels maximum supported real detail, no cartoon, no illustration, no plastic, no fantasy.",
+      "path": "nature-carpet.png",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "object_bounds": [
+        51,
+        140,
+        1624,
+        811
+      ],
+      "opaque_bounds": [
+        96,
+        229,
+        1577,
+        801
+      ],
+      "transparent_fraction": 0.56,
+      "object_dimensions": [
+        1573,
+        671
+      ],
+      "issues": [
+        "Native output is below requested 4K resolution; not upscaled.",
+        "Fine translucent foliage edges may show light green fringe on dark backgrounds; inspect in final composition."
+      ]
+    },
+    {
+      "name": "limestone-rock",
+      "requested_size": "3840x2160",
+      "prompt": "Use case: photorealistic-natural. Asset type: individual aquascape editor photographic cutout, not a sheet. Subject: one rugged natural gray aquarium limestone rock, angular asymmetric mountainlike silhouette, realistic layered fissures and pale mineral veins, deeply detailed weathered stone surface, three-quarter front view slightly from above. Entire subject fully inside frame, never cropped, 10 percent clear margin all around. Lifelike natural photography with extremely fine real surface detail, neutral studio-soft lighting compatible with underwater compositing. Genuine transparent background and clean alpha through any gaps, no background color, no fake checkerboard, no ground or cast shadow, no pot, no labels, no aquarium, no other objects. Request native 3840x2160 pixels maximum supported real detail, no cartoon, no illustration, no plastic, no fantasy.",
+      "path": "nature-limestone.png",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "object_bounds": [
+        349,
+        45,
+        1444,
+        903
+      ],
+      "opaque_bounds": [
+        353,
+        47,
+        1436,
+        902
+      ],
+      "transparent_fraction": 0.6112,
+      "object_dimensions": [
+        1095,
+        858
+      ],
+      "issues": [
+        "Native output is below requested 4K resolution; not upscaled."
+      ]
+    },
+    {
+      "name": "dragon-stone",
+      "requested_size": "2160x3840",
+      "prompt": "Use case: photorealistic-natural. Asset type: individual aquascape editor photographic cutout, not a sheet. Subject: one porous ochre dragon stone for aquascaping, asymmetric upright rugged rock with deep eroded cavities and honeycomb pores, warm ochre brown and muted gray mineral variation, front three-quarter view. Entire subject fully inside frame with 10 percent clear margin around every extremity. Extremely detailed lifelike natural photography, neutral studio-soft lighting compatible with underwater compositing. Genuine transparent background and clean alpha through all gaps, no background color, no fake checkerboard, no ground or cast shadow, no pot, no labels, no aquarium, no other objects. Request native 2160x3840 pixels maximum supported real detail, no cartoon, no illustration, no plastic, no fantasy.",
+      "path": "nature-dragon-stone.png",
+      "native_dimensions": [
+        941,
+        1672
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "object_bounds": [
+        63,
+        41,
+        903,
+        1632
+      ],
+      "opaque_bounds": [
+        65,
+        51,
+        901,
+        1628
+      ],
+      "transparent_fraction": 0.4752,
+      "object_dimensions": [
+        840,
+        1591
+      ],
+      "issues": [
+        "Native output is below requested 4K resolution; not upscaled."
+      ]
+    },
+    {
+      "name": "driftwood",
+      "requested_size": "3840x2160",
+      "prompt": "Use case: photorealistic-natural. Asset type: individual aquascape editor photographic cutout, not a sheet. Subject: one piece of dark branching aquarium driftwood, asymmetrical low twisted trunk with several long graceful upward branches and narrow tapered tips, real weathered wood grain and crevices, front three-quarter view. Entire subject fully inside frame with 10 percent clear margin around every extremity. Extremely detailed lifelike natural photography, neutral studio-soft lighting compatible with underwater compositing. Genuine transparent background and clean alpha through all gaps, no background color, no fake checkerboard, no ground or cast shadow, no pot, no labels, no aquarium, no other objects. Request native 3840x2160 pixels maximum supported real detail, no cartoon, no illustration, no plastic, no fantasy.",
+      "path": "nature-driftwood.png",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "object_bounds": [
+        70,
+        13,
+        1604,
+        926
+      ],
+      "opaque_bounds": [
+        73,
+        18,
+        1588,
+        924
+      ],
+      "transparent_fraction": 0.8295,
+      "object_dimensions": [
+        1534,
+        913
+      ],
+      "issues": [
+        "Native output is below requested 4K resolution; not upscaled."
+      ]
+    },
+    {
+      "name": "moss-patch",
+      "requested_size": "3840x2160",
+      "prompt": "Use case: photorealistic-natural. Asset type: individual aquascape editor photographic cutout, not a sheet. Subject: one irregular shallow patch of lush aquatic moss for laying over rock and wood, dense tiny feathered fronds in varied emerald greens, naturally ragged edges, viewed slightly from above and front, moss alone with no visible rock or wood. Entire subject fully inside frame with 10 percent clear margin around every extremity. Extremely detailed lifelike natural photography, neutral studio-soft lighting compatible with underwater compositing. Genuine transparent background and clean alpha through all gaps, no background color, no fake checkerboard, no ground or cast shadow, no pot, no labels, no aquarium, no other objects. Request native 3840x2160 pixels maximum supported real detail, no cartoon, no illustration, no plastic, no fantasy.",
+      "path": "nature-moss.png",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "object_bounds": [
+        59,
+        37,
+        1617,
+        913
+      ],
+      "opaque_bounds": [
+        101,
+        124,
+        1508,
+        842
+      ],
+      "transparent_fraction": 0.4742,
+      "object_dimensions": [
+        1558,
+        876
+      ],
+      "issues": [
+        "Native output is below requested 4K resolution; not upscaled.",
+        "Fine translucent foliage edges may show light green fringe on dark backgrounds; inspect in final composition."
+      ]
+    },
+    {
+      "name": "pale-sand",
+      "requested_size": "3840x2160",
+      "prompt": "Use case: photorealistic-natural. Asset type: individual full-frame aquascape editor texture image. seamless tileable top-down texture of warm pale beige natural aquarium sand, fine irregular sand grains with small scale subtle variation. Flat evenly lit surface without ripples, no objects no horizon no shading gradient, photographically real detailed grains. Edge-to-edge fully opaque image, seamless tileable in both directions, no borders no text no labels no watermarks. Request native 3840x2160 pixels maximum supported real detail.",
+      "path": "nature-sand.png",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "alpha_extrema": null,
+      "object_bounds": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "issues": [
+        "Native output is below requested 4K resolution; not upscaled.",
+        "Requested seamless texture; exact pixel seam continuity not guaranteed by generated output."
+      ]
+    },
+    {
+      "name": "aqua-soil",
+      "requested_size": "3840x2160",
+      "prompt": "Use case: photorealistic-natural. Asset type: individual full-frame aquascape editor texture image. seamless tileable top-down texture of dark brown nearly black aquarium aqua soil, small rounded porous granules with naturally varying sizes and realistic fine earthy detail. Flat evenly lit surface, no objects no horizon no shading gradient. Edge-to-edge fully opaque image, seamless tileable in both directions, no borders no text no labels no watermarks. Request native 3840x2160 pixels maximum supported real detail.",
+      "path": "nature-soil.png",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "alpha_extrema": null,
+      "object_bounds": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "issues": [
+        "Native output is below requested 4K resolution; not upscaled.",
+        "Requested seamless texture; exact pixel seam continuity not guaranteed by generated output."
+      ]
+    },
+    {
+      "name": "caustics",
+      "requested_size": "3840x2160",
+      "prompt": "Use case: photorealistic-natural. Asset type: individual full-frame aquascape editor texture image. seamless tileable underwater caustics light texture, monochrome grayscale, pure black background with soft bright branching irregular focused refracted sunlight patches, realistic caustics cast by a gently moving aquarium water surface, irregular curving networks and gentle uneven pooling of light. No sand or material texture, no objects, no parallel lines, no geometric grid, no color. Intended for screen blend and animated warped sampling. Edge-to-edge fully opaque image, seamless tileable in both directions, no borders no text no labels no watermarks. Request native 3840x2160 pixels maximum supported real detail.",
+      "path": "nature-caustics.png",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "alpha_extrema": null,
+      "object_bounds": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "issues": [
+        "Native output is below requested 4K resolution; not upscaled.",
+        "Requested seamless texture; exact pixel seam continuity not guaranteed by generated output."
+      ]
+    }
+  ],
+  "resolution_test": {
+    "source": "/workspace/scratch/024d60ec8bcb/generated_images/exec-1b1d0d81-3ba8-4f62-b9fb-a12d2af4c2cd.png",
+    "native_dimensions": [
+      941,
+      1672
+    ],
+    "mode": "RGB",
+    "accepted": false,
+    "reason": "No resolution improvement; checkerboard rendered into background. Original alpha cutout retained."
+  }
+}
