@@ -1,5 +1,9 @@
 const TAGIM_ORIGIN = "https://app.tagims.com";
 const WEBSITE_ORIGIN = "https://tagims-site-production.pages.dev";
+const DEVELOPMENT_SITES = [
+  { prefix: "/dev/tagims", origin: "https://tagims-development.pages.dev" },
+  { prefix: "/dev/pcolahome", origin: "https://pcolahome-development.pages.dev" },
+];
 const BRAND_PATH = "/__tagims/brand.png";
 
 const SHELL_STYLES = `
@@ -94,6 +98,19 @@ function upstreamRequest(request, origin) {
   return new Request(target, request);
 }
 
+function developmentSiteFor(pathname) {
+  return DEVELOPMENT_SITES.find(({ prefix }) =>
+    pathname === prefix || pathname.startsWith(prefix + "/")
+  );
+}
+
+function developmentRequest(request, site) {
+  const incoming = new URL(request.url);
+  const pathname = incoming.pathname.slice(site.prefix.length) || "/";
+  const target = new URL(pathname + incoming.search, site.origin);
+  return new Request(target, request);
+}
+
 function rewriteLocation(response, publicOrigin) {
   const location = response.headers.get("location");
   if (!location || !location.startsWith(TAGIM_ORIGIN)) return response;
@@ -110,6 +127,11 @@ export default {
       const assetUrl = new URL(request.url);
       assetUrl.pathname = "/TAGIMS%20LOGO.png";
       return env.ASSETS.fetch(new Request(assetUrl, request));
+    }
+
+    const developmentSite = developmentSiteFor(incoming.pathname);
+    if (developmentSite) {
+      return fetch(developmentRequest(request, developmentSite));
     }
 
     if (isWebsitePath(incoming.pathname)) {
