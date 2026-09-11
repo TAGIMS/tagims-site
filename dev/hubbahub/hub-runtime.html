@@ -1,0 +1,905 @@
+<!doctype html>
+<html lang="en">
+
+<!-- HUB GUIDE ============================================================
+     HEAD: PAGE STRUCTURE
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<head>
+  <base href="/apps/hubbahub/">
+  <meta name="robots" content="noindex,nofollow">
+  <script src="/dev/hubbahub/workspace-storage.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TAGIMS Hub 18.0 · Business Center</title>
+  
+<!-- HUB GUIDE ============================================================
+     RESOURCE: https://fonts.googleapis.com
+     External stylesheet or connection hint used by this page.
+     ====================================================================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  
+<!-- HUB GUIDE ============================================================
+     RESOURCE: https://fonts.gstatic.com
+     External stylesheet or connection hint used by this page.
+     ====================================================================== -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+<!-- HUB GUIDE ============================================================
+     RESOURCE: https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400..700&family=DM+Sans:wght@400..700&family=Lora:wght@400..700&family=Manrope:wght@400..800&family=Montserrat:wght@400..700&family=Playfair+Display:wght@400..700&family=Raleway:wght@400..700&display=swap
+     External stylesheet or connection hint used by this page.
+     ====================================================================== -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400..700&amp;family=DM+Sans:wght@400..700&amp;family=Lora:wght@400..700&amp;family=Manrope:wght@400..800&amp;family=Montserrat:wght@400..700&amp;family=Playfair+Display:wght@400..700&amp;family=Raleway:wght@400..700&amp;display=swap">
+  
+<!-- HUB GUIDE ============================================================
+     RESOURCE: css/hub.css
+     External stylesheet or connection hint used by this page.
+     ====================================================================== -->
+<link rel="stylesheet" href="css/hub.css?v=18.0.3">
+<link rel="stylesheet" href="css/financial-dashboard.css">
+</head>
+
+<!-- HUB GUIDE ============================================================
+     BODY: HUB BOOTING
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<body class="hub-booting">
+  
+<!-- HUB GUIDE ============================================================
+     ELEMENT: STARTUP LOADER
+     DOM ID: startupLoader. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="startup-loader" id="startupLoader" role="status" aria-live="polite" aria-label="Command Center Loading">
+    <div class="startup-loader-inner">
+      <div class="startup-loader-emblem" aria-hidden="true"></div>
+      <p class="startup-loader-label">Command Center Loading</p>
+    </div>
+  </div>
+  
+<!-- HUB GUIDE ============================================================
+     ELEMENT: BACKGROUND
+     DOM ID: background. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="background parallax" id="background"></div>
+  
+<!-- HUB GUIDE ============================================================
+     ELEMENT: MENU EDGE TRIGGER
+     DOM ID: menuEdgeTrigger. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="menu-edge-trigger" id="menuEdgeTrigger" aria-hidden="true"></div>
+
+
+  
+<!-- HUB GUIDE ============================================================
+     HEADER: TOPBAR
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<header class="topbar">
+    
+<!-- HUB GUIDE ============================================================
+     ELEMENT: OPEN MENU
+     DOM ID: openMenu. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<button class="menu-button" id="openMenu" aria-label="Open settings" aria-controls="panel" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15.4a3.4 3.4 0 1 0 0-6.8 3.4 3.4 0 0 0 0 6.8Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06-2.87 2.87-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21H9.5v-.1a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.87.34l-.06.06-2.87-2.87.06-.06A1.7 1.7 0 0 0 4 14.9a1.7 1.7 0 0 0-1.6-1H2.3V9.8h.1A1.7 1.7 0 0 0 4 8.7a1.7 1.7 0 0 0-.34-1.87l-.06-.06L6.47 3.9l.06.06A1.7 1.7 0 0 0 8.4 4.3a1.7 1.7 0 0 0 1-1.6v-.1h4.1v.1a1.7 1.7 0 0 0 1.1 1.6 1.7 1.7 0 0 0 1.87-.34l.06-.06 2.87 2.87-.06.06A1.7 1.7 0 0 0 19 8.7a1.7 1.7 0 0 0 1.6 1h.1v4.1h-.1a1.7 1.7 0 0 0-1.2 1.2Z"/></svg>
+    </button>
+  </header>
+
+  
+<!-- HUB GUIDE ============================================================
+     ELEMENT: MINIMIZED TRAY
+     DOM ID: minimizedTray. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="minimized-tray" id="minimizedTray" aria-label="Minimized widgets" aria-hidden="true"></div>
+  
+<!-- HUB GUIDE ============================================================
+     ELEMENT: ADD WIDGET
+     DOM ID: addWidget. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+
+  
+<!-- HUB GUIDE ============================================================
+     ELEMENT: MINIMIZED TOGGLE
+     DOM ID: minimizedToggle. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<button class="minimized-toggle" id="minimizedToggle" type="button" aria-label="Open minimized windows" aria-expanded="false" hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="14" height="11" rx="2"/><path d="M7 7V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
+  </button>
+  
+<!-- HUB GUIDE ============================================================
+     ELEMENT: VERTICAL GUIDE
+     DOM ID: verticalGuide. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="snap-guide vertical" id="verticalGuide"><span class="snap-guide-label"></span></div>
+  
+<!-- HUB GUIDE ============================================================
+     ELEMENT: HORIZONTAL GUIDE
+     DOM ID: horizontalGuide. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="snap-guide horizontal" id="horizontalGuide"><span class="snap-guide-label"></span></div>
+
+  
+<!-- HUB GUIDE ============================================================
+     ELEMENT: LAYOUT EDITOR
+     DOM ID: layoutEditor. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<section class="layout-editor" id="layoutEditor" aria-hidden="true" aria-label="Saved Layouts">
+    <div class="layout-manager-card" role="dialog" aria-modal="true" aria-labelledby="layoutManagerTitle">
+      
+<!-- HUB GUIDE ============================================================
+     HEADER: LAYOUT MANAGER HEAD
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<header class="layout-manager-head">
+        <div class="layout-manager-title">
+          
+<!-- HUB GUIDE ============================================================
+     ELEMENT: LAYOUT MANAGER TITLE
+     DOM ID: layoutManagerTitle. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<strong id="layoutManagerTitle">SAVED LAYOUTS</strong>
+          <span>Arrange widgets on the Hub, then save or switch here.</span>
+        </div>
+        
+<!-- HUB GUIDE ============================================================
+     ELEMENT: CLOSE LAYOUT EDITOR
+     DOM ID: closeLayoutEditor. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<button class="layout-manager-close" id="closeLayoutEditor" type="button" aria-label="Close saved layouts">×</button>
+      </header>
+      <div class="layout-manager-save">
+        
+<!-- HUB GUIDE ============================================================
+     ELEMENT: LAYOUT NAME INPUT
+     DOM ID: layoutNameInput. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input class="layout-name-input" id="layoutNameInput" type="text" maxlength="40" autocomplete="off" placeholder="Name this layout" aria-label="Layout name">
+        
+<!-- HUB GUIDE ============================================================
+     ELEMENT: SAVE CUSTOM LAYOUT
+     DOM ID: saveCustomLayout. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<button class="layout-save-button" id="saveCustomLayout" type="button">Save Current Layout</button>
+      </div>
+      <div class="layout-manager-body">
+        <div class="layout-manager-section-title"><span>Your layouts</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: LAYOUT MANAGER COUNT
+     DOM ID: layoutManagerCount. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<span id="layoutManagerCount">0 saved</span></div>
+        
+<!-- HUB GUIDE ============================================================
+     ELEMENT: CUSTOM LAYOUT LIBRARY
+     DOM ID: customLayoutLibrary. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="layout-library" id="customLayoutLibrary"></div>
+      </div>
+      
+<!-- HUB GUIDE ============================================================
+     ELEMENT: LAYOUT EDITOR STATUS
+     DOM ID: layoutEditorStatus. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="layout-editor-status" id="layoutEditorStatus" aria-live="polite">Ready</div>
+    </div>
+  </section>
+
+  
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET1
+     DOM ID: widget1. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<section class="widget" id="widget1" aria-label="Widget panel">
+    <div class="widget-drag-handle" aria-label="Drag widget"></div>
+    <div class="widget-window-header"><span class="widget-grip" aria-hidden="true"></span><span class="widget-window-title">New Widget</span></div>
+    <button class="widget-header-action widget-focus-button" type="button" aria-label="Focus widget" title="Focus widget">
+      <svg class="focus-expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+      <svg class="focus-contract-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h5V3M21 8h-5V3M3 16h5v5M21 16h-5v5"/></svg>
+    </button>
+    <button class="widget-header-action widget-minimize-button minimize-widget" type="button" aria-label="Minimize widget" title="Minimize widget"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 9 5 5 5-5"/></svg></button>
+    <button class="widget-header-action widget-close-button delete-widget" type="button" aria-label="Close widget" title="Close widget"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <button class="widget-header-action widget-settings-button" type="button" aria-label="Widget settings" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06-2.87 2.87-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21H9.5v-.1a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.87.34l-.06.06-2.87-2.87.06-.06A1.7 1.7 0 0 0 4 14.9a1.7 1.7 0 0 0-1.6-1H2.3V9.8h.1A1.7 1.7 0 0 0 4 8.7a1.7 1.7 0 0 0-.34-1.87l-.06-.06L6.47 3.9l.06.06A1.7 1.7 0 0 0 8.4 4.3a1.7 1.7 0 0 0 1-1.6v-.1h4.1v.1a1.7 1.7 0 0 0 1.1 1.6 1.7 1.7 0 0 0 1.87-.34l.06-.06 2.87 2.87-.06.06A1.7 1.7 0 0 0 19 8.7a1.7 1.7 0 0 0 1.6 1h.1v4.1h-.1a1.7 1.7 0 0 0-1.2 1.2Z"/></svg>
+    </button>
+    
+<!-- HUB GUIDE ============================================================
+     DIV: WIDGET SETTINGS POPOVER
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<div class="widget-settings-popover">
+      <div class="widget-popover-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06-2.87 2.87-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21H9.5v-.1a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.87.34l-.06.06-2.87-2.87.06-.06A1.7 1.7 0 0 0 4 14.9a1.7 1.7 0 0 0-1.6-1H2.3V9.8h.1A1.7 1.7 0 0 0 4 8.7a1.7 1.7 0 0 0-.34-1.87l-.06-.06L6.47 3.9l.06.06A1.7 1.7 0 0 0 8.4 4.3a1.7 1.7 0 0 0 1-1.6v-.1h4.1v.1a1.7 1.7 0 0 0 1.1 1.6 1.7 1.7 0 0 0 1.87-.34l.06-.06 2.87 2.87-.06.06A1.7 1.7 0 0 0 19 8.7a1.7 1.7 0 0 0 1.6 1h.1v4.1h-.1a1.7 1.7 0 0 0-1.2 1.2Z"/></svg><h3>Widget 1</h3></div>
+      
+<!-- HUB GUIDE ============================================================
+     SECTION: WIDGET SETTINGS SECTION WIDGET SPECIFIC SETTINGS
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<section class="widget-settings-section widget-specific-settings" data-widget-settings-scope="general">
+        <h4 class="widget-settings-section-title">Widget</h4>
+        <label class="setting"><span>Title</span><input class="widget-text-input" data-widget-setting="title" type="text" value="New Widget" maxlength="48"></label>
+        <div class="setting"><span>Show/hide label</span><button class="switch on widget-header-toggle" data-widget-setting="show-header" type="button" role="switch" aria-checked="true"></button></div>
+        <div class="setting"><span>Global Labels</span><button class="switch on all-widget-headers-toggle" data-widget-setting="show-all-headers" type="button" role="switch" aria-checked="true"></button></div>
+      </section>
+      
+<!-- HUB GUIDE ============================================================
+     SECTION: WIDGET SETTINGS SECTION WIDGET APP SETTINGS
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<section class="widget-settings-section widget-app-settings" data-widget-settings-scope="app" hidden>
+        <h4 class="widget-settings-section-title">App Settings</h4>
+        
+<!-- HUB GUIDE ============================================================
+     DIV: WIDGET APP SETTINGS CONTENT
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<div class="widget-app-settings-content"></div>
+      </section>
+      <div class="widget-layout-state" hidden aria-hidden="true">
+      <label class="setting"><span>Width</span><span class="range-control"><input data-widget-local-var="--widget-width" data-unit="px" type="range" min="168" max="900" step="10" value="460"><span class="range-value wide">460</span></span></label>
+      <label class="setting"><span>Height</span><span class="range-control"><input data-widget-local-var="--widget-height" data-unit="px" type="range" min="112" max="700" step="10" value="280"><span class="range-value wide">280</span></span></label>
+      <label class="setting"><span>Position X</span><span class="range-control"><input data-widget-local-var="--widget-x" data-unit="px" type="range" min="-500" max="500" step="10" value="0"><span class="range-value wide">0</span></span></label>
+      <label class="setting"><span>Position Y</span><span class="range-control"><input data-widget-local-var="--widget-y" data-unit="px" type="range" min="-350" max="350" step="10" value="0"><span class="range-value wide">0</span></span></label>
+      <button class="settings-button settings-button--secondary reset-button reset-widget-layout" type="button">Reset widget layout</button>
+      </div>
+    </div>
+    
+<!-- HUB GUIDE ============================================================
+     DIV: WIDGET CONTENT
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<div class="widget-content" aria-live="polite"></div>
+    <div class="widget-resize-handle" data-resize="nw" aria-label="Resize from top left"></div>
+    <div class="widget-resize-handle" data-resize="ne" aria-label="Resize from top right"></div>
+    <div class="widget-resize-handle" data-resize="w" aria-label="Resize from left"></div>
+    <div class="widget-resize-handle" data-resize="n" aria-label="Resize from top"></div>
+    <div class="widget-resize-handle" data-resize="e" aria-label="Resize from right"></div>
+    <div class="widget-resize-handle" data-resize="sw" aria-label="Resize from bottom left"></div>
+    <div class="widget-resize-handle" data-resize="s" aria-label="Resize from bottom"></div>
+    <div class="widget-resize-handle" data-resize="se" aria-label="Resize from bottom right"></div>
+  </section>
+
+  
+<!-- HUB GUIDE ============================================================
+     ELEMENT: OVERLAY
+     DOM ID: overlay. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="overlay" id="overlay"></div>
+
+  
+<!-- HUB GUIDE ============================================================
+     ELEMENT: PANEL
+     DOM ID: panel. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<aside class="panel" id="panel" aria-hidden="true">
+    
+<!-- HUB GUIDE ============================================================
+     DIV: PANEL HEADER
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<div class="panel-header">
+      
+<!-- HUB GUIDE ============================================================
+     ELEMENT: MENU GEAR SLOT
+     DOM ID: menuGearSlot. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div id="menuGearSlot"></div>
+      
+<!-- HUB GUIDE ============================================================
+     DIV: PANEL TITLE
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<div class="panel-title"><h1>Settings</h1></div>
+      
+<!-- HUB GUIDE ============================================================
+     ELEMENT: TOGGLE ALL SECTIONS
+     DOM ID: toggleAllSections. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<button class="section-control-button" id="toggleAllSections" type="button" aria-label="Expand all settings sections" title="Expand all"></button>
+    </div>
+
+    
+<!-- HUB GUIDE ============================================================
+     DIV: SETTINGS
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<div class="settings">
+      
+<!-- HUB GUIDE ============================================================
+     DETAILS: SETTINGS ACCORDION COLORS SECTION ALWAYS OPEN SECTION
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<details class="settings-accordion add-widgets-section" open>
+        <summary>Widgets</summary>
+        
+<!-- HUB GUIDE ============================================================
+     DIV: ACCORDION CONTENT
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<div class="accordion-content">
+          <div class="widget-drag-instruction"><strong>DRAG WIDGETS →</strong></div>
+          <div class="widget-library" aria-label="Widget library">
+<button class="widget-library-item" type="button" data-content-type="opsCRM" title="Business Center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21V5l8-3 8 3v16M9 21v-5h6v5M8 7h1m6 0h1M8 11h1m6 0h1"/></svg><span>Business Center</span></button>
+<button class="widget-library-item" type="button" data-content-type="financialdashboard" title="Financial Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 10h18M10 10v11"/></svg><span>Financial Dashboard</span></button>
+<button class="widget-library-item" type="button" data-content-type="clock" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></svg>
+              <span>Clock</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="calendar" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M7.5 3v4M16.5 3v4M3.5 9.5h17"/></svg>
+              <span>Calendar</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="weather" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 18H7a4 4 0 1 1 1.3-7.8A5.5 5.5 0 0 1 19 12a3 3 0 0 1-2 6Z"/><path d="M8.5 6.5A4 4 0 0 1 16 8"/></svg>
+              <span>Weather</span>
+            </button>
+
+<button class="widget-library-item" type="button" data-content-type="notes" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3.5h14v17H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+              <span>Notes</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="todo" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="m7.5 8 1.4 1.4L11.5 7M13.5 8.5h3M7.5 14l1.4 1.4 2.6-2.4M13.5 14.5h3"/></svg>
+              <span>To-Do</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="reminders" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span>Reminders</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="tagim" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></svg><span>TAGIM</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="music" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><span>Music</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="youtube" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="4"/><path d="m10 9 5 3-5 3Z"/></svg><span>YouTube</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="photos" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m3 17 5-5 4 4 3-3 6 6"/></svg><span>Photos</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="performance" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V9m4 10V5m4 14v-7m4 7V3m4 16v-9"/><path d="M3 19h18"/></svg>
+              <span>Hub Performance</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="gmail" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 6.5 12 13l8.5-6.5"/><rect x="3.5" y="5" width="17" height="14" rx="2"/></svg>
+              <span>Gmail</span>
+            </button>
+<button class="widget-library-item" type="button" data-content-type="drive" title="Drag into a widget window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 3-5 9 3 5h10l3-5-5-9Z"/><path d="M4 12h16M9 3l5 9M7 17l3-5"/></svg>
+              <span>Google Drive</span>
+            </button>
+</div>
+        </div>
+      </details>
+
+<details class="settings-accordion colors-section always-open-section" open>
+        <summary>Colors &amp; Style</summary>
+        
+<!-- HUB GUIDE ============================================================
+     DIV: ACCORDION CONTENT STYLE ACCORDION CONTENT
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<div class="accordion-content style-accordion-content">
+          
+<!-- HUB GUIDE ============================================================
+     ELEMENT: COLOR LAB
+     DOM ID: colorLab. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="color-lab" id="colorLab">
+            
+<!-- HUB GUIDE ============================================================
+     ELEMENT: COLOR TARGETS
+     DOM ID: colorTargets. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="color-targets" id="colorTargets" aria-label="Color target"></div>
+            <div class="color-picker-main">
+              <div class="color-wheel-wrap">
+                
+<!-- HUB GUIDE ============================================================
+     ELEMENT: COLOR WHEEL
+     DOM ID: colorWheel. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="color-wheel" id="colorWheel" role="application" aria-label="Color wheel: drag to choose hue and saturation">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: COLOR WHEEL CURSOR
+     DOM ID: colorWheelCursor. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<span class="color-wheel-cursor" id="colorWheelCursor"></span></div>
+              </div>
+              <div class="color-picker-side">
+                <label class="color-value-control"><span class="color-value-label">Light</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: COLOR VALUE
+     DOM ID: colorValue. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input class="color-value" id="colorValue" type="range" min="0" max="100" step="1" value="84" aria-label="Brightness">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: COLOR VALUE READOUT
+     DOM ID: colorValueReadout. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<span class="color-value-readout" id="colorValueReadout">84%</span></label>
+                <label class="color-hex-wrap"><span class="color-hex-label">Hex</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: COLOR HEX
+     DOM ID: colorHex. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input class="color-hex" id="colorHex" type="text" value="#50D7C8" maxlength="7" spellcheck="false" aria-label="Hex color"></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="style-backing-inputs" hidden>
+            
+<!-- HUB GUIDE ============================================================
+     ELEMENT: MENU COLOR
+     DOM ID: menuColor. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="menuColor" type="color" value="#9437ED">
+<input id="menu2Color" type="color" value="#442666">
+<input id="accent2Color" type="color" value="#33445E">
+            
+<!-- HUB GUIDE ============================================================
+     ELEMENT: ACCENT COLOR
+     DOM ID: accentColor. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="accentColor" type="color" value="#50D7C8">
+            
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET BG
+     DOM ID: widgetBg. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetBg" data-widget-var="--widget-bg" type="color" value="#ffffff">
+            
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET GRADIENT
+     DOM ID: widgetGradient. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetGradient" data-widget-var="--widget-gradient" type="color" value="#50D7C8">
+            
+<!-- HUB GUIDE ============================================================
+     ELEMENT: FONT COLOR
+     DOM ID: fontColor. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="fontColor" type="color" value="#F7F8FA">
+          </div>
+
+          
+<!-- HUB GUIDE ============================================================
+     ELEMENT: COLOR RENDERING SETTINGS
+     DOM ID: colorRenderingSettings. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="color-rendering-inline" id="colorRenderingSettings">
+              <label class="setting"><span>Widget gradient opacity</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET GRADIENT OPACITY
+     DOM ID: widgetGradientOpacity. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetGradientOpacity" data-widget-var="--widget-gradient-opacity" data-unit="%" type="range" min="0" max="100" value="73"><span class="range-value wide">73</span></span></label>
+              <div class="setting"><span>Widget gradient angle</span><div class="angle-dial-wrap">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET GRADIENT DIAL
+     DOM ID: widgetGradientDial. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="angle-dial" id="widgetGradientDial" role="slider" tabindex="0" aria-label="Widget gradient angle" aria-valuemin="0" aria-valuemax="359" aria-valuenow="350"><span class="angle-dial-pointer"></span><span class="angle-dial-center"></span></div>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET GRADIENT ANGLE VALUE
+     DOM ID: widgetGradientAngleValue. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<span class="angle-dial-readout" id="widgetGradientAngleValue">350°</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET GRADIENT ANGLE
+     DOM ID: widgetGradientAngle. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetGradientAngle" data-widget-var="--widget-gradient-angle" data-unit="deg" type="hidden" value="350"></div></div>
+          </div>
+
+          
+<!-- HUB GUIDE ============================================================
+     ELEMENT: TYPOGRAPHY SETTINGS
+     DOM ID: typographySettings. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<details class="style-subsection-accordion" id="typographySettings" open>
+            <summary>Type</summary>
+            <div class="style-subsection-content">
+              <label class="setting"><span>Font</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: FONT FAMILY
+     DOM ID: fontFamily. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<select class="setting-select" id="fontFamily"><option value="Manrope, 'Segoe UI', sans-serif">Manrope</option><option value="'DM Sans', 'Segoe UI', sans-serif">DM Sans</option><option value="Montserrat, 'Segoe UI', sans-serif">Montserrat</option><option value="Raleway, 'Segoe UI', sans-serif">Raleway</option><option value="'Playfair Display', Georgia, serif">Playfair Display</option><option value="'Cormorant Garamond', Garamond, serif">Cormorant Garamond</option><option value="Lora, Georgia, serif">Lora</option><option value="Inter, 'Segoe UI', sans-serif">Inter</option><option value="'Segoe UI', Arial, sans-serif">Segoe UI</option><option value="Georgia, serif">Georgia</option><option value="Garamond, Georgia, serif">Garamond</option></select></label>
+              <label class="setting"><span>Size</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: FONT SIZE
+     DOM ID: fontSize. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="fontSize" type="range" min="85" max="120" step="1" value="100">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: FONT SIZE VALUE
+     DOM ID: fontSizeValue. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<span class="range-value wide" id="fontSizeValue">100</span></span></label>
+            </div>
+          </details>
+
+          
+<!-- HUB GUIDE ============================================================
+     DETAILS: STYLE SUBSECTION ACCORDION
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<details class="style-subsection-accordion" open>
+            <summary>Surface</summary>
+            <div class="style-subsection-content">
+              <div class="setting"><span>Fancy Widgets</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET THEME TOGGLE
+     DOM ID: widgetThemeToggle. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<button class="switch on" id="widgetThemeToggle" role="switch" aria-checked="true" aria-label="Fancy Widgets"></button></div>
+              <label class="setting"><span>Opacity</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET BG OPACITY
+     DOM ID: widgetBgOpacity. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetBgOpacity" data-widget-var="--widget-bg-opacity" data-unit="%" type="range" min="0" max="80" value="14"><span class="range-value wide">14</span></span></label>
+            </div>
+          </details>
+
+          
+<!-- HUB GUIDE ============================================================
+     DETAILS: STYLE SUBSECTION ACCORDION
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<details class="style-subsection-accordion" open>
+            <summary>Glass</summary>
+            <div class="style-subsection-content">
+              <label class="setting"><span>Blur</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET BLUR
+     DOM ID: widgetBlur. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetBlur" data-widget-var="--widget-blur" data-unit="px" type="range" min="0" max="50" value="18"><span class="range-value wide">18</span></span></label>
+              <label class="setting"><span>Saturation</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET SATURATION
+     DOM ID: widgetSaturation. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetSaturation" data-widget-var="--widget-saturation" data-unit="%" type="range" min="50" max="250" value="135"><span class="range-value wide">135</span></span></label>
+              <label class="setting"><span>Gloss</span><span class="range-control"><input id="widgetGlossAmount" data-widget-var="--widget-gloss" data-unit="%" type="range" min="0" max="100" value="0"><span class="range-value wide">0</span></span></label>
+            </div>
+          </details>
+
+          
+<!-- HUB GUIDE ============================================================
+     DETAILS: STYLE SUBSECTION ACCORDION
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<details class="style-subsection-accordion" open>
+            <summary>Shadow</summary>
+            <div class="style-subsection-content">
+              <label class="setting"><span>Color</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET SHADOW
+     DOM ID: widgetShadow. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetShadow" data-widget-var="--widget-shadow" type="color" value="#102450"></label>
+              <label class="setting"><span>Opacity</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET SHADOW OPACITY
+     DOM ID: widgetShadowOpacity. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetShadowOpacity" data-widget-var="--widget-shadow-opacity" data-unit="%" type="range" min="0" max="100" value="62"><span class="range-value wide">62</span></span></label>
+              <label class="setting"><span>Horizontal</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET SHADOW X
+     DOM ID: widgetShadowX. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetShadowX" data-widget-var="--widget-shadow-x" data-unit="px" type="range" min="-100" max="100" value="-5"><span class="range-value wide">-5</span></span></label>
+              <label class="setting"><span>Vertical</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET SHADOW Y
+     DOM ID: widgetShadowY. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetShadowY" data-widget-var="--widget-shadow-y" data-unit="px" type="range" min="-100" max="100" value="10"><span class="range-value wide">10</span></span></label>
+              <label class="setting"><span>Blur</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET SHADOW BLUR
+     DOM ID: widgetShadowBlur. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetShadowBlur" data-widget-var="--widget-shadow-blur" data-unit="px" type="range" min="0" max="160" value="12"><span class="range-value wide">12</span></span></label>
+              <label class="setting"><span>Spread</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET SHADOW SPREAD
+     DOM ID: widgetShadowSpread. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetShadowSpread" data-widget-var="--widget-shadow-spread" data-unit="px" type="range" min="-50" max="80" value="1"><span class="range-value wide">1</span></span></label>
+            </div>
+          </details>
+
+          
+<!-- HUB GUIDE ============================================================
+     DETAILS: STYLE SUBSECTION ACCORDION
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<details class="style-subsection-accordion" open>
+            <summary>Header</summary>
+            <div class="style-subsection-content">
+              <label class="setting"><span>Color</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET HEADER
+     DOM ID: widgetHeader. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetHeader" data-widget-var="--widget-header" type="color" value="#11131f"></label>
+<label class="setting"><span>Sub-widget header</span><input id="widgetHeader2" data-widget-var="--ops-header-2" type="color" value="#243c59"></label>
+              <label class="setting"><span>Opacity</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET HEADER OPACITY
+     DOM ID: widgetHeaderOpacity. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetHeaderOpacity" data-widget-var="--widget-header-opacity" data-unit="%" type="range" min="0" max="100" value="72"><span class="range-value wide">72</span></span></label>
+            </div>
+          </details>
+
+          
+<!-- HUB GUIDE ============================================================
+     DETAILS: STYLE SUBSECTION ACCORDION
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<details class="style-subsection-accordion" open>
+            <summary>Border</summary>
+            <div class="style-subsection-content">
+              <label class="setting"><span>Color</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET BORDER
+     DOM ID: widgetBorder. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetBorder" data-widget-var="--widget-border" type="color" value="#FFFFFF"></label>
+              <label class="setting"><span>Radius</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET RADIUS
+     DOM ID: widgetRadius. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetRadius" data-widget-var="--widget-radius" data-unit="px" type="range" min="0" max="40" value="18"><span class="range-value wide">18</span></span></label>
+              <label class="setting"><span>Opacity</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET BORDER OPACITY
+     DOM ID: widgetBorderOpacity. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetBorderOpacity" data-widget-var="--widget-border-opacity" data-unit="%" type="range" min="0" max="100" value="62"><span class="range-value wide">62</span></span></label>
+              <label class="setting"><span>Width</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: WIDGET BORDER WIDTH
+     DOM ID: widgetBorderWidth. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="widgetBorderWidth" data-widget-var="--widget-border-width" data-unit="px" type="range" min="0" max="6" step=".25" value="1"><span class="range-value wide">1</span></span></label>
+              
+<!-- HUB GUIDE ============================================================
+     ELEMENT: RESET WIDGET
+     DOM ID: resetWidget. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<button class="settings-button settings-button--secondary reset-button" id="resetWidget" type="button">Reset window style</button>
+            </div>
+          </details>
+
+          
+        </div>
+      </details>
+
+      
+<!-- HUB GUIDE ============================================================
+     DETAILS: SETTINGS ACCORDION BACKGROUND SECTION
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<details class="settings-accordion background-section" open>
+        <summary>Background</summary>
+        
+<!-- HUB GUIDE ============================================================
+     DIV: ACCORDION CONTENT
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<div class="accordion-content">
+        
+<!-- HUB GUIDE ============================================================
+     SECTION: SETTINGS SUBSECTION
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<section class="settings-subsection">
+          <div class="setting background-toggle"><span>Background Image</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: BACKGROUND MODE TOGGLE
+     DOM ID: backgroundModeToggle. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<button class="switch on" id="backgroundModeToggle" role="switch" aria-checked="true" aria-label="Background Image"></button></div>
+          
+<!-- HUB GUIDE ============================================================
+     ELEMENT: BACKGROUND IMAGE CONTROLS
+     DOM ID: backgroundImageControls. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div id="backgroundImageControls">
+            <div class="background-action-grid">
+              <label class="settings-button settings-button--secondary image-picker-button"><span>Select Image</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: BACKGROUND UPLOAD
+     DOM ID: backgroundUpload. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="backgroundUpload" type="file" accept="image/*" hidden></label>
+              
+<!-- HUB GUIDE ============================================================
+     ELEMENT: REMOVE BACKGROUND
+     DOM ID: removeBackground. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<button class="icon-action-button" id="removeBackground" type="button" aria-label="Remove background image" title="Remove background image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg></button>
+            </div>
+            <label class="setting"><span>Image URL or path</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: BACKGROUND URL
+     DOM ID: backgroundURL. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="backgroundURL" type="text" placeholder="assets/backgrounds/image.jpg" aria-label="Background image URL or path"></label>
+            
+<!-- HUB GUIDE ============================================================
+     ELEMENT: APPLY BACKGROUND URL
+     DOM ID: applyBackgroundURL. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<button class="settings-button" id="applyBackgroundURL" type="button">Use image</button>
+            
+<!-- HUB GUIDE ============================================================
+     ELEMENT: BACKGROUND STATUS
+     DOM ID: backgroundStatus. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<p id="backgroundStatus" role="status"></p>
+            <div class="background-motion">
+              <div class="setting"><span>Background Motion</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: PARALLAX TOGGLE
+     DOM ID: parallaxToggle. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<button class="switch on" id="parallaxToggle" role="switch" aria-checked="true" aria-label="Background Motion"></button></div>
+              <label class="setting"><span>Move speed</span><span class="range-control">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: PARALLAX SPEED
+     DOM ID: parallaxSpeed. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="parallaxSpeed" type="range" min="1" max="10" step="1" value="6">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: SPEED VALUE
+     DOM ID: speedValue. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<span class="range-value" id="speedValue">6</span></span></label>
+            </div>
+          </div>
+          
+<!-- HUB GUIDE ============================================================
+     ELEMENT: BACKGROUND COLOR CONTROLS
+     DOM ID: backgroundColorControls. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div id="backgroundColorControls" hidden>
+            <div class="density-toggle color-style-toggle" aria-label="Color background style">
+              <button class="density-option active" type="button" data-background-style="solid" aria-label="One color" title="One color"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></button>
+              <button class="density-option" type="button" data-background-style="gradient" aria-label="Two colors" title="Two colors"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M5 18 18 5"/></svg></button>
+            </div>
+            <label class="setting"><span>Color</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: BG COLOR
+     DOM ID: bgColor. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="bgColor" type="color" value="#DA34C0"></label>
+            <label class="setting gradient-background-setting" hidden><span>Second color</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: BG GRADIENT COLOR
+     DOM ID: bgGradientColor. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="bgGradientColor" type="color" value="#321A83"></label>
+            <div class="setting gradient-background-setting" hidden><span>Direction</span><div class="angle-dial-wrap">
+<!-- HUB GUIDE ============================================================
+     ELEMENT: BG GRADIENT DIAL
+     DOM ID: bgGradientDial. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="angle-dial" id="bgGradientDial" role="slider" tabindex="0" aria-label="Color direction" aria-valuemin="0" aria-valuemax="359" aria-valuenow="135"><span class="angle-dial-pointer"></span><span class="angle-dial-center"></span></div>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: BG GRADIENT ANGLE VALUE
+     DOM ID: bgGradientAngleValue. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<span class="angle-dial-readout" id="bgGradientAngleValue">135°</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: BG GRADIENT ANGLE
+     DOM ID: bgGradientAngle. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<input id="bgGradientAngle" type="hidden" value="135"></div></div>
+          </div>
+        </section>
+        </div>
+      </details>
+
+      
+<!-- HUB GUIDE ============================================================
+     DETAILS: SETTINGS ACCORDION LAYOUT SECTION
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+<details class="settings-accordion layout-section" open><summary>Layout</summary><div class="accordion-content">
+<details class="style-subsection-accordion" open><summary>List Density</summary><div class="style-subsection-content">
+            <div class="layout-density-options" role="group" aria-label="List density">
+              <button class="layout-choice-option" type="button" data-density="standard" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h14"/></svg><span>STANDARD</span></button>
+              <button class="layout-choice-option" type="button" data-density="semi" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h14"/></svg><span>MEDIUM</span></button>
+              <button class="layout-choice-option" type="button" data-density="compact" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 8h14M5 12h14M5 16h14"/></svg><span>COMPACT</span></button>
+            </div>
+</div></details>
+<details class="style-subsection-accordion" open><summary>Responsiveness</summary><div class="style-subsection-content">
+          <div class="layout-choice-row movement-mode-control" role="group" aria-label="Layout mode">
+            <button class="layout-choice-option" type="button" data-layout-mode="freeform" aria-pressed="false">FREE</button>
+            <button class="layout-choice-option" type="button" data-layout-mode="responsive" aria-pressed="false">RESPONSIVE</button>
+          </div>
+          <label class="alignment-option"><span>Snap to Grid</span><input id="snapToGrid" type="checkbox" role="switch" checked></label>
+          <label class="alignment-option"><span>Guidelines</span><input id="showGuidelines" type="checkbox" role="switch" checked></label>
+
+</div></details>
+<details class="style-subsection-accordion" open><summary>Layouts</summary><div class="style-subsection-content">
+<div class="saved-layout-controls">          <div class="layout-menu-head"><span>Saved layouts</span>
+<!-- HUB GUIDE ============================================================
+     ELEMENT: LAYOUT MENU STATE
+     DOM ID: layoutMenuState. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<span id="layoutMenuState">None active</span></div>
+          
+<!-- HUB GUIDE ============================================================
+     ELEMENT: LAYOUT MENU LIBRARY
+     DOM ID: layoutMenuLibrary. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<div class="layout-menu-library" id="layoutMenuLibrary"></div>
+          
+<!-- HUB GUIDE ============================================================
+     ELEMENT: SAVE CURRENT LAYOUT
+     DOM ID: saveCurrentLayout. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<button class="settings-button settings-button--primary" id="saveCurrentLayout" type="button">Save Current Layout</button>
+          
+<!-- HUB GUIDE ============================================================
+     ELEMENT: OPEN LAYOUT EDITOR
+     DOM ID: openLayoutEditor. JavaScript uses this exact identifier when binding or updating the control.
+     ====================================================================== -->
+<button class="settings-button settings-button--secondary" id="openLayoutEditor" type="button">Manage Layouts</button>
+</div>
+</div></details>
+</div></details>
+
+      
+<!-- HUB GUIDE ============================================================
+     DETAILS: SETTINGS ACCORDION ADD WIDGETS SECTION
+     Markup for this section and its nested controls.
+     ====================================================================== -->
+
+
+
+    </div>
+  </aside>
+
+  
+<!-- HUB GUIDE ============================================================
+     SCRIPT LOAD: hub.js
+     Loads the file at this point in document order. Keep dependency order intact.
+     ====================================================================== -->
+<link rel="stylesheet" href="finance/native/widgets.css">
+<script src="finance/native/config.js" defer></script>
+<script src="finance/native/engine.js" defer></script>
+<script src="finance/native/store.js" defer></script>
+<link rel="stylesheet" href="business/scoped.css?v=18.0.2">
+<link rel="stylesheet" href="css/business-integration.css?v=18.0.2">
+<script src="business/config.js" defer></script>
+<script src="business/source-inputs.js" defer></script>
+<script src="business/domain.js" defer></script>
+<script src="business/store.js" defer></script>
+<script src="business/prototype-import.js" defer></script>
+<script src="business/google-photos.js" defer></script>
+<script src="business/source-ui.js" defer></script>
+<script src="business/icons.js" defer></script>
+<script src="business/pipeline.js" defer></script>
+<script src="business/photo-workspace.js" defer></script>
+<script src="business/project-ledger.js" defer></script>
+<script src="business/operations.js" defer></script>
+<script src="hub.js?v=18.0.2" defer></script>
+<script src="business/ready.js" defer></script>
+
+
+
+</body>
+</html>
+
+
