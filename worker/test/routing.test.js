@@ -24,6 +24,13 @@ test("routes the main website homepage through the Pages origin", async () => {
   assert.equal(await routedUrl("/"), "https://tagims-site-production.pages.dev/");
 });
 
+test("routes only the Hub design sandbox and its assets to Pages", async () => {
+  for (const path of ["/dev/hubbahub", "/dev/hubbahub/", "/dev/hubbahub/hub-runtime.html", "/dev/hubbahub/site.css?v=1"]) {
+    assert.equal(await routedUrl(path), `https://tagims-site-production.pages.dev${path}`);
+  }
+  assert.equal(await routedUrl("/dev/hubbahub-other"), "https://app.tagims.com/dev/hubbahub-other");
+});
+
 test("routes /apps/tagim through the Pages origin", async () => {
   assert.equal(
     await routedUrl("/apps/tagim"),
