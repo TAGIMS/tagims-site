@@ -43,6 +43,7 @@ const SHELL_MARKUP = `
     <nav aria-label="Website">
       <a href="/">TAGiM</a>
       <a href="/audit/">Business Score</a>
+      <a href="/apps/">Apps</a>
       <a href="/apps/autoloan/">Auto Loan Calculator</a>
       <a href="mailto:alex@tagims.com">Request a Consultation</a>
     </nav>
@@ -84,6 +85,8 @@ class BodyShell {
 
 function isWebsitePath(pathname) {
   return pathname === "/" ||
+    pathname === "/apps" || pathname === "/apps/" ||
+    ["/apps/crm", "/apps/photo-center", "/apps/_hub"].some(path => pathname === path || pathname.startsWith(path + "/")) ||
     pathname === "/audit" || pathname.startsWith("/audit/") ||
     pathname === "/apps/estimates" || pathname.startsWith("/apps/estimates/") ||
     pathname === "/apps/tank" || pathname.startsWith("/apps/tank/") ||
