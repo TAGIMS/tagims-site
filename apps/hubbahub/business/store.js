@@ -2,23 +2,40 @@
   const localTables=['payments','change_orders','change_events'];
   const tables=['clients','projects','project_members','walkthroughs','photos','estimates','estimate_items','field_items','pipeline_entries',...localTables];
   let session=null, mode='signed-out', data=Object.fromEntries(tables.map(t=>[t,[]]));
-  let dbPromise, refreshPromise, generation=0;
+  let dbPromise, refreshPromise, generation=0, authEpoch=0;
+  const sessionKey='tagims-ops-session';
+  function savedSession(){for(const storage of [localStorage,sessionStorage])try{const s=JSON.parse(storage.getItem(sessionKey));if(s?.refresh_token&&s?.access_token&&s?.user?.id)return s;}catch{}return null;}
+  function clearSession(){authEpoch++;session=null;localStorage.removeItem(sessionKey);sessionStorage.removeItem(sessionKey);}
+  async function refreshSession(){
+    const epoch=authEpoch;
+    const run=async()=>{
+      if(epoch!==authEpoch||!session)throw new Error('Workspace changed.');
+      const saved=savedSession();
+      if(saved?.user?.id===session.user?.id)session=saved;
+      if(Number(session.expires_at)>Date.now()/1000+60)return;
+      const next=await request('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:JSON.stringify({refresh_token:session.refresh_token})},false);
+      if(epoch!==authEpoch)throw new Error('Workspace changed.');
+      setSession(next);
+    };
+    return globalThis.navigator?.locks?navigator.locks.request('tagims-ops-session-refresh',run):run();
+  }
   const listeners=new Set(), channel=typeof BroadcastChannel==='function'?new BroadcastChannel('tagims-ops-changes'):null;
   const emit=()=>listeners.forEach(fn=>fn());
   const db=()=>dbPromise??=new Promise((resolve,reject)=>{const r=indexedDB.open('tagims-operations-demo',1);r.onupgradeneeded=()=>{r.result.createObjectStore('rows',{keyPath:'id'});r.result.createObjectStore('files');};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});
   async function local(op,store='rows'){const d=await db();return new Promise((resolve,reject)=>{const t=d.transaction(store,'readwrite');let result;try{const r=op(t.objectStore(store));if(r)r.onsuccess=()=>result=r.result;}catch(e){t.abort();reject(e);}t.oncomplete=()=>resolve(result);t.onerror=()=>reject(t.error);t.onabort=()=>reject(t.error||new Error('Local save failed.'));});}
   async function request(path,init={},auth=true){
     if(auth && !session)throw new Error('Sign in to use shared records.');
-    if(auth && session.expires_at<Date.now()/1000+60){
-      if(!refreshPromise)refreshPromise=request('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:JSON.stringify({refresh_token:session.refresh_token})},false).then(setSession).finally(()=>refreshPromise=null);
+    if(auth && !(Number(session.expires_at)>Date.now()/1000+60)){
+      if(!refreshPromise)refreshPromise=refreshSession().finally(()=>refreshPromise=null);
       await refreshPromise;
     }
+    if(auth&&!session)throw new Error('Workspace changed.');
     const headers={apikey:OpsConfig.key,...(auth?{Authorization:'Bearer '+session.access_token}:{}),...(!(init.body instanceof Blob)?{'Content-Type':'application/json'}:{}),...init.headers};
     const res=await fetch(OpsConfig.url+path,{...init,headers});
     if(!res.ok){let detail;try{detail=await res.json();}catch{}throw new Error(detail?.message||detail?.error_description||detail?.error||`Request failed (${res.status}).`);}
     return res.status===204?null:res.headers.get('content-type')?.includes('json')?res.json():res.blob();
   }
-  function setSession(s){if(session?.user?.id!==s.user?.id){generation++;data=Object.fromEntries(tables.map(t=>[t,[]]));emit();}session={...s,expires_at:Date.now()/1000+s.expires_in};mode='cloud';sessionStorage.removeItem('tagims-ops-demo');sessionStorage.setItem('tagims-ops-session',JSON.stringify(session));return session;}
+  function setSession(s){const changed=session?.user?.id!==s.user?.id;session={...s,expires_at:s.expires_at||Date.now()/1000+(Number(s.expires_in)||0)};mode='cloud';localStorage.setItem(sessionKey,JSON.stringify(session));localStorage.setItem('tagims-ops-workspace','cloud');sessionStorage.removeItem('tagims-ops-demo');sessionStorage.removeItem(sessionKey);if(changed){generation++;data=Object.fromEntries(tables.map(t=>[t,[]]));emit();}return session;}
   const valid=t=>{if(!tables.includes(t))throw new Error('Unknown record type.');};
   const id=v=>{if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v))throw new Error('Invalid record ID.');return v;};
   async function reload(){
@@ -132,12 +149,15 @@
     return URL.createObjectURL(await thumbJobs.get(key));
   }
   window.OpsStore={get mode(){return mode;},get user(){return session?.user;},get data(){return data;},on(fn){listeners.add(fn);return()=>listeners.delete(fn);},reload,save,upload,assignPhoto,image,thumbnail,review,publication,exportBackup,reorderPipeline,organizePhotos,appendProjectRecord,projectBudget,reorderProjects,
-    async signIn(email,password){setSession(await request('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email,password})},false));localStorage.setItem('tagims-ops-workspace','cloud');await reload();},
-    async signOut(){try{if(session)await request('/auth/v1/logout',{method:'POST'});}finally{session=null;mode='signed-out';localStorage.removeItem('tagims-ops-workspace');sessionStorage.removeItem('tagims-ops-session');sessionStorage.removeItem('tagims-ops-demo');await reload();}},
-    async demo(){session=null;localStorage.setItem('tagims-ops-workspace','demo');sessionStorage.removeItem('tagims-ops-session');sessionStorage.setItem('tagims-ops-demo','true');mode='demo';await reload();},
-    async restore(){try{const s=JSON.parse(sessionStorage.getItem('tagims-ops-session'));if(localStorage.getItem('tagims-ops-workspace')==='demo')mode='demo';else if(s?.refresh_token){session=s;mode='cloud';}else if(sessionStorage.getItem('tagims-ops-demo')==='true')mode='demo';}catch{}await reload();},
+    async signIn(email,password){const epoch=++authEpoch;const next=await request('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email,password})},false);if(epoch!==authEpoch)throw new Error('Workspace changed.');setSession(next);localStorage.setItem('tagims-ops-workspace','cloud');await reload();},
+    async signOut(){const old=session;clearSession();mode='signed-out';localStorage.removeItem('tagims-ops-workspace');sessionStorage.removeItem('tagims-ops-demo');await reload();if(old)await request('/auth/v1/logout',{method:'POST',headers:{Authorization:'Bearer '+old.access_token}},false);},
+    async demo(){clearSession();localStorage.setItem('tagims-ops-workspace','demo');sessionStorage.setItem('tagims-ops-demo','true');mode='demo';await reload();},
+    async restore(){const s=savedSession();if(localStorage.getItem('tagims-ops-workspace')==='demo')mode='demo';else if(s)setSession(s);else if(sessionStorage.getItem('tagims-ops-demo')==='true')mode='demo';await reload();},
     async contact(project){if(mode!=='cloud')return data.clients.find(c=>c.id===project.client_id);return (await request('/rest/v1/rpc/ops_project_contact',{method:'POST',body:JSON.stringify({project:project.id})}))?.[0];},
     async members(project,email,role){if(mode!=='cloud')throw new Error('Team access requires sign-in.');await request('/rest/v1/rpc/ops_assign_member',{method:'POST',body:JSON.stringify({project,email,member_role:role})});await changed();}
   };
   channel && (channel.onmessage=()=>{if(mode!=='signed-out')reload().catch(()=>{});});
+  // Other tabs adopt renewed tokens or sign-out without reopening credentials.
+  window.addEventListener('storage',e=>{if(e.key!==sessionKey)return;authEpoch++;let s;try{s=JSON.parse(e.newValue);}catch{}if(s?.refresh_token&&s?.user?.id&&localStorage.getItem('tagims-ops-workspace')!=='demo'){const changed=session?.user?.id!==s.user.id;session=s;mode='cloud';if(changed){generation++;data=Object.fromEntries(tables.map(t=>[t,[]]));emit();}reload().catch(()=>{});}else if(mode==='cloud'){session=null;mode='signed-out';reload().catch(()=>{});}});
 })();
+
