@@ -94,38 +94,21 @@
 .ops-root .ops-client-window .ops-client-photo-strip{margin:6px 0;max-width:480px}
 .ops-root .ops-client-window .ops-client-project-photos>small{margin:3px 0 5px}
 .ops-root.ops-business-center>.ops-step-tools{display:none}
-.ops-root .ops-menu-reveal{position:absolute;left:4px;top:0;z-index:70;display:flex;align-items:center;gap:6px;min-height:40px;margin:0;padding:6px 10px;border:0;background:transparent;color:var(--accent);cursor:pointer}
-.ops-root .ops-menu-reveal>span:first-child{font-size:23px;line-height:1}
-.ops-root .ops-business-sidebar{position:absolute;inset:0 auto auto 0;width:min(320px,calc(100% - 8px));box-sizing:border-box;max-height:min(620px,70dvh);overflow:auto;padding:48px 12px 12px;visibility:hidden;opacity:0;transform:translateX(-102%);transition:transform 150ms cubic-bezier(.2,.8,.2,1),opacity 150ms;z-index:60;background:linear-gradient(350deg,color-mix(in srgb,var(--menu) 93%,transparent),color-mix(in srgb,var(--menu) 80%,transparent));border:1px solid color-mix(in srgb,var(--accent) 65%,transparent);border-radius:0 0 12px 0;box-shadow:8px 8px 22px #0000003d;backdrop-filter:blur(22px) saturate(145%);color:var(--font-color)}
-.ops-root .ops-business-sidebar.open{visibility:visible;opacity:1;transform:translateX(0)}
-.ops-root .ops-sidebar-heading{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--ops-line);padding-bottom:8px;margin-bottom:8px}
-.ops-root .ops-sidebar-heading button{padding:4px 10px;margin:0;font-size:22px;background:transparent;border:0}
-.ops-root .ops-business-sidebar>.ops-steps{display:flex!important;flex-direction:column;align-items:stretch;gap:4px;width:100%;padding:0;margin:0;background:transparent;position:static!important}
-.ops-root .ops-business-sidebar>.ops-steps>button,.ops-root .ops-business-sidebar>.ops-crew-login{display:flex!important;align-items:center;justify-content:flex-start;width:100%;flex:none;gap:10px;text-align:left;white-space:normal;min-height:44px;padding:10px!important;margin:0;font-size:14px;background:transparent;border:0;border-radius:6px}
-.ops-root .ops-business-sidebar>.ops-steps>button[aria-current]{background:color-mix(in srgb,var(--accent) 18%,transparent);box-shadow:inset 3px 0 var(--accent)}
-.ops-root .ops-business-sidebar>.ops-steps>button .ops-icon{display:inline-flex!important}
-.ops-root .ops-business-sidebar>.ops-crew-login{border-top:1px solid var(--ops-line);margin-top:8px;padding-top:12px!important}
 @container(max-width:480px){.ops-root .ops-client-window{padding:12px!important}.ops-root .ops-client-title h3{font-size:23px}.ops-root .ops-client-window .ops-form-grid{grid-template-columns:minmax(0,1fr)}.ops-root .ops-client-window .ops-client-level>form,.ops-root .ops-client-window .ops-client-job,.ops-root .ops-client-window .ops-client-project-photos{margin-left:4px;padding-left:8px}.ops-root .ops-client-tile>summary{gap:6px;padding:10px!important}.ops-root .ops-client-tile-label strong{font-size:15px}}
-@media(prefers-reduced-motion:reduce){.ops-root .ops-business-sidebar{transition:none}}
 
 
-.ops-root .ops-client-window [data-client-level=address]>form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:end}
-.ops-root .ops-client-window [data-client-level=address]>form>.ops-form-error{grid-column:1 / -1}
-.ops-root .ops-client-window [data-client-level=address]>form>.ops-save-bar{grid-column:2;grid-row:1}
+.ops-root .ops-client-window .ops-client-address-fields>form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:end}
+.ops-root .ops-client-window .ops-client-address-fields>form>.ops-form-error{grid-column:1 / -1}
+.ops-root .ops-client-window .ops-client-address-fields>form>.ops-save-bar{grid-column:2;grid-row:1}
 .ops-root .ops-client-window .ops-client-level{margin:0!important}
 .ops-root .ops-client-tile>summary [data-client-grab]{position:static!important;transform:none!important;opacity:.7;display:flex!important;align-items:center;justify-content:center}
 
-.ops-root .ops-business-sidebar{background:var(--menu,#253044)!important;background:rgb(from var(--menu,#253044) r g b)!important}
 
 /* Widget-aligned shell; primary workflow tabs form the sticky header. */
 body .widget[data-content-type="opsClients"]>.widget-content{top:44px}
 body .widget[data-content-type="opsCRM"]>.widget-content{left:0;right:0;bottom:0;top:44px;border-radius:0}
 .ops-root.ops-business-center{padding:0!important;scroll-padding-top:52px}
-.ops-root .ops-menu-anchor{position:sticky!important;top:0!important;height:0;min-height:0;margin:0!important;padding:0!important;border:0;background:transparent!important;overflow:visible;z-index:60!important}
-.ops-root .ops-menu-reveal>span:last-child{display:none}
-.ops-root .ops-menu-reveal{width:40px;height:44px;justify-content:center;padding:4px}
-.ops-root.ops-business-center>.ops-step-body:not(.ops-processing){padding-top:48px!important}
-.ops-root.ops-business-center>.ops-step-body.ops-processing>.ops-steps{position:sticky!important;top:0!important;margin:0;padding-left:48px!important;display:flex;flex-wrap:wrap;justify-content:space-evenly;width:100%}
+.ops-root.ops-business-center>.ops-step-body.ops-processing>.ops-steps{position:sticky!important;top:var(--ops-nav-top,0px)!important;margin:0;padding:0 8px!important;display:flex;flex-wrap:wrap;justify-content:space-evenly;width:100%}
 .ops-root.ops-business-center>.ops-step-body.ops-processing>.ops-steps>button{flex:1 1 auto;justify-content:center}
 .ops-root .ops-client-heading-replaced{display:none}
 .ops-root[data-ops-type="opsClients"]>.ops-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:12px;margin:0 0 10px;padding:8px 0}
@@ -139,5 +122,21 @@ body .widget[data-content-type="opsCRM"]>.widget-content{left:0;right:0;bottom:0
 .ops-root .ops-client-section-body{padding:8px 12px 8px 20px}
 .ops-root .ops-section-actions{display:flex;justify-content:flex-end}
 .ops-root .ops-client-window .ops-client-accordion .ops-client-job,.ops-root .ops-client-window .ops-client-accordion .ops-client-project-photos{margin-left:0}
-@container(max-width:560px){.ops-root .ops-client-title{align-items:flex-start}.ops-root .ops-client-title>.ops-contact-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;justify-content:flex-start!important;margin-left:0}.ops-root .ops-client-title>.ops-contact-actions>*{text-align:center;min-width:0;padding:5px!important;margin:0;font-size:12px;min-height:36px}.ops-root .ops-client-window>.ops-client-primary,.ops-root .ops-client-window>.ops-client-level,.ops-root .ops-client-window>.ops-work-section{margin-left:8px!important}.ops-root .ops-client-window [data-client-level=address]>form{display:block}.ops-root .ops-client-section-body{padding-left:12px}.ops-root.ops-business-center>.ops-step-body.ops-processing>.ops-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}.ops-root.ops-business-center>.ops-step-body.ops-processing>.ops-steps>button{padding:6px 3px;min-width:0;font-size:11px}}
+@container(max-width:560px){.ops-root .ops-client-title{align-items:flex-start}.ops-root .ops-client-title>.ops-contact-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;justify-content:flex-start!important;margin-left:0}.ops-root .ops-client-title>.ops-contact-actions>*{text-align:center;min-width:0;padding:5px!important;margin:0;font-size:12px;min-height:36px}.ops-root .ops-client-window>.ops-client-primary,.ops-root .ops-client-window>.ops-client-level,.ops-root .ops-client-window>.ops-work-section{margin-left:8px!important}.ops-root .ops-client-window .ops-client-address-fields>form{display:block}.ops-root .ops-client-section-body{padding-left:12px}.ops-root.ops-business-center>.ops-step-body.ops-processing>.ops-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}.ops-root.ops-business-center>.ops-step-body.ops-processing>.ops-steps>button{padding:6px 3px;min-width:0;font-size:11px}}
+
+/* Two navigation levels use the Hub menu palette; controls use Hub accents. */
+.ops-root.ops-business-center>.ops-main-menu{display:flex;align-items:stretch;gap:6px;margin:0;padding:4px 8px;background:var(--menu)!important;color:var(--menu-text,var(--font-color));border-bottom:1px solid var(--ops-line)!important}
+.ops-root.ops-business-center>.ops-main-menu>.ops-steps{display:flex;flex:1;flex-wrap:wrap;gap:4px;overflow:visible;padding:0;background:transparent}
+.ops-root.ops-business-center>.ops-main-menu>.ops-steps>button{flex:1 1 auto;border-radius:7px;font-size:14px;font-weight:650;min-height:44px}
+.ops-root.ops-business-center>.ops-step-body.ops-processing>.ops-steps{background:var(--menu-2,var(--menu))!important;color:var(--menu-2-text,var(--font-color));border-bottom:1px solid var(--ops-line)!important}
+.ops-root.ops-business-center>.ops-step-body.ops-processing>.ops-steps>button{font-size:12px;font-weight:500;border-radius:0;min-height:40px}
+.ops-root :is(button,a[href]),.ops-dialog button{background:color-mix(in srgb,var(--accent-2,var(--accent)) 24%,transparent)!important;border:1px solid color-mix(in srgb,var(--accent-2,var(--accent)) 65%,transparent)!important;color:var(--font-color)!important;border-radius:7px}
+.ops-root :is(button,a[href]):hover,.ops-dialog button:hover{background:color-mix(in srgb,var(--accent-2,var(--accent)) 40%,transparent)!important}
+.ops-root button[data-action=newClient]{background:color-mix(in srgb,var(--accent) 32%,transparent)!important;border-color:var(--accent)!important}
+.ops-root button[data-action=newClient]:hover{background:color-mix(in srgb,var(--accent) 48%,transparent)!important}
+.ops-root [data-step][aria-current]{box-shadow:inset 0 -3px var(--accent-2)!important;background:color-mix(in srgb,var(--accent-2) 42%,transparent)!important}
+.ops-root .ops-client-title>.ops-contact-actions :is(button,a){text-decoration:none!important;border-radius:7px!important;padding:8px 10px;display:inline-flex;align-items:center;justify-content:center}
+.ops-root .ops-client-address-fields{margin:12px 0 0 12px;padding-left:12px;border-left:1px solid var(--ops-line)}
+.ops-root .ops-client-address-fields h4{font-size:14px;margin:0 0 8px}
+@container(max-width:560px){.ops-root .ops-client-title{align-items:flex-start}.ops-root .ops-client-title>.ops-contact-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;margin-left:0}.ops-root .ops-client-title>.ops-contact-actions>*{text-align:center;min-width:0;padding:5px!important;margin:0;font-size:12px;min-height:36px}.ops-root .ops-client-window>.ops-client-level{margin-left:8px!important}.ops-root .ops-client-window .ops-client-address-fields>form{display:block}.ops-root .ops-client-section-body{padding-left:12px}.ops-root.ops-business-center>.ops-main-menu{display:flex;flex-wrap:wrap;padding:4px}.ops-root.ops-business-center>.ops-main-menu>.ops-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%}.ops-root.ops-business-center>.ops-main-menu>.ops-steps>button{font-size:11px;padding:6px 3px;white-space:normal}.ops-root.ops-business-center>.ops-main-menu>.ops-crew-login{width:auto;margin-left:auto;font-size:11px;min-height:32px;padding:4px 8px}.ops-root.ops-business-center>.ops-step-body.ops-processing>.ops-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;padding:2px!important}.ops-root.ops-business-center>.ops-step-body.ops-processing>.ops-steps>button{font-size:11px;min-width:0;padding:5px 2px}}
 

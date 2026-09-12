@@ -609,38 +609,21 @@ body .widget.has-window-header[data-content-type^="ops"] > .widget-content:has(>
 .ops-root .ops-client-window .ops-client-photo-strip{margin: 6px 0px; max-width: 480px;}
 .ops-root .ops-client-window .ops-client-project-photos > small{margin: 3px 0px 5px;}
 .ops-root.ops-business-center > .ops-step-tools{display: none;}
-.ops-root .ops-menu-reveal{position: absolute; left: 4px; top: 0px; z-index: 70; display: flex; align-items: center; gap: 6px; min-height: 40px; margin: 0px; padding: 6px 10px; border: 0px; background: transparent; color: var(--accent); cursor: pointer;}
-.ops-root .ops-menu-reveal > span:first-child{font-size: 23px; line-height: 1;}
-.ops-root .ops-business-sidebar{position: absolute; inset: 0px auto auto 0px; width: min(320px, 100% - 8px); box-sizing: border-box; max-height: min(620px, 70dvh); overflow: auto; padding: 48px 12px 12px; visibility: hidden; opacity: 0; transform: translateX(-102%); transition: transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 150ms; z-index: 60; background: linear-gradient(350deg,color-mix(in srgb,var(--menu) 93%,transparent),color-mix(in srgb,var(--menu) 80%,transparent)); border: 1px solid color-mix(in srgb,var(--accent) 65%,transparent); border-radius: 0px 0px 12px; box-shadow: rgba(0, 0, 0, 0.24) 8px 8px 22px; backdrop-filter: blur(22px) saturate(145%); color: var(--font-color);}
-.ops-root .ops-business-sidebar.open{visibility: visible; opacity: 1; transform: translateX(0px);}
-.ops-root .ops-sidebar-heading{display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--ops-line); padding-bottom: 8px; margin-bottom: 8px;}
-.ops-root .ops-sidebar-heading button{padding: 4px 10px; margin: 0px; font-size: 22px; background: transparent; border: 0px;}
-.ops-root .ops-business-sidebar > .ops-steps{flex-direction: column; align-items: stretch; gap: 4px; width: 100%; padding: 0px; margin: 0px; background: transparent; display: flex !important; position: static !important;}
-.ops-root .ops-business-sidebar > .ops-steps > button, .ops-root .ops-business-sidebar > .ops-crew-login{align-items: center; justify-content: flex-start; width: 100%; flex: 0 0 auto; gap: 10px; text-align: left; white-space: normal; min-height: 44px; margin: 0px; font-size: 14px; background: transparent; border: 0px; border-radius: 6px; display: flex !important; padding: 10px !important;}
-.ops-root .ops-business-sidebar > .ops-steps > button[aria-current]{background: color-mix(in srgb,var(--accent) 18%,transparent); box-shadow: inset 3px 0 var(--accent);}
-.ops-root .ops-business-sidebar > .ops-steps > button .ops-icon{display: inline-flex !important;}
-.ops-root .ops-business-sidebar > .ops-crew-login{border-top: 1px solid var(--ops-line); margin-top: 8px; padding-top: 12px !important;}
 @container (max-width: 480px) {.ops-root .ops-client-window{padding: 12px !important;}
 .ops-root .ops-client-title h3{font-size: 23px;}
 .ops-root .ops-client-window .ops-form-grid{grid-template-columns: minmax(0px, 1fr);}
 .ops-root .ops-client-window .ops-client-level > form, .ops-root .ops-client-window .ops-client-job, .ops-root .ops-client-window .ops-client-project-photos{margin-left: 4px; padding-left: 8px;}
 .ops-root .ops-client-tile > summary{gap: 6px; padding: 10px !important;}
 .ops-root .ops-client-tile-label strong{font-size: 15px;}}
-@media (prefers-reduced-motion: reduce) {.ops-root .ops-business-sidebar{transition: none;}}
-.ops-root .ops-client-window [data-client-level="address"] > form{display: grid; grid-template-columns: minmax(0px, 1fr) auto; gap: 4px 12px; align-items: end;}
-.ops-root .ops-client-window [data-client-level="address"] > form > .ops-form-error{grid-column: 1 / -1;}
-.ops-root .ops-client-window [data-client-level="address"] > form > .ops-save-bar{grid-area: 1 / 2;}
+.ops-root .ops-client-window .ops-client-address-fields > form{display: grid; grid-template-columns: minmax(0px, 1fr) auto; gap: 4px 12px; align-items: end;}
+.ops-root .ops-client-window .ops-client-address-fields > form > .ops-form-error{grid-column: 1 / -1;}
+.ops-root .ops-client-window .ops-client-address-fields > form > .ops-save-bar{grid-area: 1 / 2;}
 .ops-root .ops-client-window .ops-client-level{margin: 0px !important;}
 .ops-root .ops-client-tile > summary [data-client-grab]{opacity: 0.7; align-items: center; justify-content: center; position: static !important; transform: none !important; display: flex !important;}
-.ops-root .ops-business-sidebar{background: rgb(from var(--menu,#253044) r g b) !important;}
 body .widget[data-content-type="opsClients"] > .widget-content{top: 44px;}
 body .widget[data-content-type="opsCRM"] > .widget-content{inset: 44px 0px 0px; border-radius: 0px;}
 .ops-root.ops-business-center{scroll-padding-top: 52px; padding: 0px !important;}
-.ops-root .ops-menu-anchor{height: 0px; min-height: 0px; border: 0px; overflow: visible; position: sticky !important; top: 0px !important; margin: 0px !important; padding: 0px !important; background: transparent !important; z-index: 60 !important;}
-.ops-root .ops-menu-reveal > span:last-child{display: none;}
-.ops-root .ops-menu-reveal{width: 40px; height: 44px; justify-content: center; padding: 4px;}
-.ops-root.ops-business-center > .ops-step-body:not(.ops-processing){padding-top: 48px !important;}
-.ops-root.ops-business-center > .ops-step-body.ops-processing > .ops-steps{margin: 0px; display: flex; flex-wrap: wrap; justify-content: space-evenly; width: 100%; position: sticky !important; top: 0px !important; padding-left: 48px !important;}
+.ops-root.ops-business-center > .ops-step-body.ops-processing > .ops-steps{margin: 0px; display: flex; flex-wrap: wrap; justify-content: space-evenly; width: 100%; position: sticky !important; top: var(--ops-nav-top,0px) !important; padding: 0px 8px !important;}
 .ops-root.ops-business-center > .ops-step-body.ops-processing > .ops-steps > button{flex: 1 1 auto; justify-content: center;}
 .ops-root .ops-client-heading-replaced{display: none;}
 .ops-root[data-ops-type="opsClients"] > .ops-heading{display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap; gap: 12px; margin: 0px 0px 10px; padding: 8px 0px;}
@@ -658,7 +641,32 @@ body .widget[data-content-type="opsCRM"] > .widget-content{inset: 44px 0px 0px; 
 .ops-root .ops-client-title > .ops-contact-actions{display: grid; grid-template-columns: repeat(3, minmax(0px, 1fr)); width: 100%; margin-left: 0px; justify-content: flex-start !important;}
 .ops-root .ops-client-title > .ops-contact-actions > *{text-align: center; min-width: 0px; margin: 0px; font-size: 12px; min-height: 36px; padding: 5px !important;}
 .ops-root .ops-client-window > .ops-client-primary, .ops-root .ops-client-window > .ops-client-level, .ops-root .ops-client-window > .ops-work-section{margin-left: 8px !important;}
-.ops-root .ops-client-window [data-client-level="address"] > form{display: block;}
+.ops-root .ops-client-window .ops-client-address-fields > form{display: block;}
 .ops-root .ops-client-section-body{padding-left: 12px;}
 .ops-root.ops-business-center > .ops-step-body.ops-processing > .ops-steps{display: grid; grid-template-columns: repeat(3, minmax(0px, 1fr)); gap: 0px;}
 .ops-root.ops-business-center > .ops-step-body.ops-processing > .ops-steps > button{padding: 6px 3px; min-width: 0px; font-size: 11px;}}
+.ops-root.ops-business-center > .ops-main-menu{display: flex; align-items: stretch; gap: 6px; margin: 0px; padding: 4px 8px; color: var(--menu-text,var(--font-color)); background: var(--menu) !important; border-bottom: 1px solid var(--ops-line) !important;}
+.ops-root.ops-business-center > .ops-main-menu > .ops-steps{display: flex; flex: 1 1 0%; flex-wrap: wrap; gap: 4px; overflow: visible; padding: 0px; background: transparent;}
+.ops-root.ops-business-center > .ops-main-menu > .ops-steps > button{flex: 1 1 auto; border-radius: 7px; font-size: 14px; font-weight: 650; min-height: 44px;}
+.ops-root.ops-business-center > .ops-step-body.ops-processing > .ops-steps{color: var(--menu-2-text,var(--font-color)); background: var(--menu-2,var(--menu)) !important; border-bottom: 1px solid var(--ops-line) !important;}
+.ops-root.ops-business-center > .ops-step-body.ops-processing > .ops-steps > button{font-size: 12px; font-weight: 500; border-radius: 0px; min-height: 40px;}
+.ops-root :is(button, a[href]), .ops-dialog button{border-radius: 7px; background: color-mix(in srgb,var(--accent-2,var(--accent)) 24%,transparent) !important; border: 1px solid color-mix(in srgb,var(--accent-2,var(--accent)) 65%,transparent) !important; color: var(--font-color) !important;}
+.ops-root :is(button, a[href]):hover, .ops-dialog button:hover{background: color-mix(in srgb,var(--accent-2,var(--accent)) 40%,transparent) !important;}
+.ops-root button[data-action="newClient"]{background: color-mix(in srgb,var(--accent) 32%,transparent) !important; border-color: var(--accent) !important;}
+.ops-root button[data-action="newClient"]:hover{background: color-mix(in srgb,var(--accent) 48%,transparent) !important;}
+.ops-root [data-step][aria-current]{box-shadow: inset 0 -3px var(--accent-2) !important; background: color-mix(in srgb,var(--accent-2) 42%,transparent) !important;}
+.ops-root .ops-client-title > .ops-contact-actions :is(button, a){padding: 8px 10px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none !important; border-radius: 7px !important;}
+.ops-root .ops-client-address-fields{margin: 12px 0px 0px 12px; padding-left: 12px; border-left: 1px solid var(--ops-line);}
+.ops-root .ops-client-address-fields h4{font-size: 14px; margin: 0px 0px 8px;}
+@container (max-width: 560px) {.ops-root .ops-client-title{align-items: flex-start;}
+.ops-root .ops-client-title > .ops-contact-actions{display: grid; grid-template-columns: repeat(3, minmax(0px, 1fr)); width: 100%; margin-left: 0px;}
+.ops-root .ops-client-title > .ops-contact-actions > *{text-align: center; min-width: 0px; margin: 0px; font-size: 12px; min-height: 36px; padding: 5px !important;}
+.ops-root .ops-client-window > .ops-client-level{margin-left: 8px !important;}
+.ops-root .ops-client-window .ops-client-address-fields > form{display: block;}
+.ops-root .ops-client-section-body{padding-left: 12px;}
+.ops-root.ops-business-center > .ops-main-menu{display: flex; flex-wrap: wrap; padding: 4px;}
+.ops-root.ops-business-center > .ops-main-menu > .ops-steps{display: grid; grid-template-columns: repeat(3, minmax(0px, 1fr)); width: 100%;}
+.ops-root.ops-business-center > .ops-main-menu > .ops-steps > button{font-size: 11px; padding: 6px 3px; white-space: normal;}
+.ops-root.ops-business-center > .ops-main-menu > .ops-crew-login{width: auto; margin-left: auto; font-size: 11px; min-height: 32px; padding: 4px 8px;}
+.ops-root.ops-business-center > .ops-step-body.ops-processing > .ops-steps{display: grid; grid-template-columns: repeat(3, minmax(0px, 1fr)); gap: 2px; padding: 2px !important;}
+.ops-root.ops-business-center > .ops-step-body.ops-processing > .ops-steps > button{font-size: 11px; min-width: 0px; padding: 5px 2px;}}
