@@ -1,0 +1,85 @@
+/* Operational record windows inherit the current Hub palette. */
+.ops-root input:not([type=checkbox]):not([type=range]):not([type=file]),.ops-root select,.ops-root textarea,.ops-dialog input:not([type=checkbox]):not([type=file]),.ops-dialog select,.ops-dialog textarea{background:color-mix(in srgb,currentColor 9%,transparent)!important;border-color:color-mix(in srgb,currentColor 26%,transparent)!important;box-shadow:inset 0 1px 2px #00000008!important}
+.ops-root input:focus,.ops-root select:focus,.ops-root textarea:focus,.ops-dialog input:focus,.ops-dialog textarea:focus{border-color:var(--accent)!important;background:color-mix(in srgb,var(--accent) 13%,transparent)!important}
+.ops-root.ops-client-detail-view .ops-client-directory-row>summary{display:none!important}
+.ops-root.ops-client-detail-view>.ops-heading{padding-bottom:6px;margin-bottom:8px;border:0}
+.ops-root.ops-client-detail-view .ops-client-primary{padding-top:0}
+.ops-root.ops-client-detail-view .ops-client-directory-row{border-bottom:0}
+.ops-root .ops-client-primary>.ops-contact-actions{justify-content:flex-end;margin:0 0 4px}
+.ops-root .ops-client-primary .ops-form-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ops-root .ops-address-link{font-weight:600;text-decoration:underline!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;min-height:44px;display:flex;align-items:center}
+.ops-root [data-action=openClient]{background:transparent!important;border:0!important;text-decoration:underline;padding:4px!important}
+.ops-root .ops-client-directory-row{border:0;border-bottom:1px solid var(--ops-line);border-radius:0;margin:0;padding:0;background:transparent;overflow:visible}
+.ops-root .ops-client-directory-row>summary{display:grid!important;grid-template-columns:18px minmax(120px,1.3fr) minmax(130px,1fr) minmax(150px,1.2fr) auto!important;align-items:center;gap:16px;padding:14px 8px!important;min-height:72px;background:transparent!important;box-shadow:none!important}
+.ops-root .ops-client-directory-row[open]>summary{background:color-mix(in srgb,var(--accent) 9%,transparent)!important}
+.ops-root .ops-client-directory-row>summary strong{font-size:14px;overflow-wrap:anywhere}
+.ops-root .ops-client-directory-row>summary>span{margin:0;padding:0;opacity:1;font-size:13px;overflow-wrap:anywhere}
+.ops-root .ops-client-directory-row>summary small{display:block;margin-top:4px;font-size:12px;opacity:.6}
+.ops-root .ops-client-directory-row .ops-directory-actions{display:flex;gap:8px;align-items:center}
+.ops-root .ops-client-directory-row .ops-directory-actions button{border:1px solid var(--ops-line);border-radius:24px;padding:5px 17px;margin:0;min-height:36px;font-size:13px;background:transparent}
+.ops-root .ops-client-directory-row .ops-directory-actions button:last-child{background:color-mix(in srgb,currentColor 10%,transparent)}
+.ops-root .ops-client-directory-row>summary [data-client-grab]{width:18px;min-width:0;padding:0;margin:0;border:0;background:transparent}
+@container(max-width:760px){.ops-root .ops-client-directory-row>summary{grid-template-columns:14px minmax(0,1fr) auto!important;gap:8px 12px}.ops-root .ops-client-directory-row>summary>strong{grid-column:2}.ops-root .ops-client-directory-row .ops-directory-contact,.ops-root .ops-client-directory-row .ops-directory-address{grid-column:2}.ops-root .ops-client-directory-row .ops-directory-actions{grid-column:3;grid-row:1 / 4;flex-direction:column}.ops-root .ops-client-primary .ops-form-grid{grid-template-columns:minmax(0,1fr)}}
+.ops-root .ops-client-identity{display:flex;flex-wrap:wrap;gap:12px 28px;margin:14px 0 0}.ops-root .ops-client-identity dt{font-size:12px;opacity:.7}.ops-root .ops-client-identity dd{margin:4px 0 0;font-size:16px;overflow-wrap:anywhere}
+.ops-root .ops-client-level{padding:20px 0;border-bottom:1px solid var(--ops-line)}.ops-root .ops-client-level>h3,.ops-root .ops-client-level>.ops-heading h3{padding:0;margin:0 0 12px;font-size:17px}
+.ops-root .ops-client-address{padding:8px 0}.ops-root .ops-client-address>small,.ops-root .ops-client-project-photos>small{display:block;margin:5px 0 10px;font-size:12px;opacity:.7}
+.ops-root .ops-client-address{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:18px}.ops-root .ops-client-address>.ops-contact-actions{grid-column:2;grid-row:1 / 3}.ops-root .ops-client-address>small{grid-column:1}
+@container(max-width:560px){.ops-root .ops-client-address{display:block}.ops-root.ops-processing>.ops-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;padding:0}.ops-root.ops-processing>.ops-steps>button{white-space:normal;font-size:11px;padding:6px 3px;min-width:0;min-height:44px}.ops-root.ops-processing>.ops-steps>button .ops-icon{display:none}}
+.ops-root .ops-client-stage{opacity:1!important;color:inherit!important;border-left:2px solid var(--accent);padding:6px 10px;background:color-mix(in srgb,var(--accent) 7%,transparent);font-size:14px!important}
+.ops-root .ops-client-photo-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.ops-root .ops-client-photo-strip button{padding:0;overflow:hidden;min-width:0;display:grid;text-align:left}.ops-root .ops-client-photo-strip img{display:block;aspect-ratio:4/3;object-fit:cover;width:100%;font-size:12px}.ops-root .ops-client-photo-strip small{padding:5px 8px;font-size:11px}.ops-root .ops-client-project-photos{margin:12px 0 22px}
+.ops-root .ops-attached-section{overflow:visible!important}
+.ops-root .ops-main-menu,.ops-root .ops-attached-menu>.ops-steps,.ops-root.ops-processing>.ops-steps{position:sticky!important;top:var(--ops-nav-top,0px)!important;z-index:var(--ops-nav-layer,30)!important;background:color-mix(in srgb,var(--menu,#253044) 92%,transparent);backdrop-filter:blur(18px)}
+.ops-root,.ops-dialog{--ops-line:color-mix(in srgb,currentColor 18%,transparent);--ops-surface:color-mix(in srgb,var(--widget-bg,var(--menu,#253044)) 94%,var(--accent,#50d7c8));}
+.ops-root input:not([type=checkbox]):not([type=range]),.ops-root select,.ops-root textarea,.ops-dialog input:not([type=checkbox]),.ops-dialog select,.ops-dialog textarea{background:color-mix(in srgb,currentColor 5%,transparent);color:inherit;border:1px solid var(--ops-line);border-radius:7px;font:inherit;padding:10px;min-width:0;max-width:100%;width:100%;min-height:44px;box-sizing:border-box}
+.ops-root select option,.ops-dialog select option{background:var(--menu,#253044);color:var(--font-color,#eef2f8)}
+.ops-dialog,.ops-dialog footer{background:var(--menu,#253044);color:var(--font-color,#eef2f8)}
+.ops-root .ops-record-detail.ops-command{margin:0!important;padding:20px!important;background:transparent;border:0;border-radius:0;container-type:inline-size;overflow-wrap:anywhere}
+.ops-root .ops-command-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding-bottom:18px;border-bottom:1px solid var(--ops-line)}
+.ops-root .ops-command-header h3{font-size:25px;line-height:1.2;margin:6px 0;padding:0;letter-spacing:-.025em}
+.ops-root .ops-command-header p{margin:8px 0 0;font-size:14px}
+.ops-root .ops-command-header small{font-size:11px;letter-spacing:.12em}
+.ops-root .ops-contact-actions{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.ops-root .ops-command button,.ops-root .ops-command a{font-size:14px;margin:0;min-height:40px;border-color:var(--ops-line)}
+.ops-root .ops-command-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 22px}
+.ops-root .ops-command-stats>div{border-left:2px solid color-mix(in srgb,var(--accent) 60%,transparent);padding:0 12px;display:grid;gap:5px;min-width:0}
+.ops-root .ops-command-stats small{font-size:12px}.ops-root .ops-command-stats strong{font-size:20px;font-weight:600}
+.ops-root .ops-command-columns{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:24px;align-items:start}
+.ops-root .ops-command-columns>div{min-width:0}
+.ops-root .ops-work-section{border-top:1px solid var(--ops-line);margin:0;padding:0;background:transparent;border-radius:0}
+.ops-root .ops-work-section>summary{cursor:pointer;list-style:none;font-size:14px;font-weight:650;padding:17px 0;display:flex;align-items:center;gap:10px;min-height:48px}
+.ops-root .ops-work-section>summary::before{content:'+';font-size:18px;font-weight:400;width:16px;flex-shrink:0;color:var(--accent)}
+.ops-root .ops-work-section[open]>summary::before{content:'−'}
+.ops-root .ops-work-section>summary::-webkit-details-marker{display:none}
+.ops-root .ops-section-content{padding:0 0 18px;min-width:0}
+.ops-root .ops-command form{padding:0;margin:0}
+.ops-root .ops-command label{font-size:13px;margin:6px 0 10px}
+.ops-root .ops-command .ops-form-grid{grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));gap:8px 12px}
+.ops-root .ops-save-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;flex-wrap:wrap}
+.ops-root .ops-save-bar span{font-size:11px;opacity:.6}.ops-root form[data-dirty] .ops-save-bar span{opacity:1;color:var(--accent)}
+.ops-root .ops-save-bar button{border-color:color-mix(in srgb,var(--accent) 65%,transparent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.ops-root .ops-next-panel{border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);padding:14px 18px;margin-bottom:24px;border-radius:9px;background:color-mix(in srgb,var(--accent) 5%,transparent)}
+.ops-root .ops-next-panel h3{padding:0;margin:0 0 8px;font-size:14px}
+.ops-root .ops-work-item{padding:12px 0;border-bottom:1px solid var(--ops-line);min-width:0}
+.ops-root .ops-work-item:last-child{border-bottom:0}
+.ops-root .ops-work-item p{margin:6px 0;font-size:14px}
+.ops-root .ops-item-meta,.ops-root .ops-work-item>small{display:block;font-size:12px;opacity:.7}
+.ops-root .ops-work-item .ops-work-section{border:0;margin-top:4px}.ops-root .ops-work-item .ops-work-section>summary{font-weight:400;padding:5px 0;font-size:12px;min-height:36px}
+.ops-root .ops-command .ops-check input{accent-color:var(--accent);width:18px;height:18px;min-height:18px;padding:0;flex-shrink:0}
+.ops-root .ops-work-item:has(>label>input:checked)>label strong{text-decoration:line-through;opacity:.6}
+.ops-root .ops-client-job{padding:8px 0 20px;margin-bottom:12px;border-bottom:1px solid var(--ops-line)}
+.ops-root .ops-command .ops-client-job button[data-action=openProject]{font-size:17px;background:transparent;padding:6px 0;margin:0;border:0;min-height:40px}
+.ops-root .ops-client-job p{margin:0 0 12px;font-size:13px;opacity:.7}
+.ops-root .ops-activity-row{display:grid;grid-template-columns:85px minmax(0,1fr);gap:12px;border-left:1px solid var(--ops-line);padding:8px 0 14px 12px;font-size:13px}
+.ops-root .ops-activity-row small{display:block;font-size:12px}.ops-root .ops-activity-row time{font-size:12px}
+.ops-root .ops-command .ops-project-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+.ops-root .ops-command .ops-project-metrics dt{font-size:12px}.ops-root .ops-command .ops-project-metrics dd{font-size:17px}
+.ops-root .ops-command .ops-project-ledger{border:0;padding:0;background:transparent}
+.ops-root .ops-command .ops-project-ledger h3{padding:0;margin:12px 0}
+.ops-root .ops-command :is(button,a,input,select,textarea,summary):focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@container(max-width:720px){.ops-root .ops-command-columns{grid-template-columns:minmax(0,1fr);gap:0}.ops-root .ops-command-header{flex-direction:column}.ops-root .ops-command-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container(max-width:440px){.ops-root .ops-record-detail.ops-command{padding:12px!important}.ops-root .ops-command .ops-form-grid{grid-template-columns:minmax(0,1fr)}.ops-root .ops-command-stats strong{font-size:18px}.ops-root .ops-command-header h3{font-size:22px}.ops-root .ops-next-panel{padding:12px}.ops-root .ops-command button,.ops-root .ops-command a{min-height:44px}.ops-root .ops-project-slot-row{grid-template-columns:28px minmax(0,1fr)}.ops-root .ops-project-slot{min-width:0;padding:0}.ops-root .ops-project-slot-row summary>.ops-project-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container(max-width:760px){.ops-root .ops-steps{display:flex;flex-wrap:wrap;overflow:visible;gap:2px}.ops-root .ops-steps button{flex:1 1 100px;white-space:normal;justify-content:center;font-size:12px;min-width:0}.ops-root .ops-main-menu{flex-wrap:wrap}.ops-root .ops-main-menu>.ops-steps{width:100%;min-width:0}}
+.ops-root .ops-command h3{border:0;text-decoration:none;box-shadow:none}
+.ops-root .ops-command .ops-form-error:empty{display:none}
+@container(max-width:560px){.ops-root .ops-main-menu{display:grid;grid-template-columns:minmax(0,1fr) 36px;gap:0}.ops-root .ops-main-menu>.ops-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:0;min-width:0}.ops-root .ops-main-menu>.ops-steps>button{white-space:normal;font-size:11px;padding:6px 3px;gap:4px;min-height:44px}.ops-root .ops-main-menu>.ops-steps>button .ops-icon{display:none}.ops-root .ops-main-menu>.ops-crew-login{min-width:0;width:36px;margin:0;padding:4px}.ops-root .ops-command-header{gap:10px}.ops-root .ops-command-header p{font-size:13px}.ops-root .ops-command .ops-contact-actions{gap:3px}.ops-root .ops-command .ops-contact-actions :is(button,a){font-size:12px;padding:7px}}
+
