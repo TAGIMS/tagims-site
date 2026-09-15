@@ -4,7 +4,7 @@ const {JSDOM}=require('jsdom');
 const source=fs.readFileSync(path.resolve(__dirname,'../gestures-widget.js'),'utf8');
 async function check(url,expected,workerMode=false,ios=false){
  const dom=new JSDOM('<body><section class="widget"></section></body>',{url,runScripts:'outside-only',pretendToBeVisual:true});
- const w=dom.window;if(ios){Object.defineProperty(w.navigator,'userAgent',{value:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)'});}let stopped=0,options,nextFrame,detected=0,visible=true,actions=0,cameraRequests=0,modelLoads=0;
+ const w=dom.window;if(ios){w.HTMLVideoElement.prototype.requestVideoFrameCallback=()=>{throw new Error('iOS must not depend on video callbacks');};Object.defineProperty(w.navigator,'userAgent',{value:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)'});}let stopped=0,options,nextFrame,detected=0,visible=true,actions=0,cameraRequests=0,modelLoads=0;
  const scheduler=workerMode==='scheduler';let clock=0,nextVideo,presentedFrames=0;
  if(scheduler){Object.defineProperty(w.performance,'now',{value:()=>clock});w.HTMLVideoElement.prototype.requestVideoFrameCallback=fn=>{nextVideo=fn;return 1;};w.HTMLVideoElement.prototype.cancelVideoFrameCallback=()=>{nextVideo=null;};}
  w.requestAnimationFrame=fn=>{nextFrame=fn;return 1;};w.cancelAnimationFrame=()=>{nextFrame=null;};
@@ -50,7 +50,7 @@ async function check(url,expected,workerMode=false,ios=false){
   assert.equal(widget.querySelector('[data-g=limit]').value,'24');
   const frame=async t=>{video.currentTime=t/1000;if(scheduler){clock=t;assert(nextVideo);nextVideo(t,{mediaTime:t/1000,presentedFrames:++presentedFrames});await new Promise(r=>setTimeout(r,6));}else{assert(nextFrame);await nextFrame(t);}};
   for(let t=100;t<=10000;t+=100)await frame(t);
-  assert.equal(detected,100);assert.equal(pause.textContent,'Pause');assert.equal(stopped,0);assert.equal(actions,0);
+  assert.match(widget.querySelector('[data-g=progress]').textContent,/processing video/);assert.notEqual(widget.querySelector('[data-g=rate]').textContent,'— fps');assert.equal(detected,100);assert.equal(pause.textContent,'Pause');assert.equal(stopped,0);assert.equal(actions,0);
   visible=false;await frame(10100);assert.equal(widget.querySelector('[data-g=pose]').textContent,'No hand');
   visible=true;await frame(10200);assert.equal(widget.querySelector('[data-g=pose]').textContent,'Hand detected');
   await widget.querySelector('[data-g=confidence]').onchange();await frame(10300);assert.equal(pause.textContent,'Pause');
@@ -72,7 +72,7 @@ async function check(url,expected,workerMode=false,ios=false){
    const stopping=button.onclick();widget.querySelector('[data-g=stop]').click();await stopping;assert.equal(stopped,2);
    cleanup();console.log('PASS: video-frame scheduling, timings, 24 FPS default, benchmark winner/retention filtering, no-hand rejection, cancel and Stop. Simulated only.');return;
   }
-  if(ios){assert(widget.textContent.includes('iPhone test 2'));assert.equal(workerFrames,0);assert.match(widget.querySelector('[data-g=engine]').textContent,/compatibility/);}
+  if(ios){assert(widget.textContent.includes('iPhone test 3'));assert.equal(workerFrames,0);assert.match(widget.querySelector('[data-g=engine]').textContent,/compatibility/);}
   if(workerMode&&workerMode!=='failed'&&!ios){
    assert.match(widget.querySelector('[data-g=engine]').textContent,/worker/);
    if(workerMode==='cpu')assert.match(widget.querySelector('[data-g=engine]').textContent,/CPU/);
