@@ -1,0 +1,83 @@
+/* Scoped to the native Gestures widget; inherits HUB colors and typography. */
+.gestures-app{display:flex!important;flex-direction:column;gap:12px;padding:14px;overflow:auto!important;height:100%;min-height:0;color:inherit;font:inherit;touch-action:pan-y}
+.gestures-app [hidden]{display:none!important}
+.gestures-app .g-bar,.gestures-app .g-readings{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.gestures-app .g-bar span,.gestures-app .g-readings{font-size:12px;opacity:.8}
+.gestures-app .g-camera{position:relative;aspect-ratio:4/3;width:100%;flex:none;min-height:120px;background:#10141b;border-radius:12px;overflow:hidden}
+.gestures-app video,.gestures-app canvas{position:absolute;width:100%;height:100%;object-fit:contain;transform:scaleX(-1)}
+.gestures-app canvas{pointer-events:none}
+.gestures-app .g-camera p{position:absolute;inset:0;display:grid;place-content:center;padding:15px;text-align:center;color:#fff}
+.gestures-app .g-controls{display:flex;gap:8px;flex-wrap:wrap}
+.gestures-app button,.gestures-app select{font:inherit;color:inherit;background:color-mix(in srgb,var(--accent,#50d7c8) 15%,transparent);border:1px solid currentColor;border-radius:8px;min-height:46px;padding:8px 12px;touch-action:manipulation;cursor:pointer}
+.gestures-app button:disabled{opacity:.45;cursor:default}
+.gestures-app button:focus-visible{outline:3px solid var(--accent,#50d7c8);outline-offset:3px}
+.gestures-app .g-controls button{flex:1;min-width:90px}
+.gestures-app p{margin:0;font-size:13px;line-height:1.5}
+.gestures-app summary{cursor:pointer;min-height:44px;padding:10px 0}
+.gestures-app label{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:48px;flex-wrap:wrap}
+.gestures-app input{accent-color:var(--accent,#50d7c8);max-width:100%}
+.widget[data-content-type=gestures] .widget-content{overflow:hidden!important}
+@media(max-width:600px){.gestures-app{padding:10px;gap:10px}.gestures-app .g-camera{max-height:40svh}}
+
+/* Responsive sandbox: override the shell's fixed minimums and saved geometry.
+   Only this one-widget sandbox is affected; no main HUB settings are changed. */
+body > .widget[data-content-type="gestures"] {
+  min-width:0!important;min-height:0!important;
+  max-width:calc(100vw - 24px)!important;
+  max-height:calc(100dvh - 88px)!important;
+}
+.widget[data-content-type="gestures"] .widget-content {
+  inset:44px 8px 8px!important;padding:0!important;min-width:0!important;min-height:0!important;
+}
+.widget[data-content-type="gestures"].no-window-header .widget-content{top:8px!important}
+.widget[data-content-type="gestures"] .gestures-app {
+  box-sizing:border-box;display:grid!important;width:100%!important;max-width:100%!important;
+  min-width:0!important;min-height:0!important;height:100%!important;
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:auto minmax(64px,1fr) auto auto auto auto;
+  gap:8px;padding:8px;overflow-x:hidden!important;
+}
+.gestures-app > *{min-width:0;max-width:100%;box-sizing:border-box}
+.gestures-app .g-camera{aspect-ratio:auto;min-height:64px;max-height:none!important;height:100%;width:100%;}
+.gestures-app .g-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gestures-app .g-controls button{min-width:0;max-width:100%;padding:6px;font-size:13px;overflow-wrap:anywhere;min-height:44px}
+.gestures-app details{max-height:140px;overflow:auto;overscroll-behavior:contain}
+.gestures-app .g-bar{font-size:13px;gap:4px}
+.gestures-app p{overflow-wrap:anywhere;font-size:12px;line-height:1.35}
+.gestures-app .g-diagnostics{display:grid;gap:5px;padding:8px;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:8px;align-content:start}
+.gestures-app .g-diagnostics .g-readings{opacity:1;gap:4px 12px}
+.gestures-app .g-benchmark-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 10px}
+.gestures-app .g-benchmark-results:empty{display:none}
+.gestures-app .g-benchmark-results p{font-size:11px;font-variant-numeric:tabular-nums}
+.gestures-app [data-g="benchmark"]{opacity:.8}
+
+/* Small windows and short laptop screens use the available viewport rather
+   than retaining a larger desktop window's position and dimensions. */
+@media(max-width:900px),(max-height:760px){
+  body:has(> .widget[data-content-type="gestures"]){overflow:hidden!important;min-height:0!important;height:100dvh!important;padding:0!important}
+  body > .widget[data-content-type="gestures"],
+  body > .widget[data-content-type="gestures"].focused{
+    position:fixed!important;left:max(8px,env(safe-area-inset-left))!important;
+    right:max(8px,env(safe-area-inset-right))!important;
+    top:calc(54px + env(safe-area-inset-top))!important;
+    bottom:calc(30px + env(safe-area-inset-bottom))!important;
+    width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;
+    margin:0!important;transform:none!important;
+  }
+  .widget[data-content-type="gestures"] .widget-resize-handle,
+  .widget[data-content-type="gestures"] .widget-drag-handle{display:none!important}
+}
+/* Landscape phones: preview and settings sit side by side, controls below. */
+@media(max-height:520px) and (min-width:540px){
+  .widget[data-content-type="gestures"] .gestures-app{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    grid-template-rows:auto minmax(64px,1fr) auto auto;
+    grid-template-areas:"bar status" "camera diagnostics" "camera settings" "controls controls";
+    gap:6px;
+  }
+  .gestures-app .g-bar{grid-area:bar}.gestures-app .g-diagnostics{grid-area:diagnostics;padding:5px;gap:3px}
+  .gestures-app .g-camera{grid-area:camera}.gestures-app .g-controls{grid-area:controls}
+  .gestures-app [data-g="status"]{grid-area:status;max-height:42px;overflow:auto}
+  .gestures-app details{grid-area:settings;max-height:none}
+  .gestures-app summary{min-height:28px;padding:4px 0;font-size:12px}
+}

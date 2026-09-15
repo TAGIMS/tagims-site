@@ -91,3 +91,11 @@ test("routes estimates pages and assets to Pages without capturing other apps", 
   }
   assert.equal(await routedUrl("/apps/estimates-other"), "https://app.tagims.com/apps/estimates-other");
 });
+
+
+test("routes Gestures and its assets to Pages without capturing adjacent paths", async () => {
+  for (const path of ["/dev/gestures", "/dev/gestures/", "/dev/gestures/gestures-widget.js", "/dev/gestures/css/hub.css?v=1"]) {
+    assert.equal(await routedUrl(path), `https://tagims-site-production.pages.dev${path}`);
+  }
+  assert.equal(await routedUrl("/dev/gestures-other"), "https://app.tagims.com/dev/gestures-other");
+});
