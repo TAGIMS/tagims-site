@@ -4,7 +4,8 @@
  */
 window.GesturesWidget = (() => {
  const VERSION='0.10.32';
- // iOS exposes worker canvas APIs but that path can stall during inference.
+ // iOS device tests failed on both worker and DOM-canvas GPU paths.
+ // Use CPU inference until GPU behavior can be validated on-device.
  const ios=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform));
  // Local file pages cannot fetch neighboring file:// model bytes. Use the
  // public, versioned model for double-click launches; frames stay on-device.
@@ -59,6 +60,7 @@ window.GesturesWidget = (() => {
    <div class="g-controls"><button data-g="start">Start camera</button><button data-g="pause" disabled>Pause</button><button data-g="stop" disabled>Stop camera</button></div>
    <p data-g="status" role="status">Ready. Camera starts only when you tap Start.</p>
    <section class="g-diagnostics" aria-label="Live tracking diagnostics">
+   ${ios?'<p>iPhone test 2 · CPU tracking</p>':''}
    <div class="g-readings"><span data-g="pose">No hand</span><span data-g="rate">— fps</span><span data-g="engine">Tracker off</span></div>
    <p data-g="capture">Camera delivery: — fps</p>
    <p data-g="startup">Preparing tracker · camera off</p>
@@ -94,7 +96,7 @@ window.GesturesWidget = (() => {
    const entry={cancelled:false,client:null,model:null,engine:''};preparedTracker=entry;
    entry.promise=(async()=>{
     const valid=()=>{if(entry.cancelled||disposed)throw new Error('Preparation cancelled');};
-    const opts={baseOptions:{modelAssetPath:new URL(modelAssetPath,location.href).href,delegate:'GPU'},runningMode:'VIDEO',numHands:1,minHandDetectionConfidence:Number(get('confidence').value)/100,minHandPresenceConfidence:.5,minTrackingConfidence:.5};
+    const opts={baseOptions:{modelAssetPath:new URL(modelAssetPath,location.href).href,delegate:ios?'CPU':'GPU'},runningMode:'VIDEO',numHands:1,minHandDetectionConfidence:Number(get('confidence').value)/100,minHandPresenceConfidence:.5,minTrackingConfidence:.5};
     const moduleURL='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@'+VERSION+'/vision_bundle.mjs',wasmURL='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@'+VERSION+'/wasm';
     if(!ios&&window.Worker&&window.OffscreenCanvas&&window.createImageBitmap){
      try{entry.client=workerClient();const info=await entry.client.request('init',{moduleURL,wasmURL,options:opts});valid();entry.engine=info.delegate+' · worker';}
@@ -106,8 +108,8 @@ window.GesturesWidget = (() => {
      // Use a dedicated DOM canvas for iOS GPU processing, separate from preview.
      opts.canvas=document.createElement('canvas');
      let tracker;
-     try{tracker=await lib.HandLandmarker.createFromOptions(files,opts);entry.engine='GPU · compatibility';}
-     catch(e){valid();opts.baseOptions.delegate='CPU';tracker=await lib.HandLandmarker.createFromOptions(files,opts);entry.engine='CPU · compatibility';}
+     try{tracker=await lib.HandLandmarker.createFromOptions(files,opts);entry.engine=opts.baseOptions.delegate+' · compatibility';}
+     catch(e){valid();if(opts.baseOptions.delegate==='CPU')throw e;opts.baseOptions.delegate='CPU';tracker=await lib.HandLandmarker.createFromOptions(files,opts);entry.engine='CPU · compatibility';}
      if(entry.cancelled||disposed){tracker.close();valid();}entry.model=tracker;
     }
     valid();return entry;
@@ -145,7 +147,7 @@ window.GesturesWidget = (() => {
    try{
     // Request front camera strictly on phones; desktop hardware may omit facingMode.
     const phone=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform));
-    const acquired=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:phone?{exact:'user'}:{ideal:'user'},width:{ideal:640},height:{ideal:480},frameRate:{ideal:24,max:30}}});
+    const acquired=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:phone?{exact:'user'}:{ideal:'user'},width:{ideal:640},height:{ideal:480},frameRate:{ideal:30}}});
     if(token!==generation||disposed){acquired.getTracks().forEach(t=>t.stop());return;}
     stream=acquired;video.srcObject=stream;await video.play();if(token!==generation)return;
     cameraReadyMs=performance.now()-startClicked;
@@ -217,7 +219,7 @@ window.GesturesWidget = (() => {
    const token=generation,original={delegate,width:inputWidth,path:imagePath};
    const run={cancelled:false};benchmark=run;controls();
    const results=[],variants=[];
-   for(const backend of [delegate,delegate==='GPU'?'CPU':'GPU'])for(const width of [480,320])for(const path of (client?['canvas','direct']:['canvas']))variants.push({delegate:backend,width,path});
+   for(const backend of (ios?['CPU']:[delegate,delegate==='GPU'?'CPU':'GPU']))for(const width of [480,320])for(const path of (client?['canvas','direct']:['canvas']))variants.push({delegate:backend,width,path});
    let selected=original,summary='Optimization cancelled; original settings restored.';
    try{
     for(const [i,variant] of variants.entries()){
