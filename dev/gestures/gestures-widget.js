@@ -4,6 +4,8 @@
  */
 window.GesturesWidget = (() => {
  const VERSION='0.10.32';
+ // iOS exposes worker canvas APIs but that path can stall during inference.
+ const ios=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform));
  // Local file pages cannot fetch neighboring file:// model bytes. Use the
  // public, versioned model for double-click launches; frames stay on-device.
  const modelAssetPath='https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
@@ -94,13 +96,15 @@ window.GesturesWidget = (() => {
     const valid=()=>{if(entry.cancelled||disposed)throw new Error('Preparation cancelled');};
     const opts={baseOptions:{modelAssetPath:new URL(modelAssetPath,location.href).href,delegate:'GPU'},runningMode:'VIDEO',numHands:1,minHandDetectionConfidence:Number(get('confidence').value)/100,minHandPresenceConfidence:.5,minTrackingConfidence:.5};
     const moduleURL='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@'+VERSION+'/vision_bundle.mjs',wasmURL='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@'+VERSION+'/wasm';
-    if(window.Worker&&window.OffscreenCanvas&&window.createImageBitmap){
+    if(!ios&&window.Worker&&window.OffscreenCanvas&&window.createImageBitmap){
      try{entry.client=workerClient();const info=await entry.client.request('init',{moduleURL,wasmURL,options:opts});valid();entry.engine=info.delegate+' · worker';}
      catch(e){valid();entry.client?.close();entry.client=null;}
     }
     if(!entry.client){
      libraryPromise ||= import(moduleURL).catch(e=>{libraryPromise=null;throw e;});
      const lib=await libraryPromise;valid();const files=await lib.FilesetResolver.forVisionTasks(wasmURL);valid();
+     // Use a dedicated DOM canvas for iOS GPU processing, separate from preview.
+     opts.canvas=document.createElement('canvas');
      let tracker;
      try{tracker=await lib.HandLandmarker.createFromOptions(files,opts);entry.engine='GPU · compatibility';}
      catch(e){valid();opts.baseOptions.delegate='CPU';tracker=await lib.HandLandmarker.createFromOptions(files,opts);entry.engine='CPU · compatibility';}
@@ -150,7 +154,7 @@ window.GesturesWidget = (() => {
     const ready=await preparation;
     if(token!==generation||disposed)return;
     client=ready.client;model=ready.model;engine=ready.engine;
-    delegate=engine.startsWith('CPU')?'CPU':'GPU';inputWidth=480;imagePath='canvas';busy=false;paused=false;reset();text('engine',engine);controls();status('Looking for a hand…');
+    delegate=engine.startsWith('CPU')?'CPU':'GPU';inputWidth=ios?320:480;imagePath='canvas';busy=false;paused=false;reset();text('engine',engine);controls();status('Looking for a hand…');
     const settings=stream.getVideoTracks()[0].getSettings?.()||{};
     text('capture','Camera settings: '+(settings.width||video.videoWidth)+'×'+(settings.height||video.videoHeight)+' · '+(settings.frameRate?.toFixed(1)||'unknown')+' fps negotiated'+(useVideoCallback?'':' · live delivery measurement unavailable'));
     stream.getVideoTracks()[0].addEventListener('ended',()=>stop('Camera disconnected. Tap Start to reconnect.'),{once:true});
@@ -163,7 +167,8 @@ window.GesturesWidget = (() => {
    if(paused||busy||inFlight||document.hidden||video.readyState<2||(!model&&!client)||frameTime===lastVideo||now-lastRun<1000/Number(get('limit').value)){kick();return;}
    lastRun=now;lastVideo=frameTime;inFlight=true;const token=generation,frameEpoch=epoch,started=performance.now(),frameObserved=useVideoCallback?observedAt:started;
    try{
-    const width=Math.min(inputWidth,video.videoWidth),height=Math.max(1,Math.round(width*video.videoHeight/video.videoWidth));
+    const scale=Math.min(1,inputWidth/(ios?Math.max(video.videoWidth,video.videoHeight):video.videoWidth));
+    const width=Math.max(1,Math.round(video.videoWidth*scale)),height=Math.max(1,Math.round(video.videoHeight*scale));
     if(input.width!==width||input.height!==height){input.width=width;input.height=height;}
     let hand,ms,prepared,returned;
     if(client){
