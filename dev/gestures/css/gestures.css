@@ -81,3 +81,64 @@ body > .widget[data-content-type="gestures"] {
   .gestures-app details{grid-area:settings;max-height:none}
   .gestures-app summary{min-height:28px;padding:4px 0;font-size:12px}
 }
+
+/* Mobile studio skin. Presentation only: video and landmarks share the same
+   uncropped geometry, with no filters or animated effects on the camera. */
+body:has(> .widget[data-content-type="gestures"]){background:#0b1015!important;color-scheme:dark}
+body > .widget[data-content-type="gestures"]{background:#10171e!important;border:1px solid #26343f!important;border-radius:24px!important;box-shadow:0 18px 60px #0005!important}
+.widget[data-content-type="gestures"] .widget-window-header{background:#10171e!important;border-bottom:1px solid #26343f;color:#a3b5c1}
+.widget[data-content-type="gestures"] .gestures-app{color:#eef6fa!important;background:#10171e!important;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;padding:14px;gap:10px;grid-template-rows:auto minmax(120px,1fr) auto auto auto auto;}
+.gestures-app .g-bar{align-items:center;flex-wrap:nowrap;gap:12px;padding:0 2px}
+.gestures-app .g-title{display:grid;gap:1px;flex:none}
+.gestures-app .g-eyebrow{font-size:9px!important;font-weight:700;letter-spacing:.18em;color:#a3b5c1;opacity:1!important}
+.gestures-app .g-title strong{font-size:27px;line-height:1.15;letter-spacing:-1px;font-weight:700;color:#f1f8fb}
+.gestures-app .g-title-dot{color:#66edc3;font-size:inherit!important;opacity:1!important}
+.gestures-app .g-bar [data-g="privacy"]{font-size:10px;line-height:1.4;color:#a9bdc8;text-align:right;max-width:132px;opacity:1}
+.gestures-app .g-camera{border:1px solid #293842;border-radius:20px;background:#080d12}
+.gestures-app .g-camera p{font-size:13px;color:#a9bdc8;letter-spacing:.02em}
+.gestures-app .g-controls{gap:8px}
+.gestures-app button,.gestures-app select{border:1px solid #364650;border-radius:14px;background:#1d2a33;color:#eff7fb;font-weight:600;box-shadow:none;}
+.gestures-app .g-controls button{font-size:14px;min-height:48px;padding:10px 6px}
+.gestures-app [data-g="start"]{background:#66edc3;border-color:#66edc3;color:#09261f}
+.gestures-app [data-g="pause"]:not(:disabled){border-color:#66edc3;color:#80f1d0;background:#16342d}
+.gestures-app button:disabled{opacity:1;color:#7d909e;background:#182129;border-color:#25313b}
+.gestures-app button:active:not(:disabled){background:#314b53}
+.gestures-app button:focus-visible,.gestures-app summary:focus-visible,.gestures-app select:focus-visible{outline:3px solid #66edc3;outline-offset:2px}
+.gestures-app [data-g="status"]{font-size:12px;color:#c7d8e2;line-height:1.4;padding:0 3px}
+.gestures-app .g-diagnostics{border:1px solid #293842;border-radius:16px;background:#151f27;padding:10px 12px;gap:4px}
+.gestures-app .g-diagnostics-heading{display:flex;justify-content:space-between;align-items:center;color:#dceaf1;font-weight:650;font-size:11px;padding-bottom:5px}
+.gestures-app .g-diagnostics-heading span{font-size:8px;letter-spacing:.12em;color:#96adbb}
+.gestures-app .g-readings{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px!important;padding:0 0 6px;border-bottom:1px solid #2b3942;margin-bottom:3px;font-variant-numeric:tabular-nums}
+.gestures-app [data-g="pose"]{font-size:12px;color:#80f1d0;font-weight:650}
+.gestures-app [data-g="rate"]{font-size:12px;text-align:right;color:#edf7fc;font-weight:600}
+.gestures-app [data-g="engine"]{grid-column:1/-1;font-size:10px;color:#a7bdca}
+.gestures-app .g-diagnostics p{font-size:10px;line-height:1.35;color:#adc1cc;font-variant-numeric:tabular-nums}
+.gestures-app .g-diagnostics [data-g="progress"]{color:#d1e3ed}
+.gestures-app .g-diagnostics [data-g="benchmark"]{opacity:1;color:#a0b5c2}
+.gestures-app details{border-top:1px solid #293842;padding:0 3px;max-height:160px}
+.gestures-app summary{font-size:13px;font-weight:600;min-height:44px;padding:13px 0;color:#c7dae5;}
+.gestures-app label{font-size:13px;min-height:52px}
+.gestures-app select{font-size:16px;max-width:100%}
+.gestures-app input{accent-color:#66edc3}
+@media(max-width:900px),(max-height:760px){
+ body > .widget[data-content-type="gestures"],body > .widget[data-content-type="gestures"].focused{top:calc(8px + env(safe-area-inset-top))!important;bottom:calc(8px + env(safe-area-inset-bottom))!important;}
+ body:has(> .widget[data-content-type="gestures"]) #openMenu{position:fixed!important;left:auto!important;right:20px!important;top:calc(12px + env(safe-area-inset-top))!important;width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;border:1px solid #344550!important;background:#17232d!important;box-shadow:none!important;color:#b0c6d2!important;}
+}
+@media(max-width:600px){
+ body > .widget[data-content-type="gestures"],body > .widget[data-content-type="gestures"].focused{left:env(safe-area-inset-left)!important;right:env(safe-area-inset-right)!important;top:env(safe-area-inset-top)!important;bottom:env(safe-area-inset-bottom)!important;border:0!important;border-radius:0!important;}
+ .widget[data-content-type="gestures"] .widget-window-header,.widget[data-content-type="gestures"] > .widget-header-action{display:none!important}
+ .widget[data-content-type="gestures"] .widget-content,.widget[data-content-type="gestures"].no-window-header .widget-content{inset:0!important}
+ .widget[data-content-type="gestures"] .gestures-app{padding:14px 16px 8px;gap:10px}
+ .gestures-app .g-bar{padding-right:42px;min-height:49px}
+ .gestures-app .g-camera{border-radius:22px}
+}
+@media(max-height:520px) and (min-width:540px){
+ .widget[data-content-type="gestures"] .gestures-app{grid-template-rows:auto minmax(64px,1fr) auto auto;gap:6px;padding:8px}
+ .gestures-app .g-title strong{font-size:21px}.gestures-app .g-diagnostics{padding:7px;gap:2px}
+ .gestures-app .g-diagnostics p{font-size:10px}.gestures-app .g-controls button{min-height:44px}
+}
+/* Expanded controls float above the view instead of squeezing the preview. */
+.widget[data-content-type="gestures"] .gestures-app{position:relative}
+.gestures-app details[open]{position:absolute;z-index:5;left:14px;right:14px;bottom:8px;max-height:calc(100% - 70px);height:auto;overflow:auto;padding:4px 16px 16px;border:1px solid #415563;border-radius:20px;background:#17232d;box-shadow:0 -12px 40px #0008;}
+.gestures-app details[open] summary{position:sticky;top:-4px;background:#17232d;z-index:1}
+.gestures-app details[open] button{min-height:48px;width:100%;margin:6px 0 10px}

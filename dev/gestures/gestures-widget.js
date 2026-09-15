@@ -55,14 +55,15 @@ window.GesturesWidget = (() => {
  const edges=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[0,17],[17,18],[18,19],[19,20]];
  const render=()=>{
   const root=document.createElement('div');root.className='gestures-app hub-data-widget';
-  root.innerHTML=`<div class="g-bar"><strong>Gestures</strong><span data-g="privacy">Camera off</span></div>
+  root.innerHTML=`<div class="g-bar"><div class="g-title"><span class="g-eyebrow">FRONT CAMERA</span><strong>Gestures<span class="g-title-dot">.</span></strong></div><span data-g="privacy">Camera off</span></div>
    <div class="g-camera"><video data-g="video" playsinline muted autoplay></video><canvas data-g="canvas"></canvas><p data-g="empty">Front camera · on-device tracking</p></div>
    <div class="g-controls"><button data-g="start">Start camera</button><button data-g="pause" disabled>Pause</button><button data-g="stop" disabled>Stop camera</button></div>
    <p data-g="status" role="status">Ready. Camera starts only when you tap Start.</p>
    <section class="g-diagnostics" aria-label="Live tracking diagnostics">
-   ${ios?'<p>iPhone test 3 · CPU tracking</p>':''}
+   <div class="g-diagnostics-heading">Live performance <span>ON DEVICE</span></div>
    <div class="g-readings"><span data-g="pose">No hand</span><span data-g="rate">— fps</span><span data-g="engine">Tracker off</span></div>
    <p data-g="progress" role="status">Tracker: waiting to start</p>
+   <p data-g="view">Camera view: full frame</p>
    <p data-g="capture">Camera delivery: — fps</p>
    <p data-g="startup">Preparing tracker · camera off</p>
    <p data-g="timing" title="Delay starts at browser frame observation, not sensor exposure. Worker round trip includes MediaPipe processing.">Prep — ms · Worker round trip — ms · Observed frame delay — ms</p>
@@ -145,6 +146,17 @@ window.GesturesWidget = (() => {
    model=null;reset();ctx.clearRect(0,0,canvas.width,canvas.height);get('empty').hidden=false;get('privacy').textContent='Camera off';get('pose').textContent='No hand';get('rate').textContent='— fps';text('engine',retain?'Tracker ready · camera off':'Tracker off');controls();status(message);
   }
   function pause(){if(!stream)return;paused=true;reset();ctx.clearRect(0,0,canvas.width,canvas.height);get('pose').textContent='Paused';get('rate').textContent='— fps';controls();status('Tracking paused. Tap Resume. Camera preview is still active.');}
+  async function widenCamera(track,token){
+   const current=()=>token===generation&&!disposed&&!!stream;
+   try{
+    const zoom=track.getCapabilities?.().zoom;
+    if(!zoom||!Number.isFinite(zoom.min)||!track.applyConstraints){if(current())text('view','Full frame · camera zoom unavailable');return;}
+    await track.applyConstraints({advanced:[{zoom:zoom.min}]});
+    if(!current())return;
+    const actual=track.getSettings?.().zoom;
+    text('view',Number.isFinite(actual)&&Math.abs(actual-zoom.min)<.01?'Full frame · widest available zoom':'Full frame · widest zoom requested');
+   }catch{if(current())text('view','Full frame · default camera zoom');}
+  }
   async function start(){
    if(busy||stream||disposed)return;
    if(!window.isSecureContext||!navigator.mediaDevices?.getUserMedia){status('Camera needs HTTPS or localhost. Drive preview and ordinary local-network HTTP cannot provide phone camera access.');return;}
@@ -159,6 +171,7 @@ window.GesturesWidget = (() => {
     if(token!==generation||disposed){acquired.getTracks().forEach(t=>t.stop());return;}
     stream=acquired;video.srcObject=stream;await video.play();if(token!==generation)return;
     cameraReadyMs=performance.now()-startClicked;
+    void widenCamera(stream.getVideoTracks()[0],token);
     get('empty').hidden=true;get('privacy').textContent='Camera active · local processing';status('Loading hand tracker…');
     status('Loading hand model…');
     const ready=await preparation;
