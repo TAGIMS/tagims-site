@@ -137,3 +137,8 @@ body > .widget[data-content-type="gestures"]{background:#10171e!important;border
  .gestures-app .g-title strong{font-size:21px}.gestures-app .g-diagnostics{padding:7px;gap:2px}
  .gestures-app .g-diagnostics p{font-size:10px}.gestures-app .g-controls button{min-height:44px}
 }
+/* Expanded controls float above the view instead of squeezing the preview. */
+.widget[data-content-type="gestures"] .gestures-app{position:relative}
+.gestures-app details[open]{position:absolute;z-index:5;left:14px;right:14px;bottom:8px;max-height:calc(100% - 70px);height:auto;overflow:auto;padding:4px 16px 16px;border:1px solid #415563;border-radius:20px;background:#17232d;box-shadow:0 -12px 40px #0008;}
+.gestures-app details[open] summary{position:sticky;top:-4px;background:#17232d;z-index:1}
+.gestures-app details[open] button{min-height:48px;width:100%;margin:6px 0 10px}
