@@ -13,8 +13,8 @@ async function check(url,expected,workerMode=false,ios=false){
  w.HTMLCanvasElement.prototype.getContext=()=>({drawImage(){},clearRect(){},beginPath(){},moveTo(){},lineTo(){},stroke(){},arc(){},fill(){}});
  w.HTMLMediaElement.prototype.play=async()=>{};
  const track={stop(){stopped++;},addEventListener(){}};
- Object.defineProperty(w.navigator,'mediaDevices',{value:{getUserMedia:async()=>{cameraRequests++;return {getTracks:()=>[track],getVideoTracks:()=>[track]};}}});
- w.__load=async()=>({FilesetResolver:{forVisionTasks:async()=>({})},HandLandmarker:{createFromOptions:async(files,opts)=>{options=opts;if(workerMode==='cpu'&&opts.baseOptions.delegate==='GPU')throw new Error('GPU unavailable');return {close(){},setOptions:async o=>{if(o.baseOptions)options.baseOptions={...options.baseOptions,...o.baseOptions};},detectForVideo(image){if(ios){assert.equal(image.width,240);assert.equal(image.height,320);assert(options.canvas instanceof w.HTMLCanvasElement);}detected++;if(scheduler)clock+=options.baseOptions.delegate==='CPU'?4:8;return {landmarks:visible&&(!scheduler||image.width!==320)?[Array.from({length:21},(_,i)=>({x:.2+i*.02,y:.4}))]:[]};}};}}});
+ Object.defineProperty(w.navigator,'mediaDevices',{value:{getUserMedia:async constraints=>{assert.equal(constraints.video.frameRate.ideal,30);assert.equal(constraints.video.frameRate.max,undefined);cameraRequests++;return {getTracks:()=>[track],getVideoTracks:()=>[track]};}}});
+ w.__load=async()=>({FilesetResolver:{forVisionTasks:async()=>({})},HandLandmarker:{createFromOptions:async(files,opts)=>{options=opts;if(workerMode==='cpu'&&opts.baseOptions.delegate==='GPU')throw new Error('GPU unavailable');return {close(){},setOptions:async o=>{if(o.baseOptions)options.baseOptions={...options.baseOptions,...o.baseOptions};},detectForVideo(image){if(ios){assert.equal(image.width,240);assert.equal(image.height,320);assert(options.canvas instanceof w.HTMLCanvasElement);assert.equal(options.baseOptions.delegate,'CPU');}detected++;if(scheduler)clock+=options.baseOptions.delegate==='CPU'?4:8;return {landmarks:visible&&(!scheduler||image.width!==320)?[Array.from({length:21},(_,i)=>({x:.2+i*.02,y:.4}))]:[]};}};}}});
  let workerFrames=0,active=0,maxActive=0;
  if(workerMode){
   // Execute the actual embedded worker message handler with mocked model APIs.
@@ -72,7 +72,7 @@ async function check(url,expected,workerMode=false,ios=false){
    const stopping=button.onclick();widget.querySelector('[data-g=stop]').click();await stopping;assert.equal(stopped,2);
    cleanup();console.log('PASS: video-frame scheduling, timings, 24 FPS default, benchmark winner/retention filtering, no-hand rejection, cancel and Stop. Simulated only.');return;
   }
-  if(ios){assert.equal(workerFrames,0);assert.match(widget.querySelector('[data-g=engine]').textContent,/compatibility/);}
+  if(ios){assert(widget.textContent.includes('iPhone test 2'));assert.equal(workerFrames,0);assert.match(widget.querySelector('[data-g=engine]').textContent,/compatibility/);}
   if(workerMode&&workerMode!=='failed'&&!ios){
    assert.match(widget.querySelector('[data-g=engine]').textContent,/worker/);
    if(workerMode==='cpu')assert.match(widget.querySelector('[data-g=engine]').textContent,/CPU/);
