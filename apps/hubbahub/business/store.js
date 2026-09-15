@@ -149,6 +149,8 @@
     return URL.createObjectURL(await thumbJobs.get(key));
   }
   window.OpsStore={get mode(){return mode;},get user(){return session?.user;},get data(){return data;},on(fn){listeners.add(fn);return()=>listeners.delete(fn);},reload,save,upload,assignPhoto,image,thumbnail,review,publication,exportBackup,reorderPipeline,organizePhotos,appendProjectRecord,projectBudget,reorderProjects,
+    async loadAppearance(){const owner=session?.user?.id;if(mode!=='cloud'||!owner)throw new Error('Sign in to sync appearance.');const rows=await request('/rest/v1/ops_user_preferences?user_id=eq.'+id(owner)+'&select=appearance');if(session?.user?.id!==owner)throw new Error('Workspace changed.');return rows?.[0]?.appearance||null;},
+    async saveAppearance(appearance){const owner=session?.user?.id;if(mode!=='cloud'||!owner)throw new Error('Sign in to sync appearance.');await request('/rest/v1/ops_user_preferences?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates'},body:JSON.stringify({user_id:owner,appearance,updated_at:new Date().toISOString()})});if(session?.user?.id!==owner)throw new Error('Workspace changed.');},
     async signIn(email,password){const epoch=++authEpoch;const next=await request('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email,password})},false);if(epoch!==authEpoch)throw new Error('Workspace changed.');setSession(next);localStorage.setItem('tagims-ops-workspace','cloud');await reload();},
     async signOut(){const old=session;clearSession();mode='signed-out';localStorage.removeItem('tagims-ops-workspace');sessionStorage.removeItem('tagims-ops-demo');await reload();if(old)await request('/auth/v1/logout',{method:'POST',headers:{Authorization:'Bearer '+old.access_token}},false);},
     async demo(){clearSession();localStorage.setItem('tagims-ops-workspace','demo');sessionStorage.setItem('tagims-ops-demo','true');mode='demo';await reload();},
@@ -160,4 +162,3 @@
   // Other tabs adopt renewed tokens or sign-out without reopening credentials.
   window.addEventListener('storage',e=>{if(e.key!==sessionKey)return;authEpoch++;let s;try{s=JSON.parse(e.newValue);}catch{}if(s?.refresh_token&&s?.user?.id&&localStorage.getItem('tagims-ops-workspace')!=='demo'){const changed=session?.user?.id!==s.user.id;session=s;mode='cloud';if(changed){generation++;data=Object.fromEntries(tables.map(t=>[t,[]]));emit();}reload().catch(()=>{});}else if(mode==='cloud'){session=null;mode='signed-out';reload().catch(()=>{});}});
 })();
-
