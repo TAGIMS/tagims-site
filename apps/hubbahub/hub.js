@@ -4362,7 +4362,7 @@ try{const saved=fdStorage.getItem(key);if(saved){data=validate(JSON.parse(saved)
 data=validate(data);
 for(const k of ['living','materials','other'])while(data[k].length<10)data[k].push({name:'',amount:''});
 function validate(d){if(!d||d.version!==1)throw Error('Unsupported backup');for(const k of ['balances','employees','pipeline','business','personal','living','materials','other','reimbursements','outSelect','paySelect','businessSelect','personalSelect'])if(!Array.isArray(d[k]))throw Error('Missing '+k);if(d.balances.length!==3||d.outSelect.length!==8||d.paySelect.length!==4)throw Error('Incomplete backup');d.employees.forEach(e=>{if(e.lateDays==null)e.lateDays=Math.max(0,Number(d.lateDays)||0);});return d;}
-function save(){try{fdStorage.setItem(key,JSON.stringify(data));saveError='';}catch{saveError='Not saved — export a backup now. Device storage is unavailable.';}document.querySelectorAll('[data-fd-save]').forEach(e=>e.textContent=saveError||'Saved on this device');}
+function save(){try{fdStorage.setItem(key,JSON.stringify(data));saveError='';}catch{saveError='Not saved — export a backup now. Device storage is unavailable.';}document.querySelectorAll('[data-fd-save]').forEach(e=>e.textContent=saveError||'Saved on this device');document.dispatchEvent(new Event('hub-financial-saved'));}
 function get(path){return path.split('.').reduce((o,k)=>o[k],data)}
 function set(path,v){let a=path.split('.'),o=data;for(const k of a.slice(0,-1))o=o[k];o[a.at(-1)]=v;}
 function billTotals(rows){return [sum(rows.map(r=>r.amount)),...['late','now','bridge'].map(k=>sum(rows.map(r=>r[k+'On']?r[k]:0)))];}
@@ -4418,7 +4418,7 @@ document.addEventListener('pointermove',e=>{if(!rowDrag||e.pointerId!==rowDrag.i
 document.addEventListener('pointerup',e=>{if(!rowDrag||e.pointerId!==rowDrag.id)return;const {from,to}=rowDrag;clearRowDrag();reorderPipeline(from,to);});
 document.addEventListener('pointercancel',clearRowDrag);
 document.addEventListener('keydown',e=>{const h=e.target.closest('[data-fd-grab]');if(!h||!['ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();const from=Number(h.dataset.fdGrab),to=from+(e.key==='ArrowUp'?-1:1),root=h.closest('.fd-root');reorderPipeline(from,to);root.querySelector('[data-fd-grab="'+Math.max(0,Math.min(to,data.pipeline.length-1))+'"]')?.focus();});
-return {render,calc,fresh,save,refresh,get data(){return data}};
+return {render,calc,fresh,save,refresh,replace(value){const next=validate(JSON.parse(JSON.stringify(value)));undo=[];billHistory={business:{undo:[],redo:[]},personal:{undo:[],redo:[]}};saveBillHistory();data=next;save();redraw();},get data(){return data}};
 })();
 contentRenderers.financialdashboard=()=>{const el=makeWidget('fd-root',FD.render());applyFDColors(el);requestAnimationFrame(()=>{FD.refresh();const widget=el.closest('.widget');if(widget){syncFDEdge(widget);const observer=new ResizeObserver(()=>syncFDEdge(widget));observer.observe(widget);const header=widget.querySelector('.widget-window-header');if(header)observer.observe(header);}});return el;};
 window.addEventListener('DOMContentLoaded',()=>{if(window.HubAutoSeedFinance===true&&!currentWidgets().some(w=>w.dataset.contentType==='financialdashboard'))createWidgetAt('financialdashboard',innerWidth/2,innerHeight/2);});
