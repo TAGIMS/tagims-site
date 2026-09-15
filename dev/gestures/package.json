@@ -1,0 +1,9 @@
+{
+  "name": "gestures-hub-sandbox",
+  "private": true,
+  "scripts": {
+    "build": "node tools/build.cjs",
+    "test": "node tools/test-startup.cjs && node tools/test-startup.cjs 390 && node tools/test-startup.cjs 844"
+  },
+  "devDependencies": { "jsdom": "26.1.0" }
+}

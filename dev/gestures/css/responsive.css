@@ -1,0 +1,1000 @@
+
+/* HUB GUIDE ============================================================
+ * STYLESHEET GUIDE
+ * Each header names the selector or condition controlled by the rules below.
+ * ====================================================================== */
+
+/* HUB GUIDE ============================================================
+ * STYLE RULE: html
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+    /* HUB 14.4.16 — authoritative canonical presentation layer.
+       Container measurements refine content inside a state; viewport media
+       queries do not select widget presentation. Financial iframe documents
+       retain their own existing responsive CSS and independent scroll areas. */
+
+/* HUB GUIDE ============================================================
+ * STYLE RULE: body[data-hub-layout="freeform"]
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    body[data-hub-layout="freeform"] { min-height:max(100dvh,var(--hub-canvas-height,100dvh)); overflow-x:hidden; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: body[data-hub-layout="freeform"][data-hub-canvas-scroll="true"]
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    body[data-hub-layout="freeform"][data-hub-canvas-scroll="true"] { overflow:auto; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: body[data-hub-layout="freeform"] > .widget:not(.focused)
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    body[data-hub-layout="freeform"] > .widget:not(.focused) { top:50dvh; left:var(--hub-viewport-center-x,50vw); max-width:none; max-height:none; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state] .widget-content
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state] .widget-content { min-width:0; min-height:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state] .hub-data-widget
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state] .hub-data-widget { min-width:0; min-height:0; max-width:100%; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state] .hub-widget-title
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state] .hub-widget-title { overflow-wrap:anywhere; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state] .widget-header-action
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state] .widget-header-action { display:grid; pointer-events:auto; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state="icon"] .widget-window-header
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state="icon"] .widget-window-header { padding-left:34px; padding-right:94px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state="icon"] .widget-window-title
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state="icon"] .widget-window-title { font-size:.62rem; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state="icon"] .widget-header-action
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state="icon"] .widget-header-action { width:26px; height:28px; top:4px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state="icon"] .widget-settings-button
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state="icon"] .widget-settings-button { left:8px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state="icon"] .widget-minimize-button
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state="icon"] .widget-minimize-button { right:62px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state="icon"] .widget-focus-button
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state="icon"] .widget-focus-button { right:35px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state="icon"] .widget-close-button
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state="icon"] .widget-close-button { right:8px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state="icon"] .widget-content
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state="icon"] .widget-content { inset:6px; padding:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state="sub-compact"] .widget-content
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state="sub-compact"] .widget-content { inset:8px; padding:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state="sub-compact"].has-window-header .widget-content
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state="sub-compact"].has-window-header .widget-content { top:36px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state="compact"] .widget-content
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state="compact"] .widget-content { padding:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-responsive-state="mobile"] .widget-content
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-responsive-state="mobile"] .widget-content { padding:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget:is([data-responsive-state="half-full"],[data-responsive-state="full"]) .widget-content
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget:is([data-responsive-state="half-full"],[data-responsive-state="full"]) .widget-content { padding:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="clock"][data-responsive-state="icon"] .clock-extra
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+
+    /* Instruments: prioritize the live instrument, then reveal supporting data. */
+    .widget[data-content-type="clock"][data-responsive-state="icon"] .clock-extra { display:none; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="clock"][data-responsive-state="icon"] .clock-stage
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="clock"][data-responsive-state="icon"] .clock-stage { width:100%; height:100%; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="calendar"]:is([data-responsive-state="icon"],[data-responsive-state="sub-compact"]) .calendar-agenda
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+
+    /* Calendar remains a readable month in the two shallow states. */
+    .widget[data-content-type="calendar"]:is([data-responsive-state="icon"],[data-responsive-state="sub-compact"]) .calendar-agenda { display:none!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="calendar"]:is([data-responsive-state="icon"],[data-responsive-state="sub-compact"]) .calendar-widget
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="calendar"]:is([data-responsive-state="icon"],[data-responsive-state="sub-compact"]) .calendar-widget { display:block; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="calendar"]:is([data-responsive-state="icon"],[data-responsive-state="sub-compact"]) .calendar-month
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="calendar"]:is([data-responsive-state="icon"],[data-responsive-state="sub-compact"]) .calendar-month { height:100%; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="calendar"]:is([data-responsive-state="icon"],[data-responsive-state="sub-compact"]) .calendar-month-name
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="calendar"]:is([data-responsive-state="icon"],[data-responsive-state="sub-compact"]) .calendar-month-name { font-size:12px; margin:0 0 3px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="calendar"]:is([data-responsive-state="icon"],[data-responsive-state="sub-compact"]) .calendar-grid
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="calendar"]:is([data-responsive-state="icon"],[data-responsive-state="sub-compact"]) .calendar-grid { height:calc(100% - 20px); }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="calendar"]:is([data-responsive-state="icon"],[data-responsive-state="sub-compact"]) :is(.calendar-day,.calen...
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="calendar"]:is([data-responsive-state="icon"],[data-responsive-state="sub-compact"]) :is(.calendar-day,.calendar-day-name) { font-size:10px; min-height:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"] .widget-content
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+
+    /* Canonical shell, measured content refinement: freeform growth also restores gauges. */
+    .widget[data-content-type="performance"] .widget-content { inset:5px!important; padding:0!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"].has-window-header .widget-content
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"].has-window-header .widget-content { top:38px!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-responsive-state] .performance-widget
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-responsive-state] .performance-widget { display:grid!important; width:100%; height:100%; min-height:0; grid-template-rows:minmax(0,1fr) 28px auto!important; gap:8px!important; padding:0!important; align-content:stretch!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-responsive-state] .performance-cockpit
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-responsive-state] .performance-cockpit { display:grid!important; grid-template-columns:repeat(3,minmax(0,1fr))!important; place-items:center!important; position:relative; min-height:0!important; width:100%!important; height:100%!important; padding:0!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-responsive-state] .performance-gauge
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-responsive-state] .performance-gauge { display:block!important; position:relative!important; left:auto!important; top:auto!important; opacity:1!important; visibility:visible!important; width:min(30cqw,75cqh)!important; max-width:100%!important; max-height:100%!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-responsive-state] .performance-gauge-nav
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-responsive-state] .performance-gauge-nav { display:none!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-responsive-state] .performance-telemetry
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-responsive-state] .performance-telemetry { display:grid!important; width:100%!important; min-width:0; grid-template-columns:auto minmax(0,1fr) auto!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-responsive-state] .performance-instruments
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-responsive-state] .performance-instruments { display:grid!important; grid-template-columns:repeat(4,minmax(0,1fr)); }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-performance-layout="cluster"] .performance-widget
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-performance-layout="cluster"] .performance-widget { grid-template-rows:minmax(0,1fr) 28px!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-performance-layout="cluster"] .performance-instruments
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-performance-layout="cluster"] .performance-instruments { display:none!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-performance-layout="single"] .performance-widget
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-performance-layout="single"] .performance-widget { grid-template-rows:minmax(0,1fr)!important; gap:0!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-performance-layout="single"] :is(.performance-telemetry,.performance-instruments)
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-performance-layout="single"] :is(.performance-telemetry,.performance-instruments) { display:none!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-performance-layout="single"] .performance-cockpit
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-performance-layout="single"] .performance-cockpit { grid-template-columns:1fr!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-performance-layout="single"] .performance-gauge
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-performance-layout="single"] .performance-gauge { display:none!important; width:min(94cqw,94cqh)!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-performance-layout="single"] .performance-gauge.is-active
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-performance-layout="single"] .performance-gauge.is-active { display:block!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-performance-layout="single"] .performance-gauge-nav
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-performance-layout="single"] .performance-gauge-nav { display:grid!important; width:28px!important; height:34px!important; opacity:.8!important; visibility:visible!important; pointer-events:auto!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-responsive-state="icon"] .performance-gauge-number
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-responsive-state="icon"] .performance-gauge-number { display:none; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-responsive-state="icon"] .performance-gauge-value
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-responsive-state="icon"] .performance-gauge-value { font-size:clamp(20px,17cqw,32px); }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-responsive-state].hide-chart .performance-telemetry
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-responsive-state].hide-chart .performance-telemetry { display:none!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-performance-layout="cluster"].hide-chart .performance-widget
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-performance-layout="cluster"].hide-chart .performance-widget { grid-template-rows:minmax(0,1fr)!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="performance"][data-performance-layout="dashboard"].hide-chart .performance-widget
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="performance"][data-performance-layout="dashboard"].hide-chart .performance-widget { grid-template-rows:minmax(0,1fr) auto!important; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="todo"] .todo-add
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+
+    /* Lists retain their scroll areas and editors in every supported state. */
+    .widget[data-content-type="todo"] .todo-add { flex-shrink:0; margin-top:auto; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="todo"] .todo-add input
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="todo"] .todo-add input { min-width:0; flex:1; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="todo"][data-responsive-state="sub-compact"] .todo-widget
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="todo"][data-responsive-state="sub-compact"] .todo-widget { padding:0; gap:4px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="todo"][data-responsive-state="sub-compact"] .widget-inline-label
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="todo"][data-responsive-state="sub-compact"] .widget-inline-label { margin-bottom:4px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="reminders"][data-responsive-state="sub-compact"] .widget-inline-label
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="reminders"][data-responsive-state="sub-compact"] .widget-inline-label { margin-bottom:6px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="notes"][data-responsive-state] .notes-pad
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="notes"][data-responsive-state] .notes-pad { min-height:0; font-size:16px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="gmail"][data-responsive-state] .mail-copy
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="gmail"][data-responsive-state] .mail-copy { min-width:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="drive"][data-responsive-state] .drive-name
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="drive"][data-responsive-state] .drive-name { min-width:0; overflow:hidden; text-overflow:ellipsis; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="photos"][data-responsive-state] :is(.photo-feature-stage,.photo-grid)
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="photos"][data-responsive-state] :is(.photo-feature-stage,.photo-grid) { min-height:0; max-height:100%; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="photos"][data-responsive-state="sub-compact"] .hub-widget-header
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="photos"][data-responsive-state="sub-compact"] .hub-widget-header { display:none; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="analytics"][data-responsive-state] .analytics-kpis
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+
+    .widget[data-content-type="analytics"][data-responsive-state] .analytics-kpis { grid-template-columns:repeat(2,minmax(0,1fr)); }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="analytics"][data-responsive-state] .analytics-widget
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="analytics"][data-responsive-state] .analytics-widget { display:grid; grid-template-rows:auto auto minmax(50px,1fr) minmax(0,1fr); min-height:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="analytics"][data-responsive-state] .analytics-chart
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="analytics"][data-responsive-state] .analytics-chart { height:100%; min-height:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="analytics"][data-responsive-state] .analytics-sources
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="analytics"][data-responsive-state] .analytics-sources { overflow:auto; min-height:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="system"][data-responsive-state] .system-grid
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="system"][data-responsive-state] .system-grid { grid-template-columns:repeat(2,minmax(0,1fr)); overflow:auto; min-height:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="system"][data-responsive-state="icon"] :is(.hub-widget-header,.system-card:nth-child(n+2))
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="system"][data-responsive-state="icon"] :is(.hub-widget-header,.system-card:nth-child(n+2)) { display:none; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="system"][data-responsive-state="icon"] .system-grid
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="system"][data-responsive-state="icon"] .system-grid { grid-template-columns:1fr; align-content:center; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="system"][data-responsive-state="sub-compact"] .system-card:nth-child(n+3)
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="system"][data-responsive-state="sub-compact"] .system-card:nth-child(n+3) { display:none; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="launcher"][data-responsive-state="icon"] .app-grid
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="launcher"][data-responsive-state="icon"] .app-grid { grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:minmax(0,1fr); }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="launcher"][data-responsive-state="icon"] :is(.hub-widget-header,.app-tile:nth-child(n+5))
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="launcher"][data-responsive-state="icon"] :is(.hub-widget-header,.app-tile:nth-child(n+5)) { display:none; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="links"][data-responsive-state="icon"] .link-grid
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="links"][data-responsive-state="icon"] .link-grid { grid-template-columns:repeat(2,minmax(0,1fr)); overflow:hidden; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="links"][data-responsive-state="icon"] :is(.hub-widget-header,.quick-link:nth-child(n+5))
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="links"][data-responsive-state="icon"] :is(.hub-widget-header,.quick-link:nth-child(n+5)) { display:none; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="music"][data-responsive-state="sub-compact"] .hub-widget-header
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="music"][data-responsive-state="sub-compact"] .hub-widget-header { display:none; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="music"][data-responsive-state="sub-compact"] .music-body
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="music"][data-responsive-state="sub-compact"] .music-body { display:grid; grid-template-columns:minmax(70px,.65fr) minmax(0,1.35fr); gap:10px; height:100%; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="music"][data-responsive-state="sub-compact"] .album-art
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="music"][data-responsive-state="sub-compact"] .album-art { width:100%; height:100%; max-height:140px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="music"][data-responsive-state="sub-compact"] .music-copy
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="music"][data-responsive-state="sub-compact"] .music-copy { min-width:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="music"][data-responsive-state="sub-compact"] .music-copy h3
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="music"][data-responsive-state="sub-compact"] .music-copy h3 { margin:2px 0; font-size:16px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="music"][data-responsive-state="sub-compact"] .music-copy p
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="music"][data-responsive-state="sub-compact"] .music-copy p { margin:2px 0; font-size:11px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="music"][data-responsive-state="sub-compact"] :is(.music-progress,.music-times)
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="music"][data-responsive-state="sub-compact"] :is(.music-progress,.music-times) { display:none; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="youtube"][data-responsive-state] .youtube-widget
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="youtube"][data-responsive-state] .youtube-widget { height:100%; min-height:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="tagim"][data-responsive-state] .tagim-widget
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="tagim"][data-responsive-state] .tagim-widget { display:flex; flex-direction:column; min-height:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="tagim"][data-responsive-state] .tagim-main
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="tagim"][data-responsive-state] .tagim-main { flex:1; min-height:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="tagim"][data-responsive-state] .tagim-orb-image
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="tagim"][data-responsive-state] .tagim-orb-image { max-width:100%; max-height:100%; object-fit:contain; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-content-type="tagim"][data-responsive-state] .tagim-composer
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget[data-content-type="tagim"][data-responsive-state] .tagim-composer { flex-shrink:0; min-width:0; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .snap-guide-label
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+
+    .snap-guide-label { max-width:min(240px,calc(100vw - 16px)); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; pointer-events:none; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: body[data-hub-layout="flow"] > .widget:not(.focused)
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    /* Fluid rows share one gap and fill their entire allocated area. */
+    body[data-hub-layout="flow"] > .widget:not(.focused) {
+      width:100%; min-width:0; height:var(--hub-flow-height,168px);
+      justify-self:stretch; align-self:stretch;
+    }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: body[data-hub-layout="flow"] > .widget[data-flow-state="icon"][data-content-type="calendar"] .calendar-month
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    body[data-hub-layout="flow"] > .widget[data-flow-state="icon"][data-content-type="calendar"] .calendar-month { display:grid; grid-template-rows:auto minmax(0,1fr); }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: body[data-hub-layout="flow"] > .widget[data-flow-state="icon"][data-content-type="calendar"] .calendar-month-name
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    body[data-hub-layout="flow"] > .widget[data-flow-state="icon"][data-content-type="calendar"] .calendar-month-name { font-size:clamp(12px,6cqw,18px); padding-inline:28px; text-align:center; margin:0 0 4px; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: body[data-hub-layout="flow"] > .widget[data-flow-state="icon"][data-content-type="calendar"] .calendar-grid
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    body[data-hub-layout="flow"] > .widget[data-flow-state="icon"][data-content-type="calendar"] .calendar-grid { height:100%; }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: body[data-hub-layout="flow"] > .widget[data-flow-state="icon"][data-content-type="calendar"] :is(.calendar-day,.calendar-day-name)
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    body[data-hub-layout="flow"] > .widget[data-flow-state="icon"][data-content-type="calendar"] :is(.calendar-day,.calendar-day-name) { font-size:clamp(10px,5cqw,15px); }
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget.is-layout-animating
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+    .widget.is-layout-animating { will-change:transform; }
+/* HUB GUIDE ============================================================
+ * VIEWPORT / INPUT CONDITION: (prefers-reduced-motion: reduce)
+ * The following styles apply only while this media condition matches.
+ * ====================================================================== */
+
+
+
+    @media (prefers-reduced-motion: reduce) {
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+ .widget { scroll-behavior:auto; }}
+/* HUB GUIDE ============================================================
+ * STYLE RULE: .widget[data-finance-parked]
+ * Presentation for the elements matched by this selector.
+ * ====================================================================== */
+
+
+
+
+    
+.widget[data-finance-parked] { display:none!important; }
+
+/* Classic workspace controls; existing hover and click-to-pin handlers retained. */
+/* Invisible Settings hover zone stops above the window manager. */
+body .menu-edge-trigger { display:block; position:fixed; inset:0 auto calc(104px + env(safe-area-inset-bottom,0px)) 0; width:12px; z-index:100020; }
+body .topbar { top:calc(22px + env(safe-area-inset-top,0px)); left:20px; width:46px; height:46px; z-index:200010; transform:none; }
+body #minimizedToggle[hidden] { display:none; }
+body .topbar #openMenu { display:grid; place-items:center; width:46px; height:46px; padding:0; }
+body .topbar #openMenu svg { width:22px; height:22px; padding:0; }
+body #panel { padding-left:22px; }
+body #panel .panel-header { padding-left:56px; }
+body #minimizedToggle { top:auto; bottom:calc(20px + env(safe-area-inset-bottom,0px)); left:20px; z-index:200010; }
+body #minimizedTray { top:auto; bottom:calc(78px + env(safe-area-inset-bottom,0px)); left:20px; transform:none; z-index:200009; }
+body #widgetAdder { position:static; inset:auto; transform:none; width:100%; height:auto; display:block; padding:0; background:transparent; visibility:visible; pointer-events:auto; }
+body #widgetAdder .widget-adder-card { display:grid; width:100%; height:auto; max-height:none; padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; backdrop-filter:none; grid-template-rows:auto auto; }
+body #widgetAdder .widget-adder-grid { align-content:start; overflow:visible; grid-template-columns:repeat(2,minmax(0,1fr)); }
+body #widgetAdder .widget-adder-categories { flex-wrap:wrap; overflow:visible; }
+.alignment-option { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:10px 0; }
+.alignment-option input { accent-color:var(--accent); width:32px; height:20px; cursor:pointer; }
+body[data-arrangement-mode="freeform"] { display:block; padding:0; overflow:auto; }
+body[data-arrangement-mode="freeform"] > .widget:not(.focused) { position:absolute; width:var(--widget-width); height:var(--widget-height); max-width:none; max-height:none; }
+.widget[data-content-type="notes"] .notes-pad { line-height:28px; background-size:100% 28px; background-attachment:local; }
+.widget[data-responsive-state="wide"] .hub-data-widget { min-width:0; min-height:0; }
+@media (prefers-reduced-motion:reduce) { body #widgetAdder { transition:none; } }
+
+.widget-size-preset { display:grid; gap:6px; margin:10px 0 14px; }
+.widget-size-preset select { min-width:0; width:100%; padding:8px; color:inherit; background:var(--menu); border:1px solid var(--hub-line); border-radius:8px; }
+body[data-hub-layout="flow"] > .widget[data-flow-state="icon"] { max-width:200px; justify-self:center; }
+
+.layout-section .style-subsection-content { padding:6px 0 12px; }
+.saved-layout-controls { display:grid; gap:10px; }
+.saved-layout-controls #saveCurrentLayout, .saved-layout-controls #openLayoutEditor { width:100%; margin:0; }
+
+/* Antialiased circular mask avoids clipped cardinal edges at fractional pixel sizes. */
+.color-wheel { flex-shrink:0; border:0; box-sizing:border-box; border-radius:50%; -webkit-mask-image:radial-gradient(circle closest-side,#000 calc(100% - 1px),transparent 100%); mask-image:radial-gradient(circle closest-side,#000 calc(100% - 1px),transparent 100%); }
+
+/* Weather: spacious forecast strip, readable details and an inline radar. */
+.widget[data-content-type="weather"] .widget-content { inset:12px;overflow:hidden;z-index:0;isolation:isolate; }
+.widget[data-content-type="weather"].has-window-header .widget-content { top:48px; }
+
+.wx-app { width:100%;height:100%;min-width:0;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr);gap:14px;position:relative;color:var(--font-color);text-shadow:none;font-size:15px;container-type:size; }
+.wx-app * { box-sizing:border-box; }
+.wx-app [hidden] { display:none!important; }
+.wx-toolbar { display:flex;align-items:center;gap:10px;min-width:0;flex-wrap:wrap; }
+.wx-toolbar>span { opacity:.75;flex:1; }
+.wx-app button,.wx-app select { color:inherit;font:inherit;border:0;background:rgb(255 255 255 / 9%);border-radius:8px;padding:7px 10px;cursor:pointer; }
+.wx-app select { max-width:100%; }
+.wx-app select option { background:var(--menu);color:var(--font-color); }
+.wx-app button:hover,.wx-app button:focus-visible { background:rgb(255 255 255 / 18%);color:var(--accent); }
+.wx-app a { color:inherit;text-decoration:underline;text-underline-offset:3px; }
+.wx-pages { min-height:0;min-width:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin; }
+.wx-page { min-width:0;padding:4px 0 16px; }
+.wx-heading { display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap; }
+.wx-heading h3 { margin:0;font-size:20px;font-weight:650; }
+.wx-heading>span { font-size:14px;opacity:.75; }
+.wx-page p { line-height:1.5;margin:12px 0; }
+.wx-lead { font-size:clamp(20px,3cqw,28px);font-weight:650; }
+.wx-days { display:grid;grid-template-columns:repeat(7,minmax(60px,1fr));gap:0;overflow-x:auto;border-block:1px solid rgb(255 255 255 / 22%);min-height:140px; }
+.wx-day { display:grid;grid-template-rows:auto minmax(40px,1fr) auto;justify-items:center;align-items:center;gap:10px;padding:14px 4px;white-space:nowrap; }
+.wx-day svg { width:clamp(36px,7cqw,76px);height:100%;max-height:80px;min-height:36px; }
+.wx-day strong,.wx-day small { font-size:15px; }
+.wx-day small { opacity:.7; }
+.wx-summary { display:none; }
+.wx-stats { display:flex;flex-wrap:wrap;gap:22px 28px;margin:20px 0; }
+.wx-stat { display:grid;gap:6px;min-width:120px;flex:1; }
+.wx-stat>span { opacity:.75;font-size:14px; }
+.wx-stat strong { font-size:clamp(20px,3cqw,28px);font-weight:600; }
+.wx-bars { display:flex;gap:12px;overflow-x:auto;padding:12px 0;min-height:142px;scrollbar-width:thin; }
+.wx-bars>div { flex:0 0 48px;display:grid;grid-template-rows:22px 80px 22px;gap:6px;text-align:center;font-size:14px; }
+.wx-bars small { font-size:14px; }
+.wx-bars i { display:block;height:var(--bar);min-height:2px;align-self:end;border-radius:4px 4px 0 0;background:linear-gradient(0deg,#4593e3,#79dced); }
+[data-page="uv"] .wx-bars i { background:linear-gradient(0deg,#a7d985,#ffcf62,#ff7970); }
+.wx-status { position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%); }
+.wx-alert { border-left:3px solid #ffb65c;padding:8px 14px;margin:14px 0; }
+.wx-solar,.wx-moon-row { display:flex;align-items:center;gap:24px;flex-wrap:wrap; }
+.wx-solar>div:last-child,.wx-moon-row>div:last-child { flex:1;min-width:170px; }
+.wx-celestial { flex:0 1 200px;width:clamp(120px,24cqw,200px);aspect-ratio:1; }
+.wx-celestial svg { display:block;width:100%;height:100%; }
+.wx-sun { filter:drop-shadow(0 0 18px #ffbc452c); }
+.wx-moon { filter:drop-shadow(0 0 18px #c5dafa22); }
+.wx-aqi { margin:26px 0; }
+.wx-aqi-track { height:18px;border-radius:9px;background:linear-gradient(to right,#6dd68a 0% 16.66%,#f3d65c 16.66% 33.33%,#f19b56 33.33% 50%,#f16a74 50% 66.66%,#af7ccc 66.66% 83.33%,#8b4362 83.33%);position:relative; }
+.wx-aqi-track i { position:absolute;top:-7px;height:32px;width:5px;background:white;border:1px solid #152537;border-radius:3px;transform:translateX(-50%); }
+.wx-aqi-labels { display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-top:12px;font-size:14px;text-align:center;overflow-wrap:anywhere; }
+.wx-nav { position:absolute;top:50%;z-index:1100;width:30px;height:42px;padding:0!important;font-size:30px!important;opacity:0;transition:opacity .15s;background:rgb(12 25 40 / 85%)!important; }
+.wx-prev { left:0; }.wx-next { right:0; }
+.wx-app:hover .wx-nav,.wx-app:focus-within .wx-nav { opacity:.95; }
+.wx-map { height:clamp(230px,58cqh,460px);width:100%;border-radius:10px;background:#182939;isolation:isolate; }
+.wx-radar-controls { display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap; }
+.wx-radar-controls input { min-width:90px;flex:1;accent-color:var(--accent); }
+.wx-radar-error { color:#ffcf8a; }
+.wx-map .leaflet-control-attribution { font-size:14px;color:#e6edf7;background:#142333e6; }
+.wx-map .leaflet-control-zoom a { color:#e6edf7;background:#142333;text-decoration:none; }
+.wx-empty { padding:15px 0;opacity:.8; }
+/* Compact forecast uses the entire content area, without invisible reserved rows. */
+.wx-compact .wx-days { height:100%;min-height:0; }
+.wx-compact .wx-day { padding:8px 4px;gap:5px; }
+.wx-compact .wx-day svg { max-height:100px; }
+@container (max-width:400px) { .wx-toolbar>span { display:none; }.wx-aqi-labels { grid-template-columns:repeat(3,1fr);row-gap:10px; }.wx-celestial { flex-basis:130px; }.wx-solar,.wx-moon-row { gap:12px; } }
+@media (hover:none) { .wx-nav { opacity:.85; } }
+/* At-a-glance weather; no disclosure panels. */
+.wx-app { box-sizing:border-box;padding-top:32px;grid-template-rows:auto minmax(0,1fr) auto;font-size:16px; }
+.wx-app.wx-compact { padding-top:0; }
+.wx-tabs { display:flex;gap:6px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:thin; }
+.wx-tabs button { white-space:nowrap;background:transparent; }
+.wx-tabs [aria-pressed="true"] { color:var(--accent);background:rgb(255 255 255 / 10%); }
+.wx-days { border:0; }
+.wx-day { position:relative; }
+.wx-day+.wx-day:before { content:"";position:absolute;left:0;top:15%;height:70%;width:1px;background:rgb(255 255 255 / 25%); }
+.wx-day strong,.wx-day small,.wx-stat>span,.wx-heading>span,.wx-bars small,.wx-aqi-labels { font-size:16px; }
+.wx-rain-outlook { display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin:20px 0; }
+.wx-rain-outlook>div { display:grid;gap:10px;grid-template-rows:auto 45px auto; }
+.wx-rain-outlook strong { font-size:26px; }
+.wx-rain-outlook i { display:block;height:var(--bar);min-height:2px;align-self:end;background:#78c9f2;border-radius:4px 4px 0 0; }
+.wx-uv-track { height:16px;background:linear-gradient(to right,#7edb95,#efdc68,#f2a766,#ef7078,#b586d5);border-radius:9px;position:relative;margin:24px 3px; }
+.wx-uv-track i { position:absolute;top:-6px;height:28px;width:5px;border:1px solid #263749;background:white;border-radius:3px;transform:translateX(-50%); }
+.wx-condition-icon { width:26px;height:26px;color:#98dcf3;display:none; }
+.wx-page[data-page="details"] .wx-condition-icon { display:block; }
+.wx-page[data-page="details"] .wx-stats { display:grid;grid-template-columns:repeat(2,minmax(0,1fr)); }
+.wx-tide-chart { width:100%;height:160px;display:block; }
+.wx-tide-axis { display:flex;justify-content:space-between;gap:12px;margin-top:8px; }
+.wx-page[data-page="tide"] .wx-stat strong { font-size:22px; }
+
+/* Every weather section stays in a continuous scroll at every width. */
+.wx-app { grid-template-rows:auto minmax(0,1fr); }
+.wx-pages { display:block;position:relative;scroll-padding:0; }
+.wx-page { border-bottom:1px solid rgb(255 255 255 / 16%);padding:20px 0; }
+.wx-page[data-page="weather"] { padding:12px 0 24px; }
+.wx-compact { grid-template-rows:minmax(0,1fr);gap:0; }
+.wx-compact .wx-toolbar { display:none; }
+.wx-compact .wx-page { min-height:var(--wx-page-height);padding:14px 0; }
+.wx-compact .wx-page[data-page="weather"],.wx-compact .wx-page[data-page="today"] { height:var(--wx-page-height);padding:0;overflow:hidden; }
+.wx-compact .wx-days { height:100%;min-height:0; }
+.wx-compact .wx-day { grid-template-rows:auto minmax(32px,1fr) auto; }
+.wx-compact .wx-day svg { width:clamp(36px,8cqw,76px);min-height:32px; }
+.wx-nav { top:auto;bottom:5px; }
+/* Dedicated icon cards use the full face, not a clipped desktop layout. */
+.wx-icon-stage { display:none; }
+.wx-radar-timeline { flex:1 1 220px;min-width:0; }
+.wx-radar-timeline input { width:100%;display:block;margin:0; }
+.wx-radar-range { display:flex;justify-content:space-between;gap:16px;margin-top:8px;font-size:16px; }
+.wx-radar-range>span:last-child { text-align:right; }
+.wx-icon { display:block;padding:0!important;overflow:hidden; }
+.wx-icon .wx-toolbar,.wx-icon .wx-pages { display:none; }
+.wx-icon .wx-icon-stage { display:block;width:100%;height:100%;overflow:hidden; }
+.wx-icon-card { position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;height:100%;padding:10px 17px;text-align:center;overflow:hidden; }
+.wx-icon-label { font-size:clamp(14px,9cqw,20px);font-weight:600;line-height:1.1; }
+.wx-icon-value { font-size:clamp(22px,21cqw,48px);line-height:1.05;overflow-wrap:anywhere; }
+.wx-icon-extra { font-size:clamp(14px,8cqw,18px);line-height:1.2;white-space:pre-line; }
+.wx-icon-art { position:absolute;inset:12%;z-index:-1;display:grid;place-items:center;opacity:.28; }
+.wx-icon-art svg,.wx-icon-art .wx-condition-icon { display:block;width:100%;height:100%;min-width:0; }
+.wx-icon[data-icon-page="today"] .wx-icon-art { opacity:.4; }
+.wx-icon[data-icon-page="solar"] .wx-icon-value,.wx-icon[data-icon-page="air"] .wx-icon-value,.wx-icon[data-icon-page="moon"] .wx-icon-value,.wx-icon[data-icon-page="tide"] .wx-icon-value { font-size:clamp(22px,16cqw,36px); }
+.wx-icon .wx-nav { top:calc(50% - 20px);bottom:auto;width:24px;height:40px; }
+.wx-icon[data-icon-page="radar"] .wx-icon-stage { display:none; }
+.wx-icon[data-icon-page="radar"] .wx-pages { display:block;height:100%;overflow:hidden; }
+.wx-icon[data-icon-page="radar"] .wx-page { display:none; }
+.wx-icon[data-icon-page="radar"] .wx-page[data-page="radar"] { display:flex;flex-direction:column;height:100%;min-height:0;padding:0;border:0;gap:4px; }
+.wx-icon[data-icon-page="radar"] .wx-heading,.wx-icon[data-icon-page="radar"] [data-wx="back"],.wx-icon[data-icon-page="radar"] [data-wx="home"],.wx-icon[data-icon-page="radar"] [data-wx="regional"],.wx-icon[data-icon-page="radar"] .wx-radar-time { display:none; }
+.wx-icon .wx-map { flex:1;min-height:60px;height:auto; }
+.wx-icon .wx-radar-controls { margin:0;gap:4px;flex-wrap:nowrap; }
+.wx-icon .wx-radar-timeline { flex:1; }
+.wx-icon .wx-radar-range { font-size:14px;gap:3px;margin-top:4px; }
+.wx-icon .wx-radar-error { margin:0;font-size:14px; }
+.wx-icon * { scrollbar-width:none; }
+.wx-icon *::-webkit-scrollbar { display:none; }
+/* AI-generated weather atlas; embedded to keep the existing project filenames. */
+
+.wx-art { display:inline-block;aspect-ratio:1;background-image:none;background-size:400% 400%;background-repeat:no-repeat;image-rendering:auto;flex-shrink:0; }
+.wx-art[data-art="sunny"] { background-position:0.000000% 0.000000%; }
+.wx-art[data-art="partly"] { background-position:33.333333% 0.000000%; }
+.wx-art[data-art="cloudy"] { background-position:66.666667% 0.000000%; }
+.wx-art[data-art="rain"] { background-position:100.000000% 0.000000%; }
+.wx-art[data-art="storm"] { background-position:0.000000% 33.333333%; }
+.wx-art[data-art="snow"] { background-position:33.333333% 33.333333%; }
+.wx-art[data-art="thermometer"] { background-position:66.666667% 33.333333%; }
+.wx-art[data-art="drop"] { background-position:100.000000% 33.333333%; }
+.wx-art[data-art="wind"] { background-position:0.000000% 66.666667%; }
+.wx-art[data-art="pressure"] { background-position:33.333333% 66.666667%; }
+.wx-art[data-art="eye"] { background-position:66.666667% 66.666667%; }
+.wx-art[data-art="solar"] { background-position:100.000000% 66.666667%; }
+.wx-art[data-art="moon"] { background-position:0.000000% 100.000000%; }
+.wx-art[data-art="air"] { background-position:33.333333% 100.000000%; }
+.wx-art[data-art="tide"] { background-position:66.666667% 100.000000%; }
+.wx-art[data-art="fog"] { background-position:100.000000% 100.000000%; }
+.wx-today { display:grid;grid-template-columns:minmax(0,46%) minmax(0,1fr);align-items:center;gap:clamp(12px,4cqw,40px);height:var(--wx-today-height,240px);width:100%;margin:0;padding:8px 4px; }
+.wx-today>.wx-art { width:min(100%,var(--wx-today-height,240px));height:auto;max-height:none;aspect-ratio:1;justify-self:start; }
+.wx-today>div { display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:clamp(4px,1.2cqh,12px);min-width:0; }
+.wx-today .wx-location { font-size:clamp(18px,4.2cqw,32px);line-height:1.1;font-weight:600; }
+.wx-today .wx-current-temp { font-size:clamp(42px,min(13cqw,30cqh),104px);line-height:1; }
+.wx-today .wx-current-condition { font-size:clamp(17px,3.8cqw,30px);line-height:1.15; }
+.wx-today .wx-today-range { font-size:clamp(16px,3.4cqw,25px);line-height:1.15;opacity:.8; }
+.wx-compact .wx-today { height:100%; }
+.wx-day .wx-art { width:clamp(42px,9cqw,100px);max-width:100%; }
+.wx-compact .wx-day .wx-art { width:min(100%,48cqh); }
+.wx-condition-icon.wx-art { width:48px;height:48px; }
+.wx-section-art { float:left;width:clamp(64px,12cqw,110px);margin:0 18px 12px 0; }
+.wx-page>.wx-stats,.wx-page>.wx-rain-outlook,.wx-page>.wx-uv-track,.wx-page>.wx-aqi,.wx-tide-chart { clear:both; }
+.wx-celestial>.wx-art { width:100%;height:100%; }
+.wx-moon-texture { width:100%;height:100%; }
+.wx-moon-texture>.wx-art { width:100%;height:100%; }
+.wx-moon-dark { filter:brightness(.18); }
+.wx-icon-art>.wx-art { width:100%;height:100%; }
+.wx-icon .wx-condition-icon.wx-art { width:100%;height:100%; }
+.wx-icon-art { opacity:.55;inset:5%; }
+.wx-icon[data-icon-page="today"] .wx-icon-art { opacity:.48; }
+.wx-icon-value,.wx-icon-label,.wx-icon-extra { text-shadow:0 2px 10px #071a27b3; }
+.wx-app button { border:1px solid rgb(255 255 255 / 12%);box-shadow:inset 0 1px 0 rgb(255 255 255 / 8%); }
+.wx-app .wx-nav { border-radius:50%;width:30px;height:30px;font-size:26px!important;line-height:1;backdrop-filter:blur(12px); }
+@container (max-width:330px) and (min-height:280px) {
+ .wx-today { grid-template-columns:1fr;height:auto;min-height:var(--wx-today-height);gap:8px; }
+ .wx-today>.wx-art { width:min(75cqw,190px);justify-self:center; }
+ .wx-today>div { align-items:center;text-align:center; }
+ .wx-today .wx-current-temp { font-size:56px; }
+}
+.wx-control-icon { display:block;width:22px;height:22px;flex-shrink:0;filter:drop-shadow(0 1px 2px #06172766); }
+.wx-app .wx-nav { display:grid;place-items:center; }
+.wx-app [data-wx="play"] { display:flex;align-items:center;justify-content:center;gap:7px; }
+/* Performance dashboard: open instruments separated by quiet vertical rules. */
+.widget[data-content-type="performance"][data-performance-layout="dashboard"] .performance-widget { grid-template-rows:minmax(0,1fr) 28px auto!important;gap:4px!important; }
+.widget[data-content-type="performance"] .performance-telemetry { height:28px!important;min-height:0!important;align-self:start; }
+.widget[data-content-type="performance"] .performance-chart { height:28px!important; }
+.widget[data-content-type="performance"] .performance-mini { background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important; }
+.widget[data-content-type="performance"] .performance-mini > span { border:0!important;padding-top:3px!important;margin-top:6px!important; }
+.widget[data-content-type="performance"] .performance-instruments { gap:8px 0; }
+.widget[data-content-type="performance"] .performance-mini:not(:nth-child(4n+1)) { border-left:1px solid rgb(255 255 255 / 18%)!important; }
+
+/* Keep surface gradients and gloss out of the translucent outer border. */
+.widget, body.widget-basic .widget { background-clip:padding-box; }

@@ -84,6 +84,8 @@ class BodyShell {
 
 function isWebsitePath(pathname) {
   return pathname === "/" ||
+    pathname === "/dev/gestures" ||
+    pathname.startsWith("/dev/gestures/") ||
     pathname === "/dev/hubbahub" || pathname.startsWith("/dev/hubbahub/") ||
     pathname === "/audit" || pathname.startsWith("/audit/") ||
     pathname === "/apps/estimates" || pathname.startsWith("/apps/estimates/") ||
