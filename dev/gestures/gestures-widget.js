@@ -60,8 +60,9 @@ window.GesturesWidget = (() => {
    <div class="g-controls"><button data-g="start">Start camera</button><button data-g="pause" disabled>Pause</button><button data-g="stop" disabled>Stop camera</button></div>
    <p data-g="status" role="status">Ready. Camera starts only when you tap Start.</p>
    <section class="g-diagnostics" aria-label="Live tracking diagnostics">
-   ${ios?'<p>iPhone test 2 · CPU tracking</p>':''}
+   ${ios?'<p>iPhone test 3 · CPU tracking</p>':''}
    <div class="g-readings"><span data-g="pose">No hand</span><span data-g="rate">— fps</span><span data-g="engine">Tracker off</span></div>
+   <p data-g="progress" role="status">Tracker: waiting to start</p>
    <p data-g="capture">Camera delivery: — fps</p>
    <p data-g="startup">Preparing tracker · camera off</p>
    <p data-g="timing" title="Delay starts at browser frame observation, not sensor exposure. Worker round trip includes MediaPipe processing.">Prep — ms · Worker round trip — ms · Observed frame delay — ms</p>
@@ -81,11 +82,16 @@ window.GesturesWidget = (() => {
   let client,inFlight=false,epoch=0,inputWidth=480,engine='',imagePath='canvas',delegate='GPU';
   let benchmark=null,sample=null,prepTotal=0,roundTotal=0,ageTotal=0;
   let videoCallback=0,wake=0,latestTime=-1,observedAt=0,cameraFrames=0,cameraAt=0,presented=0;
-  const useVideoCallback=typeof video.requestVideoFrameCallback==='function';
+  // iOS uses the animation loop with currentTime deduplication, independent of video callbacks.
+  const useVideoCallback=!ios&&typeof video.requestVideoFrameCallback==='function';
   let statsAt=0,statsFrames=0,inferenceTotal=0;
   let stream,model,raf=0,generation=0,disposed=false,paused=false,busy=false;
   let lastVideo=-1,lastRun=0,lastUI=0;
   const status=s=>text('status',s);
+  let phase='waiting to start',phaseAt=performance.now(),completedFrames=0;
+  const showProgress=()=>text('progress','Tracker: '+phase+' · '+Math.floor((performance.now()-phaseAt)/1000)+' s · '+completedFrames+' frames processed');
+  const setPhase=value=>{phase=value;phaseAt=performance.now();showProgress();};
+  const progressTimer=setInterval(showProgress,1000);
   let preparedTracker=null,startClicked=0,awaitingFirst=false,cameraReadyMs=0;
   function releasePrepared(){
    const previous=preparedTracker;preparedTracker=null;
@@ -103,8 +109,9 @@ window.GesturesWidget = (() => {
      catch(e){valid();entry.client?.close();entry.client=null;}
     }
     if(!entry.client){
+     setPhase('loading tracking library');
      libraryPromise ||= import(moduleURL).catch(e=>{libraryPromise=null;throw e;});
-     const lib=await libraryPromise;valid();const files=await lib.FilesetResolver.forVisionTasks(wasmURL);valid();
+     const lib=await libraryPromise;valid();setPhase('preparing runtime');const files=await lib.FilesetResolver.forVisionTasks(wasmURL);valid();setPhase('loading model and initializing tracker');
      // Use a dedicated DOM canvas for iOS GPU processing, separate from preview.
      opts.canvas=document.createElement('canvas');
      let tracker;
@@ -112,7 +119,7 @@ window.GesturesWidget = (() => {
      catch(e){valid();if(opts.baseOptions.delegate==='CPU')throw e;opts.baseOptions.delegate='CPU';tracker=await lib.HandLandmarker.createFromOptions(files,opts);entry.engine='CPU · compatibility';}
      if(entry.cancelled||disposed){tracker.close();valid();}entry.model=tracker;
     }
-    valid();return entry;
+    valid();setPhase('tracker ready');return entry;
    })().catch(e=>{entry.client?.close();entry.model?.close();if(preparedTracker===entry)preparedTracker=null;throw e;});
    entry.promise.catch(()=>{});return entry.promise;
   }
@@ -130,6 +137,7 @@ window.GesturesWidget = (() => {
    presented=metadata.presentedFrames;videoCallback=video.requestVideoFrameCallback(observeVideo);kick();
   }
   function stop(message='Camera stopped.',keepWarm=false){
+   setPhase(message);
    const retain=keepWarm&&!busy&&!inFlight&&!benchmark&&!!(client||model);
    if(retain&&preparedTracker)preparedTracker.engine=engine;
    if(!retain)releasePrepared();
@@ -141,7 +149,7 @@ window.GesturesWidget = (() => {
    if(busy||stream||disposed)return;
    if(!window.isSecureContext||!navigator.mediaDevices?.getUserMedia){status('Camera needs HTTPS or localhost. Drive preview and ordinary local-network HTTP cannot provide phone camera access.');return;}
    busy=true;controls();const token=++generation;status('Allow front-camera access…');
-   startClicked=performance.now();awaitingFirst=true;const preparation=prepareTracker();
+   completedFrames=0;startClicked=performance.now();awaitingFirst=true;const preparation=prepareTracker();
    text('benchmark','Live measurements update automatically. Optimization is optional.');get('results').replaceChildren();
    text('timing','Measuring frame preparation and processing…');
    try{
@@ -160,19 +168,20 @@ window.GesturesWidget = (() => {
     const settings=stream.getVideoTracks()[0].getSettings?.()||{};
     text('capture','Camera settings: '+(settings.width||video.videoWidth)+'×'+(settings.height||video.videoHeight)+' · '+(settings.frameRate?.toFixed(1)||'unknown')+' fps negotiated'+(useVideoCallback?'':' · live delivery measurement unavailable'));
     stream.getVideoTracks()[0].addEventListener('ended',()=>stop('Camera disconnected. Tap Start to reconnect.'),{once:true});
-    lastRun=0;latestTime=-1;cameraAt=0;cameraFrames=0;presented=0;if(useVideoCallback)videoCallback=video.requestVideoFrameCallback(observeVideo);else raf=requestAnimationFrame(frame);
+    setPhase('waiting for first video frame');lastRun=0;latestTime=-1;cameraAt=0;cameraFrames=0;presented=0;if(useVideoCallback)videoCallback=video.requestVideoFrameCallback(observeVideo);else raf=requestAnimationFrame(frame);
    }catch(e){if(token!==generation||disposed)return;const reason={NotAllowedError:'Camera permission denied. Allow this site to use the camera, then try again.',NotFoundError:'No front camera is available.',OverconstrainedError:'A front-facing camera was not available. Rear-camera fallback is disabled.',NotReadableError:'Camera is busy. Close other camera apps and try again.'}[e.name]||'Tracker could not start: '+e.message;stop(reason);}
   }
   async function frame(now){
    if(disposed||!stream)return;if(!useVideoCallback)raf=requestAnimationFrame(frame);
    const frameTime=useVideoCallback?latestTime:video.currentTime;
-   if(paused||busy||inFlight||document.hidden||video.readyState<2||(!model&&!client)||frameTime===lastVideo||now-lastRun<1000/Number(get('limit').value)){kick();return;}
+   if(paused||busy||inFlight||document.hidden||video.readyState<2||!video.videoWidth||!video.videoHeight||(!model&&!client)||frameTime===lastVideo||now-lastRun<1000/Number(get('limit').value)){kick();return;}
    lastRun=now;lastVideo=frameTime;inFlight=true;const token=generation,frameEpoch=epoch,started=performance.now(),frameObserved=useVideoCallback?observedAt:started;
    try{
     const scale=Math.min(1,inputWidth/(ios?Math.max(video.videoWidth,video.videoHeight):video.videoWidth));
     const width=Math.max(1,Math.round(video.videoWidth*scale)),height=Math.max(1,Math.round(video.videoHeight*scale));
     if(input.width!==width||input.height!==height){input.width=width;input.height=height;}
     let hand,ms,prepared,returned;
+    if(completedFrames===0)setPhase('processing first frame');
     if(client){
      let bitmap;
      if(imagePath==='direct')bitmap=await createImageBitmap(video,{resizeWidth:width,resizeHeight:height,resizeQuality:'low'});
@@ -184,6 +193,7 @@ window.GesturesWidget = (() => {
     }else{inputContext.drawImage(video,0,0,width,height);prepared=performance.now();hand=model.detectForVideo(input,now).landmarks?.[0];ms=performance.now()-prepared;}
     returned=performance.now();
     if(token!==generation||frameEpoch!==epoch||paused)return;
+    completedFrames++;if(completedFrames===1){setPhase('processing video');text('rate',Math.round(ms)+' ms MediaPipe · first frame completed');}
     if(awaitingFirst){awaitingFirst=false;text('startup','Startup: '+((returned-startClicked)/1000).toFixed(1)+' s to first tracking result · '+((returned-startClicked-cameraReadyMs)/1000).toFixed(1)+' s after camera preview');}
     const prep=prepared-started,round=returned-prepared,age=returned-frameObserved;
     if(sample){sample.seen++;if(sample.seen>5){sample.times.push(returned-started);sample.hits+=hand?1:0;}if(sample.times.length>=20&&returned-sample.started>=4000)sample.finish();}
@@ -270,7 +280,7 @@ window.GesturesWidget = (() => {
   document.addEventListener('visibilitychange',visibility);window.addEventListener('pagehide',pagehide);
   const observer=new MutationObserver(()=>{if(!widget.isConnected){cleanup();return;}if(widget.hidden&&(stream||busy||preparedTracker))stop('Camera stopped because the widget was minimized.');});
   observer.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden']});
-  const cleanup=()=>{disposed=true;stop();observer.disconnect();document.removeEventListener('visibilitychange',visibility);window.removeEventListener('pagehide',pagehide);};
+  const cleanup=()=>{clearInterval(progressTimer);disposed=true;stop();observer.disconnect();document.removeEventListener('visibilitychange',visibility);window.removeEventListener('pagehide',pagehide);};
   if(window.isSecureContext&&window.Worker&&window.OffscreenCanvas&&window.createImageBitmap&&!document.hidden){
    prepareTracker().then(()=>{if(!disposed&&!stream&&!busy&&preparedTracker)text('startup','Tracker ready · camera starts on tap');}).catch(()=>{if(!disposed&&!stream&&!busy)text('startup','Tracker will retry on Start.');});
   }else text('startup','Tracker prepares on Start.');
