@@ -221,3 +221,13 @@ body .widget.has-window-header[data-content-type^=ops]>.widget-content:has(>.ops
 .widget-content>.ops-root:has(>.ops-steps){padding-top:0!important;scroll-padding-top:52px}
 .widget-content>.ops-root>.ops-steps{position:sticky;top:0;z-index:20;margin-top:0;padding-top:0;backdrop-filter:blur(18px);background:rgba(5,12,23,.18);border-radius:0}
 @container(max-width:560px){.ops-root .ops-main-menu>.ops-steps{gap:2px}.ops-root .ops-main-menu>.ops-steps>button,.ops-root.ops-processing>.ops-steps>button{padding:10px 12px}}
+.ops-root .ops-live-album[hidden]{display:none}
+.ops-live-open>[hidden]{display:none!important}
+.ops-root .ops-live-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr));gap:12px;max-width:none;margin:16px 0 0;text-align:left}
+.ops-root .ops-live-grid article{min-width:0;position:relative}
+.ops-root .ops-live-grid img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:0}
+.ops-root .ops-live-grid p{margin:0;padding:8px 0;font-size:14px;min-height:1em}
+.ops-root .ops-live-select{display:flex;margin-bottom:8px}
+
+.ops-root .ops-live-grid button{font-size:12px;padding:8px 4px;width:100%}
+.ops-root .ops-live-select{font-size:13px}

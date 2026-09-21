@@ -1,0 +1,80 @@
+/* Shared visual tokens, with explicit ownership rather than dashboard root classes. */
+body .widget .ops-root.ops-business-center>.ops-main-menu{background:var(--widget-header,#17233b)!important;border-bottom:1px solid color-mix(in srgb,var(--font-color) 18%,transparent)!important;padding:6px 12px!important}
+body .widget .ops-root.ops-business-center>.ops-main-menu>.ops-steps>button,body .widget .ops-root.ops-business-center>.ops-main-menu>.ops-crew-login{color:var(--font-color)!important;background:transparent!important;border:0!important;border-bottom:2px solid transparent!important;border-radius:5px!important;padding:10px 14px!important;font-size:12px!important;font-weight:600!important}
+body .widget .ops-root.ops-business-center>.ops-main-menu>.ops-steps>button[aria-current],body .widget .ops-root.ops-business-center>.ops-main-menu>.ops-steps>button:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)!important;border-bottom-color:var(--accent)!important}
+.fd-root [data-fd-project-link]{width:100%;font-size:10px;padding:5px;margin-top:4px;max-width:100%}.fd-root [data-fd-open-project]{padding:3px 5px;font-size:10px;min-height:24px}
+.ops-business-center,.pp-root{--bc-line:color-mix(in srgb,var(--font-color,#fff) 15%,transparent);--bc-card:color-mix(in srgb,var(--widget-bg,#17233b) 35%,transparent);font-size:13px;line-height:1.5}
+.ops-business-center .ops-main-menu{background:var(--fd-c-nav,rgba(13,20,32,.9))!important;border:0!important;border-bottom:1px solid var(--bc-line)!important;padding:5px 12px!important;box-shadow:0 5px 18px #0002;border-radius:0!important;gap:6px}
+.ops-business-center .ops-main-menu button{background:transparent!important;color:var(--font-color,#fff)!important;border:0!important;border-bottom:2px solid transparent!important;border-radius:5px!important;font-size:12px!important;font-weight:600!important;padding:10px 14px!important;min-height:42px!important}
+.ops-business-center .ops-main-menu button[aria-current],.ops-business-center .ops-main-menu button:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)!important;border-bottom-color:var(--accent)!important}
+.ops-business-center>.ops-step-body{padding:18px!important}.ops-business-center .ops-heading{justify-content:space-between!important;margin:0 0 16px!important;padding:0 0 12px!important;border-bottom:1px solid var(--bc-line)}
+.ops-business-center :is(.ops-record-accordion,.ops-client-tile,.ops-project-list-window,.ops-work-section){border:1px solid var(--bc-line)!important;border-radius:12px!important;background:var(--bc-card)!important;box-shadow:none!important}
+.ops-business-center .ops-project-list-window{padding:10px!important}.ops-business-center .ops-record-accordion{margin:8px 0!important}.ops-business-center .ops-record-accordion>summary{padding:15px!important}.ops-business-center .ops-steps:not(.ops-main-menu .ops-steps){background:transparent!important;border-bottom:1px solid var(--bc-line)}
+.ops-business-center :is(button,input,select,textarea),.pp-root :is(button,input,select,textarea){font:inherit;border-radius:7px}.ops-business-center :is(input,select,textarea),.pp-root :is(input,select,textarea){background:color-mix(in srgb,var(--font-color) 5%,transparent)!important;border:1px solid var(--bc-line)!important;color:inherit}
+.pp-root{min-width:0;padding:0 2px 24px}.pp-header{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:18px}.pp-header h1{font-size:25px;margin:2px 0;letter-spacing:-.035em}.pp-header h2{font-size:15px!important;margin:2px 0!important;border:0!important}.pp-header small,.pp-next small{font-size:10px;color:var(--hub-muted,#bdc9db);text-transform:uppercase;letter-spacing:.08em}.pp-controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap}.pp-controls label{display:grid;gap:4px}.pp-controls select{max-width:280px}
+.pp-progress{padding:14px 4px}.pp-progress>div{height:7px;border-radius:99px;background:color-mix(in srgb,var(--font-color) 15%,transparent);overflow:hidden}.pp-progress i{display:block;height:100%;background:var(--accent);border-radius:inherit}.pp-progress ol{list-style:none;display:flex;justify-content:space-between;gap:5px;padding:0;margin:8px 0;font-size:10px;text-transform:capitalize}.pp-progress li[aria-current]{color:var(--accent);font-weight:700}
+.pp-nav{display:flex;gap:5px;flex-wrap:wrap;padding:8px 0;margin-bottom:14px;border-block:1px solid var(--bc-line)}.pp-nav button{background:transparent!important}.pp-section{margin:0 0 12px!important}.pp-section>summary{padding:14px 16px!important;font-size:14px;font-weight:650;background:color-mix(in srgb,var(--widget-header,#17233b) 35%,transparent)}.pp-section .ops-section-content{padding:16px}.pp-next,.pp-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px;border:1px solid var(--bc-line);border-radius:9px;margin:8px 0}.pp-next strong,.pp-row small{display:block}.pp-row small{color:var(--hub-muted)}.pp-root .ops-project-metrics{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}.pp-root .ops-project-metrics>div{padding:12px;border:1px solid var(--bc-line);border-radius:8px;background:var(--bc-card)}.pp-editor:empty{display:none}.pp-editor{padding:18px;border:1px solid var(--accent);border-radius:12px;margin-top:16px}.ops-step-body:has(>.fd-root){height:75vh!important;min-height:450px;padding:0!important}.ops-project-tasks{display:grid;gap:8px;margin:10px 0}.ops-project-task{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px;border:1px solid #ffffff25;border-radius:8px}.ops-project-task small{display:block;opacity:.7}.ops-project-task button{flex-shrink:0}
+@container(max-width:650px){.pp-header{align-items:start;flex-direction:column}.pp-root .ops-project-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.pp-progress ol{font-size:8px}.pp-controls{width:100%}.pp-next{align-items:start;flex-direction:column}}
+/* Project Portal only: restore the dashboard-style navigation and disclosure controls. */
+/* Mirror the dashboard's header clearance; fallback titles follow the Hub setting. */
+.widget .widget-fallback-title{display:none!important}
+/* Reuse the existing title row without its header surface; no in-flow duplicate. */
+body .widget.no-window-header:is([data-content-type="clientPortal"],[data-content-type="financialdashboard"]) .widget-window-title{display:block!important;opacity:1!important}
+body .widget.no-window-header:is([data-content-type="clientPortal"],[data-content-type="financialdashboard"]) .widget-window-header{background:transparent!important;border-color:transparent!important;box-shadow:none!important}
+body .widget[data-content-type="clientPortal"]>.widget-content{inset:40px 0 0!important;padding:0!important;overflow:hidden!important;border-radius:0!important;display:block!important}
+body .widget[data-content-type="clientPortal"] [data-standalone-portal]{height:100%;min-height:0;overflow:hidden!important}
+body .widget[data-content-type="clientPortal"] [data-standalone-portal]>.pp-root{height:100%;min-height:0;display:flex;flex-direction:column;padding:0!important;box-sizing:border-box}
+body .widget[data-content-type="clientPortal"] .pp-root>.pp-nav{flex:0 0 auto;border-radius:0!important;min-height:44px;grid-template-columns:40px minmax(0,1fr) 40px!important;gap:8px!important}
+body .widget[data-content-type="clientPortal"] .pp-root>.pp-nav .pp-nav-links{flex-wrap:nowrap;overflow:auto}
+body .widget[data-content-type="clientPortal"] .pp-root>.pp-nav .pp-nav-links button{padding:14px 12px!important;line-height:normal;min-height:0}
+body .widget[data-content-type="clientPortal"] .pp-root>.pp-sections{flex:1;min-height:0;overflow:auto;margin-right:14px;margin-bottom:12px;scrollbar-gutter:stable;box-sizing:border-box}
+body .widget[data-content-type="clientPortal"] .pp-root>.pp-nav .pp-expand-all{right:46px}
+body .widget[data-content-type="financialdashboard"].no-window-header>.widget-content{top:var(--fd-header-height)!important}
+body .ops-root[data-project-portal=true]{padding:0!important}
+body .ops-root .pp-root{padding:0 0 24px}
+body .ops-root .pp-root>.pp-nav{position:relative;margin:0!important;grid-template-columns:48px minmax(0,1fr) 48px!important;gap:0!important;width:100%;box-sizing:border-box;padding:0 12px!important}
+body .ops-root .pp-root>.pp-nav .pp-nav-links{grid-column:2;justify-content:safe center;gap:0}
+body .ops-root .pp-root>.pp-nav .pp-nav-links button{flex:0 0 auto;text-align:center;padding:12px 10px!important;min-height:42px;font-size:12px}
+body .ops-root .pp-root>.pp-nav .pp-expand-all{position:absolute;right:27px;top:50%;transform:translateY(-50%)}
+.pp-root>.pp-sections{padding:14px}
+.pp-root [data-pp-section=overview] .pp-header{margin-bottom:0}
+.pp-root [data-pp-section=overview] .pp-title .pp-controls{margin-top:0}
+body .ops-root .pp-root .pp-section{border:1px solid color-mix(in srgb,currentColor 12.5%,transparent)!important;border-radius:12px!important;margin:0!important;padding:0!important;overflow:clip;background:var(--fd-c-panel,color-mix(in srgb,currentColor 2%,transparent))!important;box-shadow:none!important}
+body .ops-root .pp-root .pp-section>summary{border-radius:11px;min-height:50px}
+body .ops-root .pp-root .pp-section[open]>summary{border-radius:11px 11px 0 0}
+body .ops-root .pp-root [data-pp-section=overview] .ops-project-metrics>div{min-height:108px;display:flex;flex-direction:column;justify-content:center;padding:16px}
+.pp-root .pp-header{align-items:flex-start}
+.pp-root .pp-title{min-width:0}
+.pp-root .pp-title .pp-controls{margin-top:16px}
+.pp-root .pp-client-info{display:grid;gap:4px;text-align:right;max-width:48%;overflow-wrap:anywhere}
+.pp-root .pp-client-info>strong{font-size:19px}
+.pp-root .pp-client-info>span{font-size:13px}
+.pp-root .pp-contact{display:grid;gap:3px;margin-top:7px;color:var(--hub-muted,var(--font-color));font-size:12px}
+.pp-root .pp-client-actions{margin-top:7px;font-size:11px}
+.pp-root .pp-client-actions>summary{cursor:pointer;list-style:none;color:var(--accent)}
+.pp-root .pp-client-actions>summary::-webkit-details-marker{display:none}
+body .ops-root .pp-root .pp-editor{border:0;margin:12px 0 0;padding:0;border-radius:0}
+@container(max-width:650px){.pp-root .pp-client-info{max-width:100%;width:100%;text-align:left}.pp-root .pp-title{width:100%}}
+body .ops-root .pp-root .pp-nav{display:grid;grid-template-columns:40px minmax(0,1fr) 40px;align-items:center;gap:8px;padding:0 12px;margin:0 0 14px;min-height:44px;border:0;border-bottom:1px solid var(--form-line,var(--bc-line));background:color-mix(in srgb,var(--menu-2,var(--menu,#17233b)) var(--widget-header-opacity,72%),transparent)}
+body .ops-root .pp-root .pp-nav-links{grid-column:2;display:flex;justify-content:safe center;min-width:0;flex-wrap:wrap}
+body .ops-root .pp-root .pp-nav-links button{position:relative;margin:0;padding:14px 12px!important;min-height:44px;background:transparent!important;color:var(--menu-2-text,var(--font-color))!important;border:0!important;border-radius:0!important;box-shadow:none!important;font-size:12px;font-weight:650;white-space:nowrap}
+body .ops-root .pp-root .pp-nav-links button::after{content:"";position:absolute;bottom:4px;left:12px;right:12px;height:3px;border-radius:3px;background:transparent}
+body .ops-root .pp-root .pp-nav-links button[aria-current]::after{background:var(--accent)}
+body .ops-root .pp-root .pp-nav-links button:hover::after{background:color-mix(in srgb,var(--accent) 50%,transparent)}
+body .ops-root .pp-root .pp-expand-all{grid-column:3;position:relative;width:36px;height:36px;min-width:0;margin:0;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+body .ops-root .pp-root .ops-work-section>summary{position:relative;padding-right:48px!important;list-style:none}
+body .ops-root .pp-root .ops-work-section>summary::before{display:none!important}
+body .ops-root .pp-root .ops-work-section>summary::after,body .ops-root .pp-root .pp-expand-all span::after{content:"";position:absolute;top:50%;right:24px;width:9px;height:9px;border:0;border-right:2px solid color-mix(in srgb,var(--accent) 72%,#fff);border-bottom:2px solid color-mix(in srgb,var(--accent) 72%,#fff);background:transparent;transform:translateY(-68%) rotate(45deg)}
+body .ops-root .pp-root .ops-work-section[open]>summary::after,body .ops-root .pp-root .pp-expand-all[data-expand=false] span::after{width:12px;height:2px;border:0;background:color-mix(in srgb,var(--accent) 72%,#fff);transform:translateY(-50%);right:22.5px}
+body .ops-root .pp-root .pp-expand-all span::after{right:12px}
+body .ops-root .pp-root .pp-expand-all[data-expand=false] span::after{right:10.5px}
+.pp-root .pp-progress{padding:20px 4px 14px;overflow:visible}
+.pp-root .pp-phase-rail{position:relative;display:grid;grid-template-columns:repeat(var(--pp-stages),minmax(0,1fr));width:100%;min-width:0;list-style:none;margin:0;padding:0;gap:0}
+.pp-root .pp-phase-rail::before,.pp-root .pp-phase-rail::after{content:"";position:absolute;left:calc(50% / var(--pp-stages));top:10px;height:4px;border-radius:99px;width:calc(100% - 100% / var(--pp-stages));background:color-mix(in srgb,var(--font-color) 24%,transparent)}
+.pp-root .pp-phase-rail::after{width:calc((100% - 100% / var(--pp-stages)) * var(--pp-progress) / 100);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 72%,#fff),var(--accent));box-shadow:0 0 10px color-mix(in srgb,var(--accent) 32%,transparent)}
+.pp-root .pp-phase-rail li{position:relative;z-index:1;display:grid;justify-items:center;align-content:start;gap:9px;min-width:0;text-align:center;font-size:10px;line-height:1.2;text-transform:capitalize;color:var(--hub-muted,var(--font-color))}
+.pp-root .pp-phase-rail i{display:block;box-sizing:border-box;width:18px;height:18px;margin:2px 0;border:3px solid color-mix(in srgb,var(--font-color) 24%,var(--widget-bg,#17233b));border-radius:50%;background:var(--widget-bg,#17233b);box-shadow:0 0 0 3px color-mix(in srgb,var(--widget-bg,#17233b) 88%,transparent)}
+.pp-root .pp-phase-rail .is-complete i{border-color:var(--accent);background:var(--accent)}
+.pp-root .pp-phase-rail .is-current i{width:22px;height:22px;margin:0;border-color:color-mix(in srgb,var(--accent) 75%,#fff);background:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 16%,transparent),0 0 14px color-mix(in srgb,var(--accent) 40%,transparent)}
+.pp-root .pp-phase-rail :is(.is-complete,.is-current){color:var(--font-color)}
+@container(max-width:650px){body .ops-root .pp-root .pp-nav{grid-template-columns:0 minmax(0,1fr) 36px;gap:3px}body .ops-root .pp-root .pp-nav-links button{padding:14px 9px!important}.pp-root .pp-phase-rail li{font-size:8px}}

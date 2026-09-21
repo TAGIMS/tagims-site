@@ -22,9 +22,10 @@
   opsField:'M9 5h12 M9 12h12 M9 19h12 M2 5l2 2 3-4 M2 12l2 2 3-4 M2 19l2 2 3-4'
  };
  paths.opsProjects=paths.opsProjectWorkspace;paths.opsCrew=paths.opsClients;paths.opsContact=paths.opsClients;paths.opsPhotos=paths.opsPhotoCenter;paths.opsEstimate=paths.opsEstimates;paths.opsPublish=paths.opsUpload;
- paths.opsGallery=paths.opsPhotoCenter;
+ paths.opsGallery=paths.opsPhotoCenter;paths.opsLiveGallery=paths.opsPhotoCenter;
  paths.opsAlbums='M3 7h7l2-3h9v17H3z M6 11h12 M6 15h8';
  paths.opsTrash='M4 6h16 M9 6V3h6v3 M6 6l1 15h10l1-15 M10 10v7 M14 10v7';
  paths.opsProcessing=paths.opsClients;
+ paths.opsHomeBase='M3 11l9-8 9 8 M5 10v11h14V10 M9 21v-7h6v7 M8 9h.01 M16 9h.01';
  window.OpsIcon=type=>`<svg class="ops-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[type]||paths.opsApps}"/></svg>`;
 })();

@@ -142,7 +142,7 @@
      ELEMENT: CLOSE LAYOUT EDITOR
      DOM ID: closeLayoutEditor. JavaScript uses this exact identifier when binding or updating the control.
      ====================================================================== -->
-<button class="layout-manager-close" id="closeLayoutEditor" type="button" aria-label="Close saved layouts">×</button>
+<button class="layout-manager-close" id="closeLayoutEditor" type="button" aria-label="Close saved layouts">Ã—</button>
       </header>
       <div class="layout-manager-save">
         
@@ -312,10 +312,13 @@
      Markup for this section and its nested controls.
      ====================================================================== -->
 <div class="accordion-content">
-          <div class="widget-drag-instruction"><strong>DRAG WIDGETS →</strong></div>
+          <div class="widget-drag-instruction"><strong>DRAG WIDGETS â†’</strong></div>
           <div class="widget-library" aria-label="Widget library">
 <button class="widget-library-item" type="button" data-content-type="opsCRM" title="Business Center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21V5l8-3 8 3v16M9 21v-5h6v5M8 7h1m6 0h1M8 11h1m6 0h1"/></svg><span>Business Center</span></button>
+<button class="widget-library-item" type="button" data-content-type="clientPortal" title="Project Portal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V7l8-4 8 4v13M8 20v-6h8v6M8 9h2m4 0h2"/><path d="M3 20h18"/></svg><span>Project Portal</span></button>
+<button class="widget-library-item" type="button" data-content-type="opsHomeBase" title="Home Base"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8M5 10v11h14V10M9 21v-7h6v7"/></svg><span>Home Base</span></button>
 <button class="widget-library-item" type="button" data-content-type="financialdashboard" title="Financial Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 10h18M10 10v11"/></svg><span>Financial Dashboard</span></button>
+<button class="widget-library-item" type="button" data-content-type="spreadsheet" title="Spreadsheet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg><span>Spreadsheet</span></button>
 <button class="widget-library-item" type="button" data-content-type="clock" title="Drag into a widget window">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></svg>
               <span>Clock</span>
@@ -481,7 +484,7 @@
      ELEMENT: WIDGET GRADIENT ANGLE VALUE
      DOM ID: widgetGradientAngleValue. JavaScript uses this exact identifier when binding or updating the control.
      ====================================================================== -->
-<span class="angle-dial-readout" id="widgetGradientAngleValue">350°</span>
+<span class="angle-dial-readout" id="widgetGradientAngleValue">350Â°</span>
 <!-- HUB GUIDE ============================================================
      ELEMENT: WIDGET GRADIENT ANGLE
      DOM ID: widgetGradientAngle. JavaScript uses this exact identifier when binding or updating the control.
@@ -795,7 +798,7 @@
      ELEMENT: BG GRADIENT ANGLE VALUE
      DOM ID: bgGradientAngleValue. JavaScript uses this exact identifier when binding or updating the control.
      ====================================================================== -->
-<span class="angle-dial-readout" id="bgGradientAngleValue">135°</span>
+<span class="angle-dial-readout" id="bgGradientAngleValue">135Â°</span>
 <!-- HUB GUIDE ============================================================
      ELEMENT: BG GRADIENT ANGLE
      DOM ID: bgGradientAngle. JavaScript uses this exact identifier when binding or updating the control.
@@ -874,25 +877,41 @@
      Loads the file at this point in document order. Keep dependency order intact.
      ====================================================================== -->
 <link rel="stylesheet" href="finance/native/widgets.css">
+<link rel="stylesheet" href="client-portal/portal.css?v=client-portal-2">
+<link rel="stylesheet" href="home-base/home-base.css?v=home-base-1">
 <script src="finance/native/config.js" defer></script>
 <script src="finance/native/engine.js" defer></script>
 <script src="finance/native/store.js" defer></script>
-<link rel="stylesheet" href="business/scoped.css?v=18.0.10">
+<link rel="stylesheet" href="business/scoped.css?v=combined-20260920">
 <link rel="stylesheet" href="css/business-integration.css?v=18.0.2">
 <link rel="stylesheet" href="css/hub-widget-theme.css?v=df3ddd6">
+<link rel="stylesheet" href="business/workspace.css?v=unified-1">
 <script src="business/config.js" defer></script>
 <script src="business/source-inputs.js" defer></script>
 <script src="business/domain.js" defer></script>
-<script src="business/store.js?v=account-sync-1" defer></script>
+<script src="business/store.js?v=combined-20260920" defer></script>
 <script src="business/prototype-import.js" defer></script>
 <script src="business/google-photos.js" defer></script>
 <script src="business/source-ui.js" defer></script>
 <script src="business/icons.js" defer></script>
 <script src="business/pipeline.js" defer></script>
-<script src="business/photo-workspace.js" defer></script>
+<script src="business/photo-workspace.js?v=combined-20260920" defer></script>
+<script src="business/workflow.js" defer></script>
+<script src="business/project-portal.js" defer></script>
+<script src="business/processing-tasks.js" defer></script>
 <script src="business/project-ledger.js" defer></script>
-<script src="business/operations.js?v=18.0.10" defer></script>
-<script src="hub.js?v=account-sync-1" defer></script>
+<script src="business/site-access.js" defer></script>
+<script src="home-base/ui.js?v=home-base-1" defer></script>
+<script src="business/operations.js?v=combined-20260920" defer></script>
+<script src="client-portal/domain.js" defer></script>
+<script src="client-portal/config.js" defer></script>
+<script src="client-portal/store.js" defer></script>
+<script src="client-portal/pdf.js" defer></script>
+<script src="client-portal/ui.js" defer></script>
+<link rel="stylesheet" href="spreadsheet/spreadsheet.css?v=12">
+<script src="spreadsheet/engine.js?v=7" defer></script>
+<script src="spreadsheet/view.js?v=11" defer></script>
+<script src="hub.js?v=combined-20260920" defer></script>
 <script src="business/ready.js" defer></script>
 <script src="business/appearance.js?v=df3ddd6" defer></script>
 <script src="business/financial-sync.js?v=account-sync-1" defer></script>
@@ -901,8 +920,5 @@
 
 </body>
 </html>
-
-
-
 
 

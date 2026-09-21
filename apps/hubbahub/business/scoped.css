@@ -223,7 +223,7 @@ body .widget[data-content-type^="ops"] > .widget-content{padding: 0px !important
 .ops-form-grid{display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 8px 16px;}
 .ops-form-grid label{min-width: 0px;}
 .ops-root input::placeholder{color: inherit; opacity: 0.6;}
-.ops-root select, .ops-dialog select{background: color-mix(in srgb, currentcolor 5%, transparent); border-width: 0px 0px 1px; border-style: none none solid; border-color: currentcolor currentcolor rgba(255, 255, 255, 0.196); border-image: none; border-radius: 6px; padding: 9px 28px 9px 10px; min-width: 0px; max-width: 100%; box-shadow: none;}
+.ops-root select, .ops-dialog select{background: color-mix(in srgb, currentcolor 5%, transparent 95%); border-width: 0px 0px 1px; border-style: none none solid; border-color: currentcolor currentcolor rgba(255, 255, 255, 0.196); border-image: none; border-radius: 6px; padding: 9px 28px 9px 10px; min-width: 0px; max-width: 100%; box-shadow: none;}
 .ops-root select:focus-visible, .ops-dialog select:focus-visible{outline: 2px solid var(--accent); outline-offset: 2px;}
 .ops-root button:where(:not(.ops-launch-tile):not(.ops-photo-preview):not(.ops-slot-handle):not([data-step])), .ops-dialog button{border: 0px; border-radius: 6px; background: transparent; box-shadow: none; padding: 9px 12px; min-height: 36px; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit; font-size: 14px; font-weight: 550; color: inherit; cursor: pointer; transition: background 0.15s, transform 0.15s;}
 .ops-root button:not(.ops-photo-preview):hover, .ops-dialog button:hover{background: color-mix(in srgb,var(--accent) 20%,transparent);}
@@ -479,6 +479,16 @@ body .widget.has-window-header[data-content-type^="ops"] > .widget-content:has(>
 .ops-root .ops-client-primary .ops-form-grid{grid-template-columns: repeat(3, minmax(0px, 1fr));}
 .ops-root .ops-address-link{font-weight: 600; min-height: 44px; display: flex; align-items: center; text-decoration: underline !important; margin: 0px !important; padding: 0px !important; border: 0px !important; background: transparent !important;}
 .ops-root [data-action="openClient"]{text-decoration: underline; background: transparent !important; border: 0px !important; padding: 4px !important;}
+
+.ops-root .ops-live-album[hidden]{display: none;}
+.ops-live-open > [hidden]{display: none !important;}
+.ops-root .ops-live-grid{display: grid; grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr)); gap: 12px; max-width: none; margin: 16px 0px 0px; text-align: left;}
+.ops-root .ops-live-grid article{min-width: 0px; position: relative;}
+.ops-root .ops-live-grid img{display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 0px;}
+.ops-root .ops-live-grid p{margin: 0px; padding: 8px 0px; font-size: 14px; min-height: 1em;}
+.ops-root .ops-live-select{display: flex; margin-bottom: 8px;}
+.ops-root .ops-live-grid button{font-size: 12px; padding: 8px 4px; width: 100%;}
+.ops-root .ops-live-select{font-size: 13px;}
 .ops-root .ops-client-identity{display: flex; flex-wrap: wrap; gap: 12px 28px; margin: 14px 0px 0px;}
 .ops-root .ops-client-identity dt{font-size: 12px; opacity: 0.7;}
 .ops-root .ops-client-identity dd{margin: 4px 0px 0px; font-size: 16px; overflow-wrap: anywhere;}
@@ -502,7 +512,7 @@ body .widget.has-window-header[data-content-type^="ops"] > .widget-content:has(>
 .ops-root .ops-attached-section{overflow: visible !important;}
 .ops-root .ops-main-menu, .ops-root .ops-attached-menu > .ops-steps, .ops-root.ops-processing > .ops-steps{background: color-mix(in srgb,var(--menu,#253044) 92%,transparent); backdrop-filter: blur(18px); position: sticky !important; top: var(--ops-nav-top,0px) !important; z-index: var(--ops-nav-layer,30) !important;}
 .ops-root, .ops-dialog{--ops-line: color-mix(in srgb,currentColor 18%,transparent); --ops-surface: color-mix(in srgb,var(--widget-bg,var(--menu,#253044)) 94%,var(--accent,#50d7c8));}
-.ops-root input:not([type="checkbox"]):not([type="range"]), .ops-root select, .ops-root textarea, .ops-dialog input:not([type="checkbox"]), .ops-dialog select, .ops-dialog textarea{background: color-mix(in srgb, currentcolor 5%, transparent); color: inherit; border: 1px solid var(--ops-line); border-radius: 7px; font: inherit; padding: 10px; min-width: 0px; max-width: 100%; width: 100%; min-height: 44px; box-sizing: border-box;}
+.ops-root input:not([type="checkbox"]):not([type="range"]), .ops-root select, .ops-root textarea, .ops-dialog input:not([type="checkbox"]), .ops-dialog select, .ops-dialog textarea{background: color-mix(in srgb, currentcolor 5%, transparent 95%); color: inherit; border: 1px solid var(--ops-line); border-radius: 7px; font: inherit; padding: 10px; min-width: 0px; max-width: 100%; width: 100%; min-height: 44px; box-sizing: border-box;}
 .ops-root select option, .ops-dialog select option{background: var(--menu,#253044); color: var(--font-color,#eef2f8);}
 .ops-dialog, .ops-dialog footer{background: var(--menu,#253044); color: var(--font-color,#eef2f8);}
 .ops-root .ops-record-detail.ops-command{background: transparent; border: 0px; border-radius: 0px; container-type: inline-size; overflow-wrap: anywhere; margin: 0px !important; padding: 20px !important;}
@@ -670,3 +680,20 @@ body .widget[data-content-type="opsCRM"] > .widget-content{inset: 44px 0px 0px; 
 .ops-root.ops-business-center > .ops-main-menu > .ops-crew-login{width: auto; margin-left: auto; font-size: 11px; min-height: 32px; padding: 4px 8px;}
 .ops-root.ops-business-center > .ops-step-body.ops-processing > .ops-steps{display: grid; grid-template-columns: repeat(3, minmax(0px, 1fr)); gap: 2px; padding: 2px !important;}
 .ops-root.ops-business-center > .ops-step-body.ops-processing > .ops-steps > button{font-size: 11px; min-width: 0px; padding: 5px 2px;}}
+
+.ops-root .ops-main-menu{grid-template-columns: 110px minmax(0px, 1fr) 110px; align-items: center; min-height: 44px; display: grid !important; gap: 0px !important; padding: 0px 12px !important; background: color-mix(in srgb,var(--menu,#253044) 70%,transparent) !important; border-radius: 0px !important;}
+.ops-root .ops-main-menu > .ops-steps{grid-column: 2; justify-content: center; min-width: 0px; display: flex !important; flex-wrap: nowrap !important; width: auto !important; gap: 2px !important; padding: 0px !important; background: transparent !important; overflow-x: auto !important;}
+.ops-root .ops-main-menu > .ops-crew-login{grid-column: 3; justify-self: end; min-width: 0px; font-size: 12px; border: 0px; box-shadow: none; width: auto !important; margin: 0px !important; padding: 8px !important; background: transparent !important;}
+.ops-root .ops-main-menu > .ops-steps > button, .ops-root.ops-processing > .ops-steps > button{position: relative; opacity: 0.85; flex: 0 0 auto !important; min-height: 44px !important; margin: 0px !important; padding: 10px 12px !important; border: 0px !important; border-radius: 0px !important; background: transparent !important; color: inherit !important; box-shadow: none !important; font-size: 12px !important; font-weight: 600 !important; white-space: nowrap !important;}
+.ops-root .ops-main-menu > .ops-steps > button .ops-icon, .ops-root.ops-processing > .ops-steps > button .ops-icon{display: none !important;}
+.ops-root .ops-main-menu > .ops-steps > button::after, .ops-root.ops-processing > .ops-steps > button::after{content: ""; position: absolute; left: 12px; right: 12px; bottom: 4px; height: 3px; border-radius: 2px; background: var(--accent,#b9ee77); opacity: 0;}
+.ops-root .ops-main-menu > .ops-steps > button:is([aria-current], :hover, :focus-visible), .ops-root.ops-processing > .ops-steps > button:is([aria-current], :hover, :focus-visible){opacity: 1; background: transparent !important; box-shadow: none !important;}
+.ops-root .ops-main-menu > .ops-steps > button:is([aria-current], :hover, :focus-visible)::after, .ops-root.ops-processing > .ops-steps > button:is([aria-current], :hover, :focus-visible)::after{opacity: 1;}
+.ops-root.ops-processing > .ops-steps{justify-content: center; display: flex !important; flex-wrap: nowrap !important; gap: 2px !important; overflow-x: auto !important; background: color-mix(in srgb,var(--menu,#253044) 70%,transparent) !important; padding: 0px 8px !important;}
+@container (max-width: 900px) {.ops-root .ops-main-menu{grid-template-columns: minmax(0px, 1fr) auto;}
+.ops-root .ops-main-menu > .ops-steps{grid-column: 1; justify-content: flex-start;}
+.ops-root .ops-main-menu > .ops-crew-login{grid-column: 2;}}
+@container (max-width: 560px) {.ops-root .ops-main-menu{padding: 0px 4px !important;}
+.ops-root .ops-main-menu > .ops-steps > button, .ops-root.ops-processing > .ops-steps > button{padding: 10px 8px !important;}
+.ops-root.ops-processing > .ops-steps{justify-content: flex-start;}
+.ops-root .ops-main-menu > .ops-crew-login{font-size: 11px;}}

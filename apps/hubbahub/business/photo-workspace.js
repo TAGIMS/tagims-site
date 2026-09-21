@@ -1,12 +1,34 @@
 /* Shared, keyed photo surfaces. Originals are never duplicated for albums. */
 window.OpsPhotoWorkspace=({S,esc,dialog,input,options,button,status,projectId})=>{
   const surfaces=new Set();
-  const act=(text,key)=>`<button type="button" data-photo-command="${key}">${text}</button>`;
+  const act=(text,key)=>`<button type="button" data-photo-command="${key}" ${S.mode!=='demo'&&['album','delete','restore'].includes(key)?'disabled title="Available in local demo only"':''}>${text}</button>`;
   const active=()=>S.data.photos.filter(p=>!p.deleted_at);
+  let livePhotos=[],liveLoaded=false,liveError='',liveRequest=null;
+  async function refreshLive(){
+    if(liveRequest)return liveRequest;
+    liveRequest=(async()=>{try{livePhotos=await S.readDevGallery();liveLoaded=true;liveError='';}catch(e){liveError='Unable to refresh gallery. Try again.';}finally{liveRequest=null;updateAll();}})();
+    return liveRequest;
+  }
+  function renderLive(el){
+    const q=el._photoState,host=el.querySelector('.ops-live-album');
+    const ids=new Set(livePhotos.map(p=>p.id));q.selection.forEach(id=>{if(!ids.has(id))q.selection.delete(id);});
+    host.innerHTML=`<p class="ops-muted">PColaHome development gallery · Website order</p><div class="ops-bulk-bar"><label class="ops-check"><input type="checkbox" data-live-all ${livePhotos.length&&q.selection.size===livePhotos.length?'checked':''} ${!livePhotos.length?'disabled':''}> Select all ${livePhotos.length}</label><span>${q.selection.size?q.selection.size+' selected':''}</span>${q.selection.size?act('Remove from gallery','removeDev')+act('Clear','clear'):''}${act('Refresh','refreshLive')}</div><p role="status">${esc(liveError||(!liveLoaded?'Loading photos…':!livePhotos.length?'No photos published yet.':''))}</p><div class="ops-live-grid"></div>`;
+    host.querySelector('[data-live-all]').indeterminate=q.selection.size>0&&q.selection.size<livePhotos.length;
+    const grid=host.querySelector('.ops-live-grid');
+    for(const p of livePhotos.slice(q.page*72,(q.page+1)*72)){
+      const card=document.createElement('article');card.dataset.photoId=p.id;
+      card.innerHTML=`<label class="ops-check ops-live-select"><input type="checkbox" data-live-pick aria-label="Select photo ${livePhotos.indexOf(p)+1}" ${q.selection.has(p.id)?'checked':''}> Select</label><a target="_blank" rel="noopener"><img loading="lazy"></a>${act('Remove from gallery','removeDev')}`;
+      card.querySelector('a').href=p.url;card.querySelector('img').src=p.url;card.querySelector('img').alt=p.alt||'Published photo';grid.append(card);
+    }
+    if(livePhotos.length>72)host.insertAdjacentHTML('beforeend',`<nav class="ops-photo-paging" aria-label="Live gallery pages"><button type="button" data-photo-page="-1" ${q.page===0?'disabled':''}>← Previous</button><span>${q.page+1} / ${Math.ceil(livePhotos.length/72)}</span><button type="button" data-photo-page="1" ${(q.page+1)*72>=livePhotos.length?'disabled':''}>Next →</button></nav>`);
+    el.querySelector('[data-photo-count]').textContent=`${livePhotos.length} published`;
+    if(!el._liveTimer){el._liveTimer=setInterval(()=>{if(!el.isConnected){clearInterval(el._liveTimer);el._liveTimer=null;}else if(q.filter==='live'&&!document.hidden)void refreshLive();},30000);void refreshLive();}
+  }
   function visible(el){
+    if(el._photoState.filter==='live')return livePhotos;
     const q=el._photoState;let photos=S.data.photos.filter(p=>q.filter==='trash'?!!p.deleted_at:!p.deleted_at);
     if(q.filter!=='trash'){
-      if(el.dataset.opsType==='opsPhotos')photos=photos.filter(p=>!p.project_id&&!p.albums?.length&&!p.gallery);
+      if(q.filter==='unsorted')photos=photos.filter(p=>!p.project_id&&!p.albums?.length);
       if(el.dataset.opsType==='opsGallery')photos=photos.filter(p=>!!p.gallery&&!p.project_id&&!p.albums?.length);
       if(el.dataset.opsType==='opsAlbums')photos=photos.filter(p=>p.project_id||p.albums?.length);
       if(q.filter==='projects')photos=photos.filter(p=>!!p.project_id);
@@ -19,30 +41,36 @@ window.OpsPhotoWorkspace=({S,esc,dialog,input,options,button,status,projectId})=
     return photos.sort((a,b)=>q.sort==='name'?String(a.name).localeCompare(String(b.name)):q.sort==='oldest'?String(a.created_at).localeCompare(String(b.created_at)):String(b.created_at).localeCompare(String(a.created_at)));
   }
   function updateAll(){for(const el of surfaces)if(el.isConnected)render(el);else dispose(el);}
-  function dispose(el){el?._photoObserver?.disconnect();el?._photoCards?.forEach(card=>{if(card._url?.startsWith('blob:'))URL.revokeObjectURL(card._url);});surfaces.delete(el);if(el)el._photoCards=null;}
+  function dispose(el){clearInterval(el?._liveTimer);if(el)el._liveTimer=null;el?._photoObserver?.disconnect();el?._photoCards?.forEach(card=>{if(card._url?.startsWith('blob:'))URL.revokeObjectURL(card._url);});surfaces.delete(el);if(el)el._photoCards=null;}
   function render(el){
     surfaces.add(el);
     if(!el._photoCards){
-      el._photoState={filter:el.dataset.opsType==='opsTrash'?'trash':'all',search:'',sort:'newest',page:0,selection:new Set()};el._photoCards=new Map();
+      el._photoState={filter:el.dataset.opsType==='opsLiveGallery'?'live':el.dataset.opsType==='opsTrash'?'trash':'all',search:'',sort:'newest',page:0,selection:new Set()};el._photoCards=new Map();
       const gallery=el.dataset.opsType==='opsGallery',publish=el.dataset.opsType==='opsPublish';
-      el.innerHTML=`<div class="ops-heading"><h2>${gallery?'Photo Gallery':publish?'Publish':'Photo Inbox'}</h2><span data-photo-count></span></div><h3 class="ops-section-title">${gallery?'Explore your library':'Organize photos'}</h3><div class="ops-photo-filters"></div><div class="ops-gallery-tools"><label class="ops-search">Search photos<input type="search" data-photo-search placeholder="Name, room, project…"></label><label>Sort<select data-photo-sort><option value="newest">Newest added</option><option value="oldest">Oldest added</option><option value="name">Name A–Z</option></select></label></div>${publish?button('Export website gallery','exportGallery')+'<p class="ops-muted">Only approved photos export. Revocation does not remove copies already published elsewhere.</p>':''}<div class="ops-bulk-bar"></div><label class="ops-thumbnail-control"><span>Thumbnail size</span><input type="range" min="80" max="320" step="10" data-thumbnail-size aria-label="Thumbnail size"><output data-thumbnail-value></output></label><div class="ops-photo-grid"></div><p data-photo-empty class="ops-empty" hidden>No photos here yet.</p>`;
+      el.innerHTML=`<div class="ops-heading"><h2>${gallery?'Photo Gallery':publish?'Publish':'Photos'}</h2><span data-photo-count></span></div><h3 class="ops-section-title">${gallery?'Explore your library':'Organize photos'}</h3><div class="ops-photo-filters"></div><div class="ops-gallery-tools"><label class="ops-search">Search photos<input type="search" data-photo-search placeholder="Name, room, project…"></label><label>Sort<select data-photo-sort><option value="newest">Newest added</option><option value="oldest">Oldest added</option><option value="name">Name A–Z</option></select></label></div>${publish?button('Export website gallery','exportGallery')+'<p class="ops-muted">Select photos below to publish directly to the PColaHome test gallery.</p>':''}<div class="ops-bulk-bar"></div><label class="ops-thumbnail-control"><span>Thumbnail size</span><input type="range" min="80" max="320" step="10" data-thumbnail-size aria-label="Thumbnail size"><output data-thumbnail-value></output></label><div class="ops-photo-grid"></div><p data-photo-empty class="ops-empty" hidden>No photos here yet.</p>`;
       if(el.dataset.opsType==='opsPhotos'){el.querySelector('.ops-heading').insertAdjacentHTML('beforeend',button('＋ Add photos','launchWidget','opsUpload'));}
-      const title={opsPhotos:'Photo Inbox',opsGallery:'Photo Gallery',opsAlbums:'Albums',opsTrash:'Trash',opsPublish:'Publish'}[el.dataset.opsType];el.querySelector('.ops-heading h2').textContent=title;
-      el.querySelector('.ops-section-title').textContent={opsPhotos:'Incoming photos',opsGallery:'Unsorted photos',opsAlbums:'Sorted photos',opsTrash:'Restore deleted photos',opsPublish:'Website-approved photos'}[el.dataset.opsType];
+      const title={opsPhotos:'Photos',opsGallery:'Photo Gallery',opsLiveGallery:'Live Gallery',opsAlbums:'Albums',opsTrash:'Trash',opsPublish:'Publish'}[el.dataset.opsType];el.querySelector('.ops-heading h2').textContent=title;
+      el.querySelector('.ops-section-title').textContent={opsPhotos:'Photo library',opsGallery:'Unsorted photos',opsAlbums:'Sorted photos',opsTrash:'Restore deleted photos',opsPublish:'Website-approved photos'}[el.dataset.opsType];
       if(!el._photoBound){el._photoBound=true;
+      el.addEventListener('change',ev=>{const t=ev.target;if(t.matches('[data-live-pick]')){const id=t.closest('[data-photo-id]').dataset.photoId;t.checked?el._photoState.selection.add(id):el._photoState.selection.delete(id);renderLive(el);}if(t.matches('[data-live-all]')){livePhotos.forEach(p=>t.checked?el._photoState.selection.add(p.id):el._photoState.selection.delete(p.id));renderLive(el);}});
       el.addEventListener('toggle',ev=>{const menu=ev.target;if(!menu.matches('.ops-photo-settings')||!menu.open)return;const panel=menu.querySelector('.ops-photo-settings-panel');panel.style.transform='';const bounds=panel.getBoundingClientRect(),area=el.getBoundingClientRect();const shift=Math.max(area.left+8-bounds.left,Math.min(0,area.right-8-bounds.right));panel.style.transform=`translateX(${shift}px)`;},true);
       el.addEventListener('input',ev=>{if(ev.target.matches('[data-photo-search]')){el._photoState.search=ev.target.value;el._photoState.page=0;render(el);}});
       el.addEventListener('change',ev=>{const t=ev.target,q=el._photoState;if(t.matches('[data-photo-sort]')){q.sort=t.value;q.page=0;render(el);}if(t.matches('[data-pick-photo]')){t.checked?q.selection.add(t.dataset.pickPhoto):q.selection.delete(t.dataset.pickPhoto);updateSelection(el);}if(t.matches('[data-pick-all]')){visible(el).forEach(p=>t.checked?q.selection.add(p.id):q.selection.delete(p.id));updateSelection(el);}});
-      el.addEventListener('click',ev=>{const page=ev.target.closest('[data-photo-page]');if(page){el._photoState.page+=Number(page.dataset.photoPage);render(el);el.scrollTop=0;return;}const f=ev.target.closest('[data-photo-filter]');if(f){el._photoState.page=0;el._photoState.filter=f.dataset.photoFilter;el._photoState.selection.clear();render(el);return;}const b=ev.target.closest('[data-photo-command]');if(b)command(el,b.dataset.photoCommand,b.closest('[data-photo-id]')?.dataset.photoId).catch(e=>status(e.message,true));});
+      el.addEventListener('click',ev=>{const page=ev.target.closest('[data-photo-page]');if(page){el._photoState.page+=Number(page.dataset.photoPage);render(el);el.scrollTop=0;return;}const f=ev.target.closest('[data-photo-filter]');if(f){el._photoState.page=0;el._photoState.filter=f.dataset.photoFilter;el._photoState.selection.clear();render(el);if(el._photoState.filter==='live')void refreshLive();return;}const b=ev.target.closest('[data-photo-command]');if(b)command(el,b.dataset.photoCommand,b.closest('[data-photo-id]')?.dataset.photoId).catch(e=>status(e.message,true));});
       }
     }
     const q=el._photoState,photos=visible(el),allIds=new Set(photos.map(p=>p.id));
     q.page=Math.min(q.page||0,Math.max(0,Math.ceil(photos.length/72)-1));const pagePhotos=photos.slice(q.page*72,(q.page+1)*72),ids=new Set(pagePhotos.map(p=>p.id));
     q.selection.forEach(id=>{if(!allIds.has(id))q.selection.delete(id);});
     const albums=el.dataset.opsType==='opsAlbums',trash=el.dataset.opsType==='opsTrash';
-    const filters=trash?[['trash','Trash']]:albums?[['all','All sorted photos'],['projects','Project albums'],['other','Other albums'],...S.data.projects.filter(p=>active().some(x=>x.project_id===p.id)).map(p=>['project:'+p.id,'Project · '+p.name]),...[...new Set(active().filter(p=>!p.project_id).flatMap(p=>p.albums||[]))].sort().map(a=>['album:'+a,'Album · '+a])]:[['all',el.dataset.opsType==='opsGallery'?'All unsorted photos':el.dataset.opsType==='opsPublish'?'Approved photos':'Inbox']];
+    const filters=trash?[['trash','Trash']]:el.dataset.opsType==='opsPhotos'?[['all','All photos'],['unsorted','Unsorted']]:albums?[['all','All sorted photos'],['projects','Project albums'],['other','Other albums'],...S.data.projects.filter(p=>active().some(x=>x.project_id===p.id)).map(p=>['project:'+p.id,'Project · '+p.name]),...[...new Set(active().filter(p=>!p.project_id).flatMap(p=>p.albums||[]))].sort().map(a=>['album:'+a,'Album · '+a])]:[['all',el.dataset.opsType==='opsGallery'?'All unsorted photos':el.dataset.opsType==='opsPublish'?'Approved photos':'Photos']];
+    if(el.dataset.opsType==='opsLiveGallery'){filters.length=0;filters.push(['live','Live Gallery']);}
     if(!filters.some(([v])=>v===q.filter)){q.filter='all';return render(el);}
     el.querySelector('.ops-photo-filters').innerHTML=filters.map(([v,l])=>`<button type="button" data-photo-filter="${esc(v)}" aria-pressed="${q.filter===v}">${esc(l)}</button>`).join('');
+    let liveHost=el.querySelector('.ops-live-album');if(!liveHost){liveHost=document.createElement('section');liveHost.className='ops-live-album';el.querySelector('.ops-photo-filters').after(liveHost);}
+    liveHost.hidden=q.filter!=='live';el.classList.toggle('ops-live-open',q.filter==='live');
+    for(const child of el.children){if(!child.matches('.ops-heading,.ops-photo-filters,.ops-live-album'))child.hidden=q.filter==='live';}
+    if(q.filter==='live'){el.querySelector('.ops-photo-filters').hidden=true;renderLive(el);return;}
     const grid=el.querySelector('.ops-photo-grid');
     for(const [id,card] of el._photoCards){if(!ids.has(id)){el._photoObserver?.unobserve(card);card.remove();if(card._url?.startsWith('blob:'))URL.revokeObjectURL(card._url);el._photoCards.delete(id);}}
     pagePhotos.forEach((p,index)=>{
@@ -56,7 +84,7 @@ window.OpsPhotoWorkspace=({S,esc,dialog,input,options,button,status,projectId})=
       card.querySelector('img').alt=p.caption||p.name||'Photo';card.querySelector('[data-pick-photo]').setAttribute('aria-label','Select '+(p.name||'photo'));
       card.querySelector('.ops-photo-caption strong').textContent=p.name||'Untitled photo';card.querySelector('.ops-photo-caption strong').title=p.name||'';
       card.querySelector('.ops-photo-caption small').textContent=[p.room,S.data.projects.find(x=>x.id===p.project_id)?.name,p.stage!=='unsorted'?p.stage:''].filter(Boolean).join(' · ')||'Unassigned';
-      const menu=p.deleted_at?act('↶ Restore','restore'):act('✎ Rename','rename')+act('Edit details','edit')+(el.dataset.opsType==='opsPhotos'?act('▧ Move to Photo Gallery','gallery'):'')+act('▱ Add to album','album')+(!p.project_id?act('↗ Assign to project','assign'):'')+(p.project_id?button(p.website_public?'Revoke approval':'Approve for website','approvePhoto',p.id):'')+act('⌫ Move to Trash','delete');
+      const menu=p.deleted_at?act('↶ Restore','restore'):act('✎ Rename','rename')+act('Edit details','edit')+act('▱ Add to album','album')+(!p.project_id?act('↗ Assign to project','assign'):'')+(p.project_id?button(p.website_public?'Revoke approval':'Approve for website','approvePhoto',p.id):'')+act('Publish to test gallery','publishDev')+act('⌫ Move to Trash','delete');
       const panel=card.querySelector('.ops-photo-settings-panel');if(el.dataset.opsType==='opsGallery')card.querySelector('.ops-photo-settings')?.remove();else if(panel&&panel.innerHTML!==menu)panel.innerHTML=menu;
     });
     let paging=el.querySelector('.ops-photo-paging');if(!paging){paging=document.createElement('nav');paging.className='ops-photo-paging';paging.setAttribute('aria-label','Photo pages');grid.after(paging);}
@@ -66,20 +94,35 @@ window.OpsPhotoWorkspace=({S,esc,dialog,input,options,button,status,projectId})=
   }
   function updateSelection(el){const q=el._photoState,photos=visible(el),n=q.selection.size;
     el._photoCards.forEach((card,id)=>{card.classList.toggle('ops-photo-selected',q.selection.has(id));card.querySelector('[data-pick-photo]').checked=q.selection.has(id);});
-    el.querySelector('.ops-bulk-bar').innerHTML=`<label class="ops-check"><input type="checkbox" data-pick-all ${photos.length&&n===photos.length?'checked':''} ${!photos.length?'disabled':''}> Select all matching</label><span>${n?n+' selected':''}</span>${n?(q.filter==='trash'?act('↶ Restore','restore'):el.dataset.opsType==='opsGallery'?act('▱ Add to album','album'):act('✎ Rename','rename')+act('Edit','edit')+(el.dataset.opsType==='opsPhotos'?act('▧ Move to Photo Gallery','gallery'):'')+act('▱ Album','album')+(photos.filter(p=>q.selection.has(p.id)).every(p=>!p.project_id)?act('↗ Assign','assign'):'')+act('⌫ Delete','delete'))+act('Clear','clear'):''}`;
+    el.querySelector('.ops-bulk-bar').innerHTML=`<label class="ops-check"><input type="checkbox" data-pick-all ${photos.length&&n===photos.length?'checked':''} ${!photos.length?'disabled':''}> Select all matching</label><span>${n?n+' selected':''}</span>${n?(q.filter==='trash'?act('↶ Restore','restore'):el.dataset.opsType==='opsGallery'?act('▱ Add to album','album'):act('✎ Rename','rename')+act('Edit','edit')+act('▱ Album','album')+(photos.filter(p=>q.selection.has(p.id)).every(p=>!p.project_id)?act('↗ Assign','assign'):'')+act('⌫ Move to Trash','delete'))+(q.filter!=='trash'?act('Publish to test gallery','publishDev'):'')+act('Clear','clear'):''}`;
     el.querySelector('[data-pick-all]').indeterminate=n>0&&n<photos.length;
   }
   async function command(el,key,id){
-    if(el.dataset.opsType==='opsGallery'&&!['clear','preview','album'].includes(key))return;
-    const q=el._photoState,ids=id?[id]:[...q.selection],photos=ids.map(id=>S.data.photos.find(p=>p.id===id)).filter(Boolean);
-    if(key==='clear'){q.selection.clear();updateSelection(el);return;}if(key==='preview'){lightbox(el,id);return;}
+    if(key==='refreshLive'){await refreshLive();return;}
+    if(key==='removeDev'&&el._photoState.filter!=='live')return;
+    if(el.dataset.opsType==='opsGallery'&&!['clear','preview','album','publishDev','removeDev'].includes(key))return;
+    const q=el._photoState,ids=id?[id]:[...q.selection],photos=ids.map(id=>(q.filter==='live'?livePhotos:S.data.photos).find(p=>p.id===id)).filter(Boolean);
+    if(key==='clear'){q.selection.clear();q.filter==='live'?renderLive(el):updateSelection(el);return;}if(key==='preview'){lightbox(el,id);return;}
     if(!photos.length)return;
+    if(key==='publishDev'||key==='removeDev'){
+      if(S.mode!=='cloud')throw new Error('Sign in to the shared photo library first. Local demo photos are not online yet.');
+      if(key==='publishDev'&&photos.length>20)throw new Error('Publish up to 20 photos at a time.');
+      const removing=key==='removeDev';
+      dialog(removing?'Remove from test gallery':'Publish to test gallery',removing?`<p>Remove ${photos.length} photo(s) from the PColaHome development gallery? Originals stay in the Hub.</p>`:`<p>Publish ${photos.length} photo(s) directly to the PColaHome development gallery. Only publish photos you have permission to share.</p>${input('alt','Image description','Remodeling project photo','text',true)}`,
+      async fields=>{
+        if(el._publishing)return;el._publishing=true;
+        try{let done=0;const failures=[];
+          for(const photo of photos){try{if(removing)await S.removeDevPhoto(photo);else await S.publishDevPhoto(photo,{caption:'',alt:fields.alt.trim().slice(0,300)});done++;q.selection.delete(photo.id);status(`${done} of ${photos.length} ${removing?'removed':'published'}…`);}catch(error){failures.push(error.message);}}
+          await refreshLive();if(failures.length)throw new Error(`${done} succeeded; ${failures.length} failed. ${failures[0]}`);
+          status(`${done} photo(s) ${removing?'removed from':'published to'} the PColaHome test gallery. No website approval needed.`);
+        }finally{el._publishing=false;}
+      },removing?'Remove':'Publish');return;
+    }
     if(key==='assign'){dialog(`Assign ${photos.length} photo(s)`,`<p>These originals will become accessible to the chosen project’s team. Website approval will not change.</p><label>Project<select name="project" required><option value="">Choose project</option>${options(S.data.projects.map(p=>[p.id,p.name]))}</select></label>`,async f=>{const failed=[];for(const p of photos){try{await S.assignPhoto(p.id,f.project);q.selection.delete(p.id);}catch(e){failed.push(e.message);}}updateAll();if(failed.length)throw new Error(failed.join('; '));},'Confirm assignment');return;}
     if(S.mode!=='demo'&&['gallery','album','delete','restore'].includes(key))throw new Error('This new feature is local-demo only until cloud integration is ready.');
     const apply=async patch=>{await S.organizePhotos(ids,patch);q.selection.clear();updateAll();};
-    if(key==='delete'){dialog(`Move ${photos.length} photo(s) to Trash?`,'<p>Removed from Inbox, Photo Gallery, and project photo views. Originals stay in local Trash and can be restored. Previously exported website copies are not removed.</p>',()=>apply({deleted_at:new Date().toISOString()}),'Move to Trash');return;}
+    if(key==='delete'){dialog(`Move ${photos.length} photo(s) to Trash?`,'<p>Removed from Photos, Albums, and project photo views. Originals stay in local Trash and can be restored. Previously exported website copies are not removed.</p>',()=>apply({deleted_at:new Date().toISOString()}),'Move to Trash');return;}
     if(key==='restore'){await apply({deleted_at:null});status('Photos restored.');return;}
-    if(key==='gallery'){await apply({gallery:true});status('Added to Photo Gallery. No originals duplicated.');return;}
     if(key==='album'){dialog('Add to album',input('album','Album name','','text',true)+'<p>Use an existing name or create a new album. Photos can belong to multiple albums.</p>',f=>{const name=f.album.trim();if(!name)throw new Error('Enter an album name.');return apply(p=>({gallery:true,albums:[...new Set([...(p.albums||[]),name])]}));});return;}
     if(key==='rename'){dialog(photos.length===1?'Rename photo':`Rename ${photos.length} photos`,input('name',photos.length===1?'Photo name':'Shared name',photos.length===1?photos[0].name:'','text',true)+(photos.length>1?'<p>Numbering follows the current selection: Name 01, Name 02… Original file extensions are preserved.</p>':''),async f=>{const base=f.name.trim();if(!base)throw new Error('Enter a name.');const patch=(p,i)=>({name:photos.length===1?base:base+' '+String(i+1).padStart(2,'0')+(p.name?.match(/\.[a-z0-9]{2,5}$/i)?.[0]||'')});if(S.mode==='demo')await apply(patch);else for(let i=0;i<photos.length;i++)await S.save('photos',{...photos[i],...patch(photos[i],i)});});return;}
     if(key==='edit'){dialog(`Edit ${photos.length} photo(s)`,`<label>Stage<select name="stage"><option value="">Keep current</option>${options(['unsorted','before','during','after'].map(s=>[s,s]))}</select></label><label class="ops-check"><input type="checkbox" name="set_room"> Replace room</label>${input('room','Room / work area')}<label class="ops-check"><input type="checkbox" name="set_caption"> Replace caption</label>${input('caption','Caption')}`,async f=>{const patch={...(f.stage?{stage:f.stage}:{}),...(f.set_room?{room:f.room}:{}),...(f.set_caption?{caption:f.caption}:{})};if(!Object.keys(patch).length)throw new Error('Choose a field to edit.');if(S.mode==='demo')await apply(patch);else for(const p of photos)await S.save('photos',{...p,...patch});});}

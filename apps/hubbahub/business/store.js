@@ -148,7 +148,27 @@
     if(!thumbJobs.has(key)){const task=new Promise((resolve,reject)=>{thumbQueue.push(async()=>{try{let blob=await local(s=>s.get(key),'files');if(!blob){const original=await local(s=>s.get(photo.storage_path),'files');if(!original)throw new Error('Original image is missing.');const bitmap=await createImageBitmap(original);try{const scale=Math.min(1,480/Math.max(bitmap.width,bitmap.height)),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);blob=await new Promise(r=>canvas.toBlob(r,'image/webp',.75));if(!blob)throw new Error('Could not create thumbnail.');await local(s=>s.put(blob,key),'files');}finally{bitmap.close();}}resolve(blob);}catch(e){reject(e);}});pumpThumbs();});thumbJobs.set(key,task);task.finally(()=>thumbJobs.delete(key)).catch(()=>{});}
     return URL.createObjectURL(await thumbJobs.get(key));
   }
-  window.OpsStore={get mode(){return mode;},get user(){return session?.user;},get data(){return data;},on(fn){listeners.add(fn);return()=>listeners.delete(fn);},reload,save,upload,assignPhoto,image,thumbnail,review,publication,exportBackup,reorderPipeline,organizePhotos,appendProjectRecord,projectBudget,reorderProjects,
+  async function publishDevPhoto(photo,details){
+    if(mode!=='cloud')throw new Error('Sign in to your shared photo library before publishing. Local demo photos must be uploaded there first.');
+    const source=await image(photo);
+    try{
+      const img=new Image();img.crossOrigin='anonymous';img.src=source;await img.decode();
+      const ratio=Math.min(1,1600/Math.max(img.width,img.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.width*ratio));canvas.height=Math.max(1,Math.round(img.height*ratio));canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+      const jpeg=canvas.toDataURL('image/jpeg',.82).split(',')[1];
+      return await request('/functions/v1/pcolahome-dev-gallery',{method:'POST',body:JSON.stringify({target:'pcolahome-development',action:'publish',photoId:photo.id,jpeg,caption:'',alt:details.alt})});
+    }finally{if(source.startsWith('blob:'))URL.revokeObjectURL(source);}
+  }
+  async function readDevGallery(){
+    const feed=await request('/functions/v1/pcolahome-dev-gallery',{cache:'no-store',signal:AbortSignal.timeout(15000)},false);
+    if(feed.target!=='pcolahome-development'||!Array.isArray(feed.photos))throw new Error('Gallery unavailable.');
+    for(const photo of feed.photos){if(typeof photo.id!=='string'||typeof photo.url!=='string'||new URL(photo.url).origin!==new URL(OpsConfig.url).origin)throw new Error('Invalid gallery photo.');}
+    return feed.photos;
+  }
+  async function removeDevPhoto(photo){
+    if(mode!=='cloud')throw new Error('Sign in to your shared photo library first.');
+    return request('/functions/v1/pcolahome-dev-gallery',{method:'POST',body:JSON.stringify({target:'pcolahome-development',action:'remove',photoId:photo.id})});
+  }
+  window.OpsStore={get mode(){return mode;},get user(){return session?.user;},get data(){return data;},on(fn){listeners.add(fn);return()=>listeners.delete(fn);},reload,save,upload,portalRequest:body=>request('/functions/v1/pcolahome-dev-portal',{method:'POST',body:JSON.stringify(body)}),publishDevPhoto,readDevGallery,removeDevPhoto,assignPhoto,image,thumbnail,review,publication,exportBackup,reorderPipeline,organizePhotos,appendProjectRecord,projectBudget,reorderProjects,
     async loadFinancials(){const owner=session?.user?.id;if(mode!=='cloud'||!owner)throw new Error('Sign in to sync finances.');const rows=await request('/rest/v1/ops_financial_dashboards?user_id=eq.'+id(owner)+'&select=worksheet,revision');if(session?.user?.id!==owner)throw new Error('Workspace changed.');return rows?.[0]||null;},
     async saveFinancials(worksheet,revision){const owner=session?.user?.id;if(mode!=='cloud'||!owner)throw new Error('Sign in to sync finances.');const rows=await request('/rest/v1/ops_financial_dashboards'+(revision===null?'':'?user_id=eq.'+id(owner)+'&revision=eq.'+Number(revision)),{method:revision===null?'POST':'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({user_id:owner,worksheet,revision:revision===null?1:Number(revision)+1,updated_at:new Date().toISOString()})});if(session?.user?.id!==owner)throw new Error('Workspace changed.');if(!rows?.length)throw new Error('Newer edits exist on another device. Load saved finances before continuing.');return rows[0];},
     async loadAppearance(){const owner=session?.user?.id;if(mode!=='cloud'||!owner)throw new Error('Sign in to sync appearance.');const rows=await request('/rest/v1/ops_user_preferences?user_id=eq.'+id(owner)+'&select=appearance');if(session?.user?.id!==owner)throw new Error('Workspace changed.');return rows?.[0]?.appearance||null;},
