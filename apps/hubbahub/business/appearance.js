@@ -29,13 +29,25 @@
     if(bg!==null&&bg!==undefined&&(typeof bg!=='string'||bg.length>11000000||!(/^(https?:\/\/|data:image\/(png|jpeg|webp|gif);base64,|assets\/)/i.test(bg))))throw Error('Unsupported background image in backup.');
     return {version:1,settings,background:bg||null};
   }
-  async function apply(bundle){
+  // Startup may migrate view settings. Remember the applied cloud snapshot
+  // independently, so those migrations cannot trigger another restore/reload.
+  async function autoRestoreSnapshot(owner, value){
+    const db=await openDB(),key='appearance-auto-restored:'+owner;
+    try{return await new Promise((resolve,reject)=>{
+      const write=value!==undefined,t=db.transaction('settings',write?'readwrite':'readonly');
+      const q=write?t.objectStore('settings').put(value,key):t.objectStore('settings').get(key);
+      t.oncomplete=()=>resolve(write?value:q.result||null);
+      t.onerror=()=>reject(t.error);t.onabort=()=>reject(t.error||new Error('Appearance storage unavailable.'));
+    });}finally{db.close();}
+  }
+  async function apply(bundle, autoOwner=null){
     const clean=validate(bundle);
     // Keep a recoverable local copy before replacing appearance.
     const before=await capture(),db=await openDB();
     await new Promise((resolve,reject)=>{const t=db.transaction('settings','readwrite');t.objectStore('settings').put(before,'appearance-before-restore');t.oncomplete=resolve;t.onerror=()=>reject(t.error);});db.close();
     await saveImage(clean.background);
     for(const [k,v] of Object.entries(clean.settings))v===null?localStorage.removeItem(k):localStorage.setItem(k,v);
+    if(autoOwner)await autoRestoreSnapshot(autoOwner,clean);
     location.reload();
   }
   const auto=host.querySelector('#appearanceAuto'),file=host.querySelector('#appearanceFile');
@@ -73,7 +85,11 @@
       if(cloud){
         const clean=validate(cloud),current=await capture();
         localStorage.setItem(ownerKey(),'true');auto.checked=true;
-        if(canonical(clean)!==canonical(validate(current)))await apply(clean);
+        const previous=await autoRestoreSnapshot(owner);
+        if(OpsStore.user?.id!==owner)return;
+        if(canonical(clean)!==canonical(validate(current))){
+          if(canonical(clean)!==canonical(previous))await apply(clean,owner);
+        }else if(canonical(clean)!==canonical(previous))await autoRestoreSnapshot(owner,clean);
       }
     }catch(e){say('Account sync unavailable. Local appearance retained. '+e.message);}
   }
