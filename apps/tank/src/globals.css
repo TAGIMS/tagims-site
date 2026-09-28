@@ -86,3 +86,21 @@
 .floating-studio .tab-arrow:hover{background:color-mix(in srgb,var(--menu-accent) 14%,transparent)}
 
 .relax-foreground{position:absolute;inset:0;width:100%;height:100%;z-index:2147483647;pointer-events:none}
+
+/* Compact top-right controls: menu, full screen, account. */
+.aquarium-app .topbar{padding-right:max(14px,env(safe-area-inset-right));}
+.aquarium-app .top-actions{gap:6px;margin-left:auto;}
+.top-actions .top-icon-button{position:relative;width:42px;height:42px;min-width:42px;padding:0;border-radius:10px;border:1px solid #d5e9ed26;background:#102c3066;backdrop-filter:blur(14px);color:#e5f1ef;}
+.top-actions .top-icon-button:hover{background:#33535a99;border-color:#d5e9ed55;}
+.top-actions .top-icon-button[aria-pressed=true]{background:#27484e88;}
+.account-sync-dot{position:absolute;right:6px;top:6px;width:5px;height:5px;border-radius:50%;background:#b1d9ef;}
+/* Keep every main control together, with sound settings directly below. */
+.aquarium-app .topbar{z-index:41;flex-wrap:wrap;gap:8px;}
+.aquarium-app .top-actions{flex-shrink:0;}
+.aquarium-app .quick-sound{top:78px;right:max(14px,env(safe-area-inset-right));bottom:auto;left:auto;transform:none;max-height:calc(100dvh - 94px);}
+@media(max-width:560px){.aquarium-app .top-actions{gap:4px;}.top-actions .top-icon-button{width:40px;height:40px;min-width:40px;}.aquarium-app .quick-sound{top:108px;max-height:calc(100dvh - 124px);}}
+/* A brief feeding cue anchored to the hand, without blocking the water. */
+.feed-control{position:relative;display:inline-flex;}
+.feed-hint{position:absolute;top:calc(100% + 10px);left:0;width:max-content;max-width:calc(100vw - 32px);padding:10px 13px;border:1px solid #cfdfbd3b;border-radius:9px;background:#183b36ed;color:#e5eddc;box-shadow:0 8px 24px #001e2340;font-size:13px;line-height:1.5;pointer-events:none;animation:feed-hint-fade 2.6s ease forwards;}
+@keyframes feed-hint-fade{0%{opacity:0}8%,72%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.feed-hint{animation:none;}}
