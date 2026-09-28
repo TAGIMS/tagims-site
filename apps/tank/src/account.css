@@ -1,0 +1,16 @@
+.tank-account{color:#ecf7f9;background:#102d40;border:1px solid #66889c;border-radius:18px;padding:24px;width:min(430px,calc(100vw - 28px));max-height:calc(100dvh - 32px);overflow:auto;box-shadow:0 20px 90px #0009;margin:auto;}
+.tank-account::backdrop{background:#03121dbb;backdrop-filter:blur(5px)}
+.tank-account h2{font-size:23px;margin:0;font-weight:600}.account-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.account-heading button{font-size:26px;min-width:40px}
+.tank-account p{font-size:14px;line-height:1.6;margin:14px 0;color:#c7dce8}.tank-account .account-email{overflow-wrap:anywhere;color:white}
+.tank-account label{display:grid;gap:7px;margin:16px 0;font-size:14px}.tank-account input{background:#071c2a;color:white;border:1px solid #66889c;border-radius:8px;padding:12px;width:100%;font-size:16px}
+.tank-account button{border:1px solid #66889c;border-radius:8px;padding:10px 14px;margin:5px 0;min-height:44px;color:#e7f3f9;cursor:pointer}.tank-account form button,.tank-account>.account-primary{width:100%}.tank-account .account-primary{background:#b1d9ef;color:#102d40;border-color:#b1d9ef;font-weight:600}
+.tank-account button:disabled{opacity:.5;cursor:wait}.tank-account button:focus-visible,.tank-account input:focus-visible{outline:2px solid #b1d9ef;outline-offset:3px}.account-actions{display:flex;flex-wrap:wrap;gap:8px}.tank-account .account-note{font-size:12px;color:#aac3d2}
+.account-loading{display:grid;place-items:center;position:fixed;inset:0;background:#102d40;color:#ecf7f9}
+@media(max-width:420px){.top-actions{gap:4px}.top-actions .glass-button,.top-actions .primary-button{padding:8px 6px;font-size:11px}.topbar{padding:10px}.brand{font-size:23px}}
+
+.tank-account .account-remember{display:flex;align-items:center;gap:10px;margin:18px 0;font-size:14px;cursor:pointer;}
+.tank-account .account-remember input{width:18px;height:18px;padding:0;accent-color:#b1d9ef;flex-shrink:0;}
+.tank-account .google-signin{width:100%;gap:12px;background:#fff;color:#1f1f1f;border-color:#dadce0;font-weight:500;}
+.tank-account .google-signin:hover{background:#edf2f5;}
+.google-mark{font:bold 20px Arial,sans-serif;color:#4285f4;}
+.tank-account .account-separator{text-align:center;color:#aac3d2;font-size:12px;margin:14px 0;}

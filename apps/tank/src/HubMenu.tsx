@@ -1,0 +1,20 @@
+import {createContext,useContext,useEffect,useRef,useState,type ReactNode} from 'react';
+import {PanelLeft,Undo2} from 'lucide-react';
+const labels:Record<string,string>={inTank:'In Tank',fish:'Fish',plants:'Plants',wood:'Wood',rocks:'Rocks',scape:'Decor',floor:'Floor & terrain',lighting:'Lighting',waves:'Waves',water:'Water & bubbles',sound:'Sound',themes:'Themes',layouts:'Saved Scenes',appearance:'Reset'};
+const Sections=createContext<{expanded:Set<string>;toggle:(id:string)=>void}>({expanded:new Set(),toggle:()=>{}});
+export function HubSection({value,children}:{value:string;children:ReactNode}){
+ const {expanded,toggle}=useContext(Sections);
+ return <details className="hub-accordion" data-section={value} open={expanded.has(value)}><summary onClick={e=>{e.preventDefault();toggle(value);}}>{labels[value]||value}</summary><div className="hub-accordion-content">{expanded.has(value)&&children}</div></details>;
+}
+export default function HubMenu({children,open,onOpenChange,active,selectionKey,onUndo,canUndo,keepOpenOutside=false}:{children:ReactNode;open:boolean;onOpenChange:(open:boolean)=>void;active:string;selectionKey?:number;onUndo:()=>void;canUndo:boolean;keepOpenOutside?:boolean}){
+ const [expanded,setExpanded]=useState<Set<string>>(()=>new Set()),pinned=useRef(false),timer=useRef<ReturnType<typeof setTimeout>|undefined>(undefined),panel=useRef<HTMLElement>(null),gear=useRef<HTMLButtonElement>(null);
+ const cancel=()=>clearTimeout(timer.current);
+ const close=()=>{cancel();pinned.current=false;onOpenChange(false);};
+ const hover=()=>{cancel();onOpenChange(true);};
+ const leave=()=>{cancel();if(keepOpenOutside)return;timer.current=setTimeout(()=>{if(!panel.current?.matches(':hover')&&!gear.current?.matches(':hover')&&!document.activeElement?.matches('input,select,textarea,[role="slider"]'))onOpenChange(false);},120);};
+ useEffect(()=>()=>clearTimeout(timer.current),[]);
+ useEffect(()=>{if(!open)pinned.current=false;},[open]);
+ useEffect(()=>{if(selectionKey){setExpanded(s=>new Set([...s,active]));pinned.current=true;requestAnimationFrame(()=>panel.current?.querySelector('[data-section="'+active+'"]')?.scrollIntoView({block:'nearest'}));}},[active,selectionKey]);
+ useEffect(()=>{cancel();if(!open)return;const dismiss=(e:PointerEvent)=>{if(!keepOpenOutside&&!panel.current?.contains(e.target as Node)&&!gear.current?.contains(e.target as Node))close();};const escape=(e:KeyboardEvent)=>{if(e.key==='Escape'){close();gear.current?.focus();}};document.addEventListener('pointerdown',dismiss,true);document.addEventListener('keydown',escape);return()=>{document.removeEventListener('pointerdown',dismiss,true);document.removeEventListener('keydown',escape);};},[open,keepOpenOutside]);
+ return <><div className="hub-edge-trigger" aria-hidden="true" onPointerEnter={e=>{if(e.pointerType==='mouse')hover();}} onPointerLeave={leave}/><button ref={gear} className="hub-gear" title={open?'Close settings':'Open settings'} aria-label={open?'Close settings':'Open settings'} aria-expanded={open} aria-controls="tank-settings" onPointerEnter={e=>{if(e.pointerType==='mouse')hover();}} onPointerLeave={leave} onClick={()=>{const next=!(open&&pinned.current);pinned.current=next;onOpenChange(next);}}><PanelLeft size={23}/></button><aside ref={panel} id="tank-settings" className={'hub-panel'+(open?' open':'')} aria-label="Aquarium settings" inert={!open} onPointerEnter={cancel} onPointerLeave={leave}><header className="hub-panel-head"><h1>Settings</h1><button className="hub-undo" aria-label="Undo" title="Undo (Ctrl+Z)" disabled={!canUndo} onClick={onUndo}><Undo2 size={20}/></button><button className={'hub-section-control'+(expanded.size?' expanded':'')} aria-label={expanded.size?'Collapse all settings sections':'Expand all settings sections'} onClick={()=>setExpanded(expanded.size?new Set():new Set(Object.keys(labels)))}/></header><Sections.Provider value={{expanded,toggle:id=>setExpanded(s=>{const next=new Set(s);next.has(id)?next.delete(id):next.add(id);return next;})}}>{children}</Sections.Provider></aside></>;
+}

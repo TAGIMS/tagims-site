@@ -42,3 +42,28 @@ EXTRA_DECOR.push(
  {name:'Twisted root arch',category:'Wood',shape:'arch',color:'#75624b',height:1.4,width:2.3,note:'Asymmetric driftwood swim-through'},
  {name:'Zen stone lantern hut',category:'Ornaments',shape:'pagoda',color:'#899080',height:1.35,width:1.15,note:'Restored original Zen garden ornament'}
 );
+
+// September collection: individual photo cutouts, never renumber older pieces.
+EXTRA_DECOR.push(
+ {name:'Yukimi snow lantern',category:'Ornaments',shape:'pagoda',color:'#969c89',height:1.15,width:1.55,note:'Wide-roofed granite garden lantern'},
+ {name:'Five-tier stone pagoda',category:'Ornaments',shape:'pagoda',color:'#989a85',height:2.15,width:1.2,note:'Weathered tiered garden tower'},
+ {name:'Tsukubai stone basin',category:'Ornaments',shape:'pot',color:'#929585',height:.65,width:1.3,note:'Hollow hand-carved granite water basin'},
+ {name:'Stone torii gate',category:'Ornaments',shape:'arch',color:'#a2a594',height:1.65,width:2.1,note:'Quiet stone gateway with open swim-through'},
+ {name:'Seiryu ridge',category:'Stone',shape:'rock',color:'#727f88',height:1.25,width:1.8,note:'Rugged blue-gray stone with white mineral veins'},
+ {name:'Pagoda sandstone',category:'Stone',shape:'rock',color:'#bb8b50',height:.9,width:1.8,note:'Warm layered terraces'},
+ {name:'Basalt columns',category:'Stone',shape:'rock',color:'#4d5154',height:1.6,width:1.2,note:'Three uneven volcanic pillars'},
+ {name:'Rose quartz river stone',category:'Stone',shape:'rock',color:'#d5a6a1',height:.45,width:1.15,note:'Soft blush mineral veining'},
+ {name:'River oak roots',category:'Wood',shape:'wood',color:'#68503c',height:1.35,width:2.5,note:'Wide low root tangle with rich grain'},
+ {name:'Two-tone Mopani',category:'Wood',shape:'wood',color:'#9c7449',height:1.3,width:1.9,note:'Honey-colored ridges and deep chocolate hollows'}
+);
+
+EXTRA_DECOR.push(
+ {name:'Sweeping Manzanita',category:'Wood',shape:'wood',color:'#a05e39',height:1.1,width:2.7,note:'Airy red-brown branches with open space between the twigs'},
+ {name:'Malaysian driftwood slab',category:'Wood',shape:'wood',color:'#483124',height:.65,width:2.2,note:'Low dark heartwood with torn amber ridges'},
+ {name:'Hollow Cholla tube',category:'Wood',shape:'wood',color:'#b78c55',height:.55,width:1.5,note:'Honey-colored lattice and an open hollow end'},
+ {name:'Ghostwood fork',category:'Wood',shape:'wood',color:'#c3a27a',height:1.7,width:1.4,note:'Thick sandblasted limbs with flowing pale grain'},
+ {name:'Madagascar lace plant',category:'Plants',shape:'stem',color:'#77b958',height:1.6,width:1.4,note:'Translucent lattice leaves on arching stems'},
+ {name:'Bolbitis water fern',category:'Plants',shape:'stem',color:'#428347',height:1.15,width:1.4,note:'Delicate emerald fern fronds'},
+ {name:'Pogostemon helferi',category:'Plants',shape:'stem',color:'#94c949',height:.4,width:.75,note:'A low lime-green rosette of curly leaves'},
+ {name:'Hygrophila pinnatifida',category:'Plants',shape:'stem',color:'#987a43',height:.95,width:1.2,note:'Lobed copper and olive leaves for the midground'}
+);

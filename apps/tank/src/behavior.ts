@@ -23,7 +23,13 @@ export const HABITS:Habit[]=[
  habit('plants',3.0,.38,.23,.03,1.05,.85,.22,.8), // Betta: hover, flare, investigate
  habit('bottom',.13,.42,.43,.09,2.8,2.5,.4,1.6),
  habit('bottom',.10,.56,.42,0,.4,.45,.03,.25),
- habit('open',3.2,.18,.25,.03,.95,.95,.24,.85) // Fantail: leisurely, curious forager
+ habit('open',3.2,.18,.25,.03,.95,.95,.24,.85), // Fantail: leisurely, curious forager
+ habit('open',2.6,.10,.14,.04,1.5,1.5,.20,1.1), // Rummy-nose: cohesive midwater school
+ habit('plants',2.2,.22,.28,.05,1.8,1.5,.24,1.15), // Chili: sheltered ruby flashes
+ habit('open',4.7,.28,.12,.045,1.2,1,.18,.95), // Killifish: surface hovering
+ habit('plants',3.5,.35,.24,.015,.85,.8,.12,.75), // Honey gourami: gentle inspection
+ habit('bottom',.18,.28,.5,.06,1.8,1.5,.3,1.2), // Kuhli: winding substrate patrol
+ habit('open',4.8,.20,.08,.035,1.1,1,.18,.9) // Hatchetfish: upper-water silver school
 ];
 export type Obstacle={center:Vector3;radius:number;soft?:boolean};
 export type Food={id:number;position:Vector3;age:number};
@@ -32,7 +38,7 @@ export function createBrain(f:FishItem,random=Math.random):Brain{const sp=SPECIE
 // Startle signals decay across neighbors and a cooldown prevents endless panic loops.
 export function startleFish(f:Brain,source:Vector3,strength=1,random=Math.random){if(SPECIES[f.kind].body==='snail')return;const away=f.position.clone().sub(source);if(away.lengthSq()<.001)away.set(random()-.5,.1,random()-.5);away.normalize().add(new Vector3((random()-.5)*.5,(random()-.5)*.2,0)).normalize();f.target.copy(f.position).addScaledVector(away,1.5+strength*1.5);f.target.x=clamp(f.target.x,-7,7);f.target.y=clamp(f.target.y,.15,5.4);f.target.z=clamp(f.target.z,-2.3,2.3);f.mode='scurry';f.timer=.55+strength*.45;f.signal=.5;f.signalStrength=strength;f.cooldown=4+random()*3;f.reaction=null;}
 export function stepFish(f:Brain,all:Brain[],obstacles:Obstacle[],food:Food[],dt:number,pace:number,current:number,random=Math.random,terrain?:Terrain){
- const sp=SPECIES[f.kind],habit=HABITS[f.kind],ground=sp.zone<.5,bodyRadius=sp.length*f.size*.3,floor=terrain?heightAt(terrain,f.position.x,f.position.z):0,minY=floor+Math.max(ground?Math.max(.10,sp.length*f.size*.55):.15,bodyRadius*.75);f.timer-=dt;f.cooldown=Math.max(0,f.cooldown-dt);f.signal=Math.max(0,f.signal-dt);
+ const sp=SPECIES[f.kind],habit=HABITS[f.kind],ground=sp.zone<.5,bodyRadius=sp.length*f.size*.3,floor=terrain?heightAt(terrain,f.position.x,f.position.z):0,minY=floor+Math.max(ground?Math.max(.10,sp.length*f.size*(f.kind===23?.12:.55)):.15,bodyRadius*.75);f.timer-=dt;f.cooldown=Math.max(0,f.cooldown-dt);f.signal=Math.max(0,f.signal-dt);
  if(f.reaction){f.reaction.delay-=dt;if(f.reaction.delay<=0)startleFish(f,f.reaction.source,f.reaction.strength,random);}
  if(f.cooldown<=0&&!f.reaction&&sp.body!=='snail'){const alarm=all.find(other=>other!==f&&other.signal>0&&other.signalStrength>.27&&other.position.distanceTo(f.position)<2.2);if(alarm)f.reaction={source:alarm.position.clone(),strength:alarm.signalStrength*.58,delay:.09+random()*.2};}
  const meal=food.reduce<Food|undefined>((best,p)=>!best||p.position.distanceToSquared(f.position)<best.position.distanceToSquared(f.position)?p:best,undefined);
@@ -80,6 +86,6 @@ export function stepFish(f:Brain,all:Brain[],obstacles:Obstacle[],food:Food[],dt
  f.position.x=clamp(f.position.x,-xLimit,xLimit);f.position.y=clamp(f.position.y,minY,5.65-bodyRadius);f.position.z=clamp(f.position.z,-2.6+bodyRadius,2.6-bodyRadius);
  // Solid collision correction prevents fish crossing hard ornaments even during bursts.
  for(const o of obstacles){if(o.soft)continue;const delta=f.position.clone().sub(o.center);const r=o.radius+bodyRadius;const d=delta.length();if(d<r){if(d<.0001)delta.set(1,0,0);else delta.divideScalar(d);f.position.copy(o.center).addScaledVector(delta,r);const inward=f.velocity.dot(delta);if(inward<0)f.velocity.addScaledVector(delta,-inward);}}
- f.position.x=clamp(f.position.x,-xLimit,xLimit);f.position.z=clamp(f.position.z,-2.6+bodyRadius,2.6-bodyRadius);f.position.y=clamp(f.position.y,(terrain?heightAt(terrain,f.position.x,f.position.z):0)+Math.max(ground?Math.max(.10,sp.length*f.size*.55):.15,bodyRadius*.75),5.65-bodyRadius);
+ f.position.x=clamp(f.position.x,-xLimit,xLimit);f.position.z=clamp(f.position.z,-2.6+bodyRadius,2.6-bodyRadius);f.position.y=clamp(f.position.y,(terrain?heightAt(terrain,f.position.x,f.position.z):0)+Math.max(ground?Math.max(.10,sp.length*f.size*(f.kind===23?.12:.55)):.15,bodyRadius*.75),5.65-bodyRadius);
  f.phase+=dt*(2.4+f.velocity.length()*7)*habit.beat;
 }

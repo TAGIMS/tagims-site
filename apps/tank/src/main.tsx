@@ -1,5 +1,7 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
-import Home from './page';
+import AccountApp from './Account';
 import './globals.css';
-createRoot(document.getElementById('root')!).render(<Home/>);
+import './studio.css';
+import './hub-menu.css';
+createRoot(document.getElementById('root')!).render(<AccountApp/>);
